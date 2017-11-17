@@ -10,6 +10,8 @@ import global_vars as VAR
 # [START LogIn]
 class Login(webapp2.RequestHandler):
     def get(self):
+        #todo:
+        
         pass
 # [END LogIn]
 
@@ -27,14 +29,18 @@ class OrderDetail(webapp2.RequestHandler):
         pass
 # [End OrderDetail]
 
+# [START MyOrder]
 class MyOrder(webapp2.RequestHandler):
     def get(self):
         pass
     def post(self):
         pass
+# [END MyOrder]
 
+# [START MyProfile]
 class MyProfile(webapp2.RequestHandler):
     def get(self):
         pass
     def post(self):
         pass
+# [END MyProfile]
