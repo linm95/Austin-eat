@@ -44,3 +44,7 @@ class MyProfile(webapp2.RequestHandler):
     def post(self):
         pass
 # [END MyProfile]
+
+# [START app]
+app = webapp2.WSGIApplication([], debug=True)
+# [END app]
