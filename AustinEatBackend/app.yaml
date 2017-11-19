@@ -4,7 +4,7 @@ threadsafe: true
 
 # [START handlers]
 handlers:
-- url: /
+- url: /.*
   script: AustinEat.app
 # [END handlers]
 
@@ -14,4 +14,6 @@ libraries:
   version: 2.5.2
 - name: jinja2
   version: 2.6
+- name: ssl
+  version: 2.7.11
 # [END libraries]
