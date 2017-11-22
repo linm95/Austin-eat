@@ -1,0 +1,2 @@
+braintree==3.39.0
+requests_toolbelt==0.8.0

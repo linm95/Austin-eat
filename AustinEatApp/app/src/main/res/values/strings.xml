@@ -2,4 +2,12 @@
     <string name="app_name">AustinEatApp</string>
     <string name="root_url">http://10.0.2.2:8080</string>
     <string name="wallet_url">/wallet</string>
+    <string name="topup_url">/topup</string>
+    <string name="balance_url">/balance</string>
+    <string name="wallet_title">My Balance</string>
+    <string name="wallet_input_hint">Amount to top up</string>
+    <string name="wallet_top_up">Top Up</string>
+    <string name="wallet_init_msg">Waiting payment service to be initialized, try again.</string>
+    <string name="wallet_success_msg">Payment succeeded!</string>
+    <string name="wallet_fail_msg">Sorry man, payment failed.</string>
 </resources>
