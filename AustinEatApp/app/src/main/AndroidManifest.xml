@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LogInActivirt" />
+        <activity android:name=".LogInActivity" />
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".DiscoverActivity" />
+        <activity android:name=".DiscoverDetailActivity"></activity>
     </application>
 
 </manifest>

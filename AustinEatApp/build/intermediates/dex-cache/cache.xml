@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Software\AndroidSDK\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="C:\Projects\Warbler_FinalProject\AustinEatApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\constraint-layout-solver-1.0.2_8e13b6400b71e69c6167540ae4621de444d9d981\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\linm9\.android\build-cache\9cf3d3c2eb47d16ed2c5c9da0cb6692e5d8ef952\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="C:\Projects\Warbler_FinalProject\AustinEatApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b327eefe4d6460d32b3e77d5fff0a5b39c335d21\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Projects\Warbler_FinalProject\AustinEatApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3f4b43dbb0872ed1a9d62d0086e670aa7d071717">
+        <dex dex="C:\Projects\Warbler_FinalProject\AustinEatApp\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_63950168f4aff8e390d13fba5b708b6fd4a811ad\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Projects\Warbler_FinalProject\AustinEatApp\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="C:\Projects\Warbler_FinalProject\AustinEatApp\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_77bb3ccb675f239358922a10aa8c18fdc6cb5c39\classes.dex" />
+    </item>
+
+</items>

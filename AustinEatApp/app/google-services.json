@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "908516156121",
+    "firebase_url": "https://austineat-1cce9.firebaseio.com",
+    "project_id": "austineat-1cce9",
+    "storage_bucket": "austineat-1cce9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908516156121:android:6f7c7fecbf6967cb",
+        "android_client_info": {
+          "package_name": "warbler.austineatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908516156121-6mhatpird4fphdo2lr9loeau2gadvbea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3tLgdQ-iWS89zeSkgnqWX1t7zrBIpcJo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
