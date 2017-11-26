@@ -16,11 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LogInActivirt" />
         <activity android:name=".LogInActivity" />
-        <activity android:name=".Main2Activity" />
         <activity android:name=".DiscoverActivity" />
         <activity android:name=".DiscoverDetailActivity"></activity>
+        <activity android:name=".WalletActivity"
+                  android:exported="true">
+        </activity>
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${applicationId}.braintree" />
+            </intent-filter>
+        </activity>
+>>>>>>> e5311cf4c3f87a11d5003be60337199376dd65c3
     </application>
 
 </manifest>

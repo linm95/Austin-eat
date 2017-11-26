@@ -6,26 +6,33 @@ from google.appengine.ext import ndb
 
 # [START User]
 class User(ndb.model):
-    name = ndb.StringProperty
-    email
-    student_number
-    paypal_account
+    name = ndb.StringProperty()
+    imageUrl = ndb.StringProperty()
+    email = ndb.StringProperty()
+    #student_number
+    #paypal_account
 
-    rate
-    reviews
+    rate = ndb.FloatProperty()
+    #reviews
 
-    order_history
+    #order_history
 # [END User]
 
 # [START Order]
 class Order(ndb.model):
-    owner
-    food
-    destination
-    due_time
-    price
+    createTime = ndb.DateTimeProperty()
+    orderID = ndb.StringProperty()
+    ownerEmail = ndb.StringProperty()
+    food = ndb.StringProperty()
+    destination = ndb.StringProperty()
+    destination_location = ndb.GeoPtProperty()
+    due_time = ndb.DateTimeProperty()
+    note = ndb.StringProperty()
+    #distance = ndb.FloatProperty()
 
-    status
+    #price
 
-    version
+    status = ndb.BooleanProprtty()
+
+    #version
 # [END Order]
