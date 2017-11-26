@@ -154,11 +154,3 @@ class IssueTransaction(webapp2.RequestHandler):
         else:
             self.error(500)
 # [END IssueTransaction]
-
-# [START app]
-app = webapp2.WSGIApplication([
-    (VAR.WALLET_URL, GetClientToken),
-    ("/balance", GetBalance),
-    ("/topup", IssueTransaction),
-], debug=True)
-# [END app]
