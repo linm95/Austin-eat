@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">AustinEatApp</string>
+
+    <string name="title">Austin Eat!</string>
+    <string name="signOutButton">Sign out</string>
+    <string name="signStatus">You are not signed in now</string>
+    <string name="introductionApp">The world\'s Greatest Food Delivery APP(TM). By APT Warbler.</string>
+    <string name="viewStreamsButton">View Streams</string>
+
     <string name="root_url">http://10.0.2.2:8080</string>
     <string name="wallet_url">/wallet</string>
     <string name="topup_url">/topup</string>

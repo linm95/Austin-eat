@@ -10,7 +10,9 @@ from google.appengine.ext import ndb
 class User(ndb.Model):
     first_name = ndb.StringProperty()
     last_name = ndb.StringProperty()
+    name = ndb.ComputedProperty(lambda self: "{} {}".format(self.first_name, self.last_name))
     avatar_url = ndb.StringProperty()
+    imageUrl = avatar_url
     email = ndb.StringProperty()
 
     # student_number
@@ -25,24 +27,28 @@ class User(ndb.Model):
     # rate
     requester_rate = ndb.FloatProperty()
     deliveryperson_rate = ndb.FloatProperty()
+    rate = ndb.ComputedProperty(lambda self: self.requester_rate + self.deliveryperson_rate)
 
     # reviews
 
     # order_history
-
-
 # [END User]
 
 # [START Order]
 class Order(ndb.model):
-    owner
-    food
-    destination
-    due_time
-    price
+    createTime = ndb.DateTimeProperty()
+    orderID = ndb.StringProperty()
+    ownerEmail = ndb.StringProperty()
+    food = ndb.StringProperty()
+    destination = ndb.StringProperty()
+    destination_location = ndb.GeoPtProperty()
+    due_time = ndb.DateTimeProperty()
+    note = ndb.StringProperty()
+    #distance = ndb.FloatProperty()
 
-    status
+    #price
 
-    version
+    status = ndb.BooleanProprtty()
 
+    #version
 # [END Order]

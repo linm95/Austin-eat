@@ -5,7 +5,7 @@ threadsafe: true
 # [START handlers]
 handlers:
 - url: /.*
-  script: AustinEat.app
+  script: router.app
 # [END handlers]
 
 # [START libraries]
