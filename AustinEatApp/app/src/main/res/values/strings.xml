@@ -10,4 +10,8 @@
     <string name="wallet_init_msg">Waiting payment service to be initialized, try again.</string>
     <string name="wallet_success_msg">Payment succeeded!</string>
     <string name="wallet_fail_msg">Sorry man, payment failed.</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

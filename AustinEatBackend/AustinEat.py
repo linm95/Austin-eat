@@ -7,6 +7,9 @@ import webapp2
 import global_vars as VAR
 import braintree
 import requests_toolbelt.adapters.appengine
+from database import *
+import json
+import re
 # [END IMPORT]
 
 # [START LogIn]
@@ -94,6 +97,48 @@ class IssueTransaction(webapp2.RequestHandler):
         else:
             self.error(500)
 # [END IssueTransaction]
+
+
+# [START GetProfile]
+class GetProfile(webapp2.RequestHandler):
+    def get(self):
+        user_email = self.request.get("email")
+        user = User.query(User.email == user_email).get()
+        self.response.write(json.dumps(user.to_dict()))
+# [END GetProfile]
+
+
+# [START EditProfile]
+class EditProfile(webapp2.RequestHandler):
+    def post(self):
+        user_email = self.request.get("email")
+        user = User.query(User.email == user_email).get()
+
+        user.first_name = self.request.get("first_name")
+        user.last_name = self.request.get("last_name")
+        user.intro = self.request.get("intro")
+
+        favorite_food_styles_str = self.request.get("favorite_food_styles")
+        favorite_food_styles_list = re.split(",\s*", favorite_food_styles_str)
+        user.favorite_food_styles = favorite_food_styles_list
+
+        favorite_foods_str = self.request.get("favorite_foods")
+        favorite_foods_list = re.split(",\s*", favorite_foods_str)
+        user.favorite_foods = favorite_foods_list
+
+        user.put()
+# [END EditProfile]
+
+
+# [START GetOrderHistory]
+class GetOrderHistory(webapp2.RequestHandler):
+    def get(self):
+        user_email = self.request.get("email")
+        user = User.query(User.email == user_email).get()
+        orders = Order.query(ancestor=user.key()).order(-Order.date).fetch()
+        orders_dict = map(lambda x: x.to_dict(), orders)
+        self.response.write(json.dumps(orders_dict))
+# [END GetOrderHistory]
 
 # [START app]
 app = webapp2.WSGIApplication([
