@@ -38,7 +38,7 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void setListView(){
-        DiscoverActivity.PullOrders pullOrders = new DiscoverActivity.PullOrders();
+        OrderActivity.PullOrders pullOrders = new OrderActivity.PullOrders();
         pullOrders.execute();
     }
 
