@@ -21,4 +21,18 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="loading">loading...</string>
+    <string name="deliver_rate">Deliver Rate</string>
+    <string name="eater_rate">Eater Rate</string>
+    <string name="profile_intro">Introduction</string>
+    <string name="profile_ffs">Favorite Food Style</string>
+    <string name="profile_ff">Favorite Food</string>
+    <string name="profile_ah">Activity History</string>
+    <string name="profile_wallet">Wallet</string>
+    <string name="profile_edit">Edit</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

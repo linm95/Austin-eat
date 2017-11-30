@@ -1,0 +1,164 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="warbler.austineatapp.ProfileFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/loading" />
+
+        <ImageView
+            android:id="@+id/profileAvatar"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_alignTop="@+id/profileDeliverRate"
+            android:layout_below="@+id/profileName"
+            android:layout_marginStart="16dp"
+            android:layout_alignBottom="@+id/profileEaterRatingBar"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+        <TextView
+            android:id="@+id/profileDeliverRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileName"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/profileAvatar"
+            android:text="@string/deliver_rate" />
+
+        <RatingBar
+            android:id="@+id/profileDeliverRatingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileDeliverRate"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/profileAvatar" />
+
+        <TextView
+            android:id="@+id/profileEaterRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileDeliverRatingBar"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/profileAvatar"
+            android:text="@string/deliver_rate" />
+
+        <RatingBar
+            android:id="@+id/profileEaterRatingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileEaterRate"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/profileAvatar" />
+
+        <TextView
+            android:id="@+id/profileIntroTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/profileAvatar"
+            android:layout_below="@+id/profileEaterRatingBar"
+            android:layout_marginTop="16dp"
+            android:text="@string/profile_intro" />
+
+        <TextView
+            android:id="@+id/profileIntroContent"
+            android:maxLines="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/profileIntroTitle"
+            android:layout_below="@+id/profileIntroTitle"
+            android:layout_marginTop="8dp"
+            android:text="@string/loading" />
+
+        <TextView
+            android:id="@+id/profileFFSTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/profileIntroContent"
+            android:layout_below="@+id/profileIntroContent"
+            android:layout_marginTop="16dp"
+            android:text="@string/profile_ffs" />
+
+        <TextView
+            android:id="@+id/profileFFSContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/profileFFSTitle"
+            android:layout_below="@+id/profileFFSTitle"
+            android:layout_marginTop="8dp"
+            android:text="@string/loading" />
+
+        <TextView
+            android:id="@+id/profileFFTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/profileFFSContent"
+            android:layout_below="@+id/profileFFSContent"
+            android:layout_marginTop="16dp"
+            android:text="@string/profile_ff" />
+
+        <TextView
+            android:id="@+id/profileFFContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/profileFFTitle"
+            android:layout_below="@+id/profileFFTitle"
+            android:layout_marginTop="8dp"
+            android:text="@string/loading" />
+
+        <Button
+            android:id="@+id/profileActivityHistoryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileFFContent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/profile_ah"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/profileWalletBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileActivityHistoryBtn"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/profile_wallet"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/profileEditBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_edit"
+            android:textAllCaps="false"
+            android:layout_below="@+id/profileWalletBtn"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</FrameLayout>
