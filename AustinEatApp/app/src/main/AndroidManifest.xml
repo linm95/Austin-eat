@@ -18,11 +18,12 @@
         </activity>
         <activity android:name=".LogInActivity" />
         <activity android:name=".DiscoverActivity" />
-        <activity android:name=".DiscoverDetailActivity"></activity>
-        <activity android:name=".WalletActivity"
-                  android:exported="true">
-        </activity>
-        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+        <activity android:name=".DiscoverDetailActivity" />
+        <activity
+            android:name=".WalletActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -36,7 +37,11 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="true"
-            android:label="@string/title_activity_profile"></activity>
+            android:label="@string/title_activity_profile" />
+        <activity android:name=".EaterOrderDetailActivity" />
+        <activity android:name=".DeliverOrderDetailActivity" />
+        <activity android:name=".OrderActivity" />
+        <activity android:name=".OrderAdapter"></activity>
     </application>
 
 </manifest>
