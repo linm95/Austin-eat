@@ -15,6 +15,9 @@ class User(ndb.Model):
     imageUrl = avatar_url
     email = ndb.StringProperty()
 
+    # EaterOrDeliver
+    user_property = ndb.StringProperty
+
     # student_number
 
     # paypal_account

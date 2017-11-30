@@ -12,6 +12,7 @@ import requests_toolbelt.adapters.appengine
 from database import *
 import json
 import re
+import math
 # [END IMPORT]
 
 # [START LogIn]
@@ -96,12 +97,91 @@ class OrderDetail(webapp2.RequestHandler):
 # [End OrderDetail]
 
 # [START MyOrder]
+# Redirect to EaterOrder or DeliverOrder
 class MyOrder(webapp2.RequestHandler):
     def get(self):
-        pass
+        user_email = self.request.get("email")
+        user = User.query(User.email == user_email).get()
+        if user.user_property=="eater":
+            return webapp2.redirect('/eater-order')
+        elif user.user_property == "deliver":
+            return webapp2.redirect('/deliver-order')
+        else:
+            pass
+
     def post(self):
         pass
 # [END MyOrder]
+
+# [START EatOrder]
+# Redirect to EaterOrder or DeliverOrder
+class EaterOrder(webapp2.RequestHandler):
+    # Get the info of my orders
+    def get(self):
+        pass
+    # Confirm the deliver and send notification to the deliver
+    def post(self):
+        pass
+# [END EatOrder]
+
+# [START DeliverOrder]
+class DeliverOrder(webapp2.RequestHandler):
+    # Get the info of my orders (pending and confirmed)
+    def get(self):
+        pass
+    # Confirm the eater and send notification to eater and wait to be confirmed
+    # Change the order status to “waiting”
+    def post(self):
+        pass
+# [END DeliverOrder]
+
+# [START EaterOrderDetail]
+class EaterOrderDetail(webapp2.RequestHandler):
+    def get(self):
+        pass
+    def post(self):
+        orderID = self.request.get("id")
+        order = Order.query(Order.orderID == orderID).get()
+        user = User.query(User.email == order.ownerEmail).get()
+        toSend = {}
+        toSend["photoUrl"] = user.imageUrl
+        toSend["name"] = user.name
+        toSend["restaurant"] = order.restaurant
+        toSend["food"] = order.food
+        toSend["location"] = order.destination
+        toSend["deadline"] = order.due_time.strftime("%H:%M")
+        toSend["rating"] = user.rate
+        toSend["note"] = order.note
+        toSend["lat"] = order.destination_location.lat
+        toSend["lon"] = order.destination_location.lon
+        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
+
+        self.response.write(json.dumps(toSend))
+# [END EaterOrderDetail]
+
+# [START DeliverOrderDetail]
+class DeliverOrderDetail(webapp2.RequestHandler):
+    def get(self):
+        pass
+    def post(self):
+        orderID = self.request.get("id")
+        order = Order.query(Order.orderID == orderID).get()
+        user = User.query(User.email == order.ownerEmail).get()
+        toSend = {}
+        toSend["photoUrl"] = user.imageUrl
+        toSend["name"] = user.name
+        toSend["restaurant"] = order.restaurant
+        toSend["food"] = order.food
+        toSend["location"] = order.destination
+        toSend["deadline"] = order.due_time.strftime("%H:%M")
+        toSend["rating"] = user.rate
+        toSend["note"] = order.note
+        toSend["lat"] = order.destination_location.lat
+        toSend["lon"] = order.destination_location.lon
+        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
+
+        self.response.write(json.dumps(toSend))
+# [END DeliverOrderDetail]
 
 # [START MyProfile]
 class MyProfile(webapp2.RequestHandler):

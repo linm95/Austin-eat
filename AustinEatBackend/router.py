@@ -11,6 +11,9 @@ app = webapp2.WSGIApplication([
     (VAR.DISCOVER_DETAIL_PAGE, AustinEat.DiscoverDetail),
     (VAR.WALLET_URL, AustinEat.GetClientToken),
     ("/balance", AustinEat.GetBalance),
-    ("/topup", AustinEat.IssueTransaction)
+    ("/topup", AustinEat.IssueTransaction),
+    # For Order Page
+    (VAR.EATER_ORDER_PAGE, AustinEat.EaterOrder),
+    (VAR.DELIVER_ORDER_PAGE, AustinEat.DeliverOrder)
 ], debug = True)
 #[END APP]
