@@ -90,11 +90,6 @@ class DiscoverDetail(webapp2.RequestHandler):
         self.response.write(json.dumps(toSend))
 # [END DiscoverDetail]
 
-# [START OrderDetail]
-class OrderDetail(webapp2.RequestHandler):
-    def get(self):
-        pass
-# [End OrderDetail]
 
 # [START MyOrder]
 # Redirect to EaterOrder or DeliverOrder
@@ -107,6 +102,7 @@ class MyOrder(webapp2.RequestHandler):
         elif user.user_property == "deliver":
             return webapp2.redirect('/deliver-order')
         else:
+            print "INFO: User Property is neither deliver nor eater!"
             pass
 
     def post(self):
@@ -117,23 +113,72 @@ class MyOrder(webapp2.RequestHandler):
 # Redirect to EaterOrder or DeliverOrder
 class EaterOrder(webapp2.RequestHandler):
     # Get the info of my orders
-    def get(self):
-        pass
+    def post(self):
+        lat = float(self.request.get('lat'))
+        lon = float(self.request.get('lng'))
+        orders = Order.query(Order.status == True).fetch()
+        toSend = []
+        for order in orders:
+            user = User.query(User.email == Order.ownerEmail)
+            dic = {}
+            dic["id"] = order.orderID
+            dic["photoUrl"] = user.imageUrl
+            dic["name"] = user.name
+            dic["restaurant"] = order.restaurant
+            dic["food"] = order.food
+            dic["location"] = order.destination
+            dic["deadline"] = order.due_time.strftime("%H:%M")
+            dic["rating"] = user.rate
+            order_lat = order.destination_location.lat
+            order_lon = order.destination_location.lon
+            dic["distance"] = distance((lat, lon), (order_lat, order_lon))
+            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            toSend.append(dic)
+        self.response.write(json.dumps(toSend))
+# [END EatOrder]
+
+# [START ConfirmEaterOrder]
+class ConfirmEaterOrder(webapp2.RequestHandler):
     # Confirm the deliver and send notification to the deliver
+    # Update the order history
     def post(self):
         pass
-# [END EatOrder]
+# [END ConfirmEaterOrder]
 
 # [START DeliverOrder]
 class DeliverOrder(webapp2.RequestHandler):
     # Get the info of my orders (pending and confirmed)
-    def get(self):
-        pass
+    def post(self):
+        lat = float(self.request.get('lat'))
+        lon = float(self.request.get('lng'))
+        orders = Order.query(Order.status == True).fetch()
+        toSend = []
+        for order in orders:
+            user = User.query(User.email == Order.ownerEmail)
+            dic = {}
+            dic["id"] = order.orderID
+            dic["photoUrl"] = user.imageUrl
+            dic["name"] = user.name
+            dic["restaurant"] = order.restaurant
+            dic["food"] = order.food
+            dic["location"] = order.destination
+            dic["deadline"] = order.due_time.strftime("%H:%M")
+            dic["rating"] = user.rate
+            order_lat = order.destination_location.lat
+            order_lon = order.destination_location.lon
+            dic["distance"] = distance((lat, lon), (order_lat, order_lon))
+            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            toSend.append(dic)
+        self.response.write(json.dumps(toSend))
+# [END DeliverOrder]
+
+# [START ConfirmDeliverOrder]
+class ConfirmDeliverOrder(webapp2.RequestHandler):
     # Confirm the eater and send notification to eater and wait to be confirmed
     # Change the order status to “waiting”
     def post(self):
         pass
-# [END DeliverOrder]
+# [END ConfirmDeliverOrder]
 
 # [START EaterOrderDetail]
 class EaterOrderDetail(webapp2.RequestHandler):
