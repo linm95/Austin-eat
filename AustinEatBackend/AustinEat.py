@@ -218,7 +218,7 @@ class DeliverOrderDetail(webapp2.RequestHandler):
         orderID = self.request.get("id")
         order = Order.query(Order.orderID == orderID).get()
         toSend = {}
-        if(order)
+        if not order:
             user = User.query(User.email == order.ownerEmail).get()
             toSend["photoUrl"] = user.imageUrl
             toSend["name"] = user.name
