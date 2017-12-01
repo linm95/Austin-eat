@@ -143,7 +143,11 @@ public class ProfileFragment extends Fragment {
             }
         };
 
-        getProfile.execute(getString(R.string.root_url) + getString(R.string.profile_url));
+        if (user == null) {
+            getProfile.execute(getString(R.string.root_url) + getString(R.string.profile_url));
+        } else {
+            UpdateProfileUI();
+        }
     }
 
     public void onClickWallet(View view) {
