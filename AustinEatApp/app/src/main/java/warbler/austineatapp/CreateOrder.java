@@ -1,12 +1,18 @@
 package warbler.austineatapp;
 
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -16,11 +22,44 @@ import okhttp3.Response;
 
 public class CreateOrder extends AppCompatActivity {
 
-    String url = "";
+    String tail = "/create-order";
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_order);
+        context = this;
+        final EditText timeinput = (EditText) findViewById(R.id.time_input);
+        timeinput.setClickable(true);
+        timeinput.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        timeinput.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, false);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
+        });
+        Button button = (Button) findViewById(R.id.create_push);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                PushOrder pushOrder = new PushOrder();
+                pushOrder.execute(getInfo());
+            }
+        });
     }
 
     private class PushOrder extends AsyncTask<ArrayList<String>, Void, Integer>{
@@ -39,7 +78,7 @@ public class CreateOrder extends AppCompatActivity {
                     .add("email", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             ArrayList<Order> orders = null;
