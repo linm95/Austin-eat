@@ -12,7 +12,6 @@ class User(ndb.Model):
     last_name = ndb.StringProperty()
     name = ndb.ComputedProperty(lambda self: "{} {}".format(self.first_name, self.last_name))
     avatar_url = ndb.StringProperty()
-    imageUrl = avatar_url
     email = ndb.StringProperty()
 
     # EaterOrDeliver
@@ -24,13 +23,12 @@ class User(ndb.Model):
     balance = ndb.FloatProperty()
 
     intro = ndb.TextProperty()
-    favorite_food_styles = ndb.StringProperty(repeated=True)
-    favorite_foods = ndb.StringProperty(repeated=True)
+    favorite_food_styles = ndb.StringProperty()
+    favorite_foods = ndb.StringProperty()
 
     # rate
     requester_rate = ndb.FloatProperty()
     deliveryperson_rate = ndb.FloatProperty()
-    rate = ndb.ComputedProperty(lambda self: self.requester_rate + self.deliveryperson_rate)
 
     # reviews
 
@@ -42,6 +40,7 @@ class Order(ndb.Model):
     createTime = ndb.DateTimeProperty()
     orderID = ndb.StringProperty()
     ownerEmail = ndb.StringProperty()
+    restaurant = ndb.StringProperty()
     food = ndb.StringProperty()
     destination = ndb.StringProperty()
     destination_location = ndb.GeoPtProperty()
