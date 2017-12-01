@@ -13,14 +13,32 @@ from database import *
 import json
 import re
 import math
+import logging
 # [END IMPORT]
 
 # [START LogIn]
-class Login(webapp2.RequestHandler):
+class LogIn(webapp2.RequestHandler):
     def get(self):
         #todo:
-
         pass
+    def post(self):
+        email = self.request.get("email")
+        logging.info(email)
+        user = User.query(User.email == email).get()
+        if not user:
+            logging.info("user is none")
+            user = User()
+            user.first_name = self.request.get("firstName")
+            user.last_name = self.request.get("lastName")
+            user.avatar_url = self.request.get("url")
+            user.email = email
+            user.balance = 0.0
+            user.intro = ""
+            user.favorite_food_styles = ""
+            user.favorite_foods = ""
+            user.requester_rate = 0.0
+            user.deliveryperson_rate = 0.0
+            user.put()
 # [END LogIn]
 
 # [START DiscoverOrder]
@@ -29,23 +47,24 @@ class DiscoverEater(webapp2.RequestHandler):
         pass
 
     def post(self):
-        lat = float(self.request.get('lat'))
-        lon = float(self.request.get('lng'))
+        lat = 0 #float(self.request.get('lat'))
+        lon = 0 #float(self.request.get('lng'))
         orders = Order.query(Order.status == "created" or Order.status == "pending").fetch()
         toSend = []
         for order in orders:
-            user = User.query(User.email == Order.ownerEmail)
+            logging.info(order.ownerEmail)
+            user = User.query(User.email == order.ownerEmail).get()
             dic = {}
             dic["id"] = order.orderID
-            dic["photoUrl"] = user.imageUrl
-            dic["name"] = user.name
+            dic["photoUrl"] = user.avatar_url
+            dic["name"] = user.first_name
             dic["restaurant"] = order.restaurant
             dic["food"] = order.food
             dic["location"] = order.destination
             dic["deadline"] = order.due_time.strftime("%H:%M")
-            dic["rating"] = user.rate
-            order_lat = order.destination_location.lat
-            order_lon = order.destination_location.lon
+            dic["rating"] = user.requester_rate
+            order_lat = 0 #order.destination_location.lat
+            order_lon = 0 #order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
             dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
             toSend.append(dic)
@@ -75,13 +94,13 @@ class DiscoverDetail(webapp2.RequestHandler):
         order = Order.query(Order.orderID == orderID).get()
         user = User.query(User.email == order.ownerEmail).get()
         toSend = {}
-        toSend["photoUrl"] = user.imageUrl
-        toSend["name"] = user.name
+        toSend["photoUrl"] = user.avatar_url
+        toSend["name"] = user.last_name
         toSend["restaurant"] = order.restaurant
         toSend["food"] = order.food
         toSend["location"] = order.destination
         toSend["deadline"] = order.due_time.strftime("%H:%M")
-        toSend["rating"] = user.rate
+        toSend["rating"] = user.requester_rate
         toSend["note"] = order.note
         toSend["lat"] = order.destination_location.lat
         toSend["lon"] = order.destination_location.lon
@@ -244,13 +263,16 @@ class CreateOrder(webapp2.RequestHandler):
         now = datetime.now()
         order.createTime = now
         order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
+        logging.info(order.orderID)
         order.ownerEmail = self.request.get("email")
+        logging.info(order.ownerEmail)
+        order.restaurant = self.request.get("restaurant")
         order.food = self.request.get("food")
         order.destination = self.request.get("location")
         time = self.request.get("deadline").split(":")
         order.due_time = datetime(now.year, now.month, now.day, int(time[0]), int(time[1]))
         order.note = self.request.get("note")
-
+        order.status = "created"
         order.put()
 # [END CreateOrder]
 # [START MyProfile]

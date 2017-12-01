@@ -37,7 +37,7 @@ public class DiscoverActivity extends AppCompatActivity {
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
         mListView = (ListView) findViewById(R.id.discover_list_view);
-        //setListView();
+        setListView();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -81,21 +81,23 @@ public class DiscoverActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
             final ArrayList<Order> finalOrders = orders;
-            DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
-            mListView.setAdapter(adapter);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            if(finalOrders.size() != 0) {
+                DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
+                mListView.setAdapter(adapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Order selectedOrder = finalOrders.get(position);
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Order selectedOrder = finalOrders.get(position);
 
-                    Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
+                        Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
 
-                    detailIntent.putExtra("OrderId", selectedOrder.id);
+                        detailIntent.putExtra("OrderId", selectedOrder.id);
 
-                    startActivity(detailIntent);
-                }
-            });
+                        startActivity(detailIntent);
+                    }
+                });
+            }
         }
     }
 }

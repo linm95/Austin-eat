@@ -1,6 +1,7 @@
 package warbler.austineatapp;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,10 +18,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class LogInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener{
 
+    private String tail = "/create-user";
     private TextView mStatusTextView;
     GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
@@ -68,6 +77,30 @@ public class LogInActivity extends AppCompatActivity implements
         }
     }
 
+    private class CreateUser extends AsyncTask{
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("email", UserHelper.getCurrentUserEmail())
+                    .add("firstName", UserHelper.getFirstName())
+                    .add("lastName", UserHelper.getLastName())
+                    .add("url", UserHelper.getPhotoUrl())
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + tail)
+                    .post(body)
+                    .build();
+            try{
+                client.newCall(request).execute();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
@@ -78,7 +111,12 @@ public class LogInActivity extends AppCompatActivity implements
                 updateUI(true);
                 UserHelper.setCurrentUserID(acct.getId());
                 UserHelper.setCurrentUserEmail(acct.getEmail());
-                //UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
+                UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
+                UserHelper.setFirstName(acct.getGivenName());
+                UserHelper.setLastName(acct.getFamilyName());
+                //Log.d("PHOTO URL", UserHelper.getPhotoUrl());
+                CreateUser createUser = new CreateUser();
+                createUser.execute();
                 Intent intent = new Intent(this, DiscoverActivity.class);
                 startActivity(intent);
             }
@@ -123,9 +161,7 @@ public class LogInActivity extends AppCompatActivity implements
                         if(status.isSuccess()) {
                             updateUI(false);
                             mStatusTextView.setText("You are signed out now");
-                            UserHelper.setCurrentUserID(null);
-                            UserHelper.setCurrentUserEmail(null);
-                            UserHelper.setPhotoUrl(null);
+                            UserHelper.reset();
                         }
                         else{
                             mStatusTextView.setText("Sign out failed:" + status.getStatusMessage());
