@@ -9,7 +9,16 @@ public class UserHelper {
     private static String userEmail;
     private static String photoUrl;
     private static String userProperty="";
+    private static String firstName;
+    private static String lastName;
 
+    public static void reset(){
+        userID = null;
+        userEmail = null;
+        photoUrl = null;
+        firstName = null;
+        lastName = null;
+    }
     public static boolean isSignedIn() {
         // FIXME: 10/26/17 TT: Add actual implementation
         return userID != null;
@@ -54,5 +63,20 @@ public class UserHelper {
     public static String getUserIdToken() {
         // FIXME: 12/1/17 TT: Add actual implementation
         return null;
+    }
+    public static void setFirstName(String firstName){
+        UserHelper.firstName = firstName;
+    }
+
+    public static String getFirstName(){
+        return firstName;
+    }
+
+    public static void setLastName(String lastName){
+        UserHelper.lastName = lastName;
+    }
+
+    public static String getLastName(){
+        return lastName;
     }
 }

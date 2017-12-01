@@ -81,9 +81,8 @@ public class CreateOrder extends AppCompatActivity {
                     .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
-            ArrayList<Order> orders = null;
             try{
-                Response response = client.newCall(request).execute();
+                client.newCall(request).execute();
             }catch(IOException e){
                 e.printStackTrace();
             }
