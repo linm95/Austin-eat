@@ -1,6 +1,6 @@
 # coding=utf-8
-#Copyright Team Wabler, UT Austin
-#Author: Po-Cheng Pan, Tian Tan, Meng Lin
+# Copyright Team Wabler, UT Austin
+# Author: Po-Cheng Pan, Tian Tan, Meng Lin
 
 # [START IMPORT]
 import webapp2
@@ -13,14 +13,18 @@ from database import *
 import json
 import re
 import math
+
+
 # [END IMPORT]
 
 # [START LogIn]
 class Login(webapp2.RequestHandler):
     def get(self):
-        #todo:
+        # todo:
 
         pass
+
+
 # [END LogIn]
 
 # [START DiscoverOrder]
@@ -50,26 +54,32 @@ class DiscoverEater(webapp2.RequestHandler):
             dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
             toSend.append(dic)
         self.response.write(json.dumps(toSend))
+
+
 # [END DiscoverOrder]
 
 # [START distance]
 def distance(loc1, loc2):
     lat1, lon1 = loc1
     lat2, lon2 = loc2
-    earthRadius = 6371000.0 #m
+    earthRadius = 6371000.0  # m
 
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
-    a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
+    a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1)) * math.cos(
+        math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     d = earthRadius * c
     return d
+
+
 # [END distance]
 
 # [START DiscoverDetail]
 class DiscoverDetail(webapp2.RequestHandler):
     def get(self):
         pass
+
     def post(self):
         orderID = self.request.get("id")
         order = Order.query(Order.orderID == orderID).get()
@@ -88,6 +98,8 @@ class DiscoverDetail(webapp2.RequestHandler):
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))
+
+
 # [END DiscoverDetail]
 
 
@@ -107,6 +119,8 @@ class MyOrder(webapp2.RequestHandler):
         else:
             print "INFO: User Property is neither deliver nor eater!"
             pass
+
+
 # [END MyOrder]
 
 # [START EatOrder]
@@ -138,6 +152,8 @@ class EaterOrder(webapp2.RequestHandler):
             toSend.append(dic)
 
         self.response.write(json.dumps(toSend))
+
+
 # [END EatOrder]
 
 # [START ConfirmEaterOrder]
@@ -146,6 +162,8 @@ class ConfirmEaterOrder(webapp2.RequestHandler):
     # Update the order history
     def post(self):
         pass
+
+
 # [END ConfirmEaterOrder]
 
 # [START DeliverOrder]
@@ -176,6 +194,8 @@ class DeliverOrder(webapp2.RequestHandler):
             dic["status"] = order.status
             toSend.append(dic)
         self.response.write(json.dumps(toSend))
+
+
 # [END DeliverOrder]
 
 # [START ConfirmDeliverOrder]
@@ -184,12 +204,15 @@ class ConfirmDeliverOrder(webapp2.RequestHandler):
     # Change the order status to “waiting”
     def post(self):
         pass
+
+
 # [END ConfirmDeliverOrder]
 
 # [START EaterOrderDetail]
 class EaterOrderDetail(webapp2.RequestHandler):
     def get(self):
         pass
+
     def post(self):
         orderID = self.request.get("id")
         order = Order.query(Order.orderID == orderID).get()
@@ -208,12 +231,15 @@ class EaterOrderDetail(webapp2.RequestHandler):
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))
+
+
 # [END EaterOrderDetail]
 
 # [START DeliverOrderDetail]
 class DeliverOrderDetail(webapp2.RequestHandler):
     def get(self):
         pass
+
     def post(self):
         orderID = self.request.get("id")
         order = Order.query(Order.orderID == orderID).get()
@@ -233,12 +259,15 @@ class DeliverOrderDetail(webapp2.RequestHandler):
             toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))
+
+
 # [END DeliverOrderDetail]
 
 # [START CreateOrder]
 class CreateOrder(webapp2.RequestHandler):
     def get(self):
         pass
+
     def post(self):
         order = Order()
         now = datetime.now()
@@ -252,13 +281,18 @@ class CreateOrder(webapp2.RequestHandler):
         order.note = self.request.get("note")
 
         order.put()
+
+
 # [END CreateOrder]
 # [START MyProfile]
 class MyProfile(webapp2.RequestHandler):
     def get(self):
         pass
+
     def post(self):
         pass
+
+
 # [END MyProfile]
 
 # [START GetClientToken]
@@ -271,6 +305,8 @@ class GetClientToken(webapp2.RequestHandler):
         gateway = braintree.BraintreeGateway(access_token=VAR.paypal_access_token)
         client_token = gateway.client_token.generate()
         self.response.write(client_token)
+
+
 # [END GetClientToken]
 
 # [START GetBalance]
@@ -278,6 +314,8 @@ class GetBalance(webapp2.RequestHandler):
     def get(self):
         # fixme: TT add implementation
         self.response.write("42.50")
+
+
 # [END GetBalance]
 
 # [START IssueTransaction]
@@ -292,7 +330,7 @@ class IssueTransaction(webapp2.RequestHandler):
             "amount": self.request.get("amount"),
             "merchant_account_id": "USD",
             "payment_method_nonce": self.request.get("payment_method_nonce"),
-            #"shipping": {
+            # "shipping": {
             #    "first_name": self.request.get("first_name"),
             #    "last_name": self.request.get("last_name"),
             #    "street_address": self.request.get("street_address"),
@@ -300,13 +338,16 @@ class IssueTransaction(webapp2.RequestHandler):
             #    "region": self.request.get("region"),
             #    "postal_code": self.request.get("postal_code"),
             #    "country_code_alpha2": self.request.get("country")
-            #},
+            # },
         })
 
         if result.is_success:
             self.response.write("success")
         else:
+            print format(result.message)
             self.error(500)
+
+
 # [END IssueTransaction]
 
 
@@ -325,6 +366,8 @@ class GetProfile(webapp2.RequestHandler):
             "deliveryperson_rate": 1.7
         }
         self.response.write(json.dumps(ret))
+
+
 # [END GetProfile]
 
 
@@ -347,6 +390,8 @@ class EditProfile(webapp2.RequestHandler):
         user.favorite_foods = favorite_foods_list
 
         user.put()
+
+
 # [END EditProfile]
 
 
@@ -358,4 +403,5 @@ class GetOrderHistory(webapp2.RequestHandler):
         orders = Order.query(ancestor=user.key()).order(-Order.date).fetch()
         orders_dict = map(lambda x: x.to_dict(), orders)
         self.response.write(json.dumps(orders_dict))
+
 # [END GetOrderHistory]

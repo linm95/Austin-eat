@@ -50,4 +50,9 @@ public class UserHelper {
     public static String getPhotoUrl(){
         return photoUrl;
     }
+
+    public static String getUserIdToken() {
+        // FIXME: 12/1/17 TT: Add actual implementation
+        return null;
+    }
 }
