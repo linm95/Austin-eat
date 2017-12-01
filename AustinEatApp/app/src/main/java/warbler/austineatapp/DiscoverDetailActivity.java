@@ -23,6 +23,7 @@ import okhttp3.Response;
 public class DiscoverDetailActivity extends AppCompatActivity {
 
     private String id;
+    private String tail = "/discover-detail";
     private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
                     .add("id",id)
                     .build();
             Request request = new Request.Builder()
-                    .url("")
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             OrderDetail order = null;

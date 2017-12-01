@@ -26,7 +26,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
     private double lat = 0;
     private double lon = 0;
-    private String url = "";
+    private String tail = "/discover";
     private ListView mListView;
     private Context context;
     @Override
@@ -63,7 +63,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     .add("lon", "" + lon)
                     .build();
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             ArrayList<Order> orders = null;

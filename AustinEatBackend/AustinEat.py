@@ -166,19 +166,20 @@ class DeliverOrderDetail(webapp2.RequestHandler):
     def post(self):
         orderID = self.request.get("id")
         order = Order.query(Order.orderID == orderID).get()
-        user = User.query(User.email == order.ownerEmail).get()
         toSend = {}
-        toSend["photoUrl"] = user.imageUrl
-        toSend["name"] = user.name
-        toSend["restaurant"] = order.restaurant
-        toSend["food"] = order.food
-        toSend["location"] = order.destination
-        toSend["deadline"] = order.due_time.strftime("%H:%M")
-        toSend["rating"] = user.rate
-        toSend["note"] = order.note
-        toSend["lat"] = order.destination_location.lat
-        toSend["lon"] = order.destination_location.lon
-        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
+        if(order)
+            user = User.query(User.email == order.ownerEmail).get()
+            toSend["photoUrl"] = user.imageUrl
+            toSend["name"] = user.name
+            toSend["restaurant"] = order.restaurant
+            toSend["food"] = order.food
+            toSend["location"] = order.destination
+            toSend["deadline"] = order.due_time.strftime("%H:%M")
+            toSend["rating"] = user.rate
+            toSend["note"] = order.note
+            toSend["lat"] = order.destination_location.lat
+            toSend["lon"] = order.destination_location.lon
+            toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))
 # [END DeliverOrderDetail]
@@ -189,12 +190,14 @@ class CreateOrder(webapp2.RequestHandler):
         pass
     def post(self):
         order = Order()
-        order.createTime = datetime.now()
-        order.orderID = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        now = datetime.now()
+        order.createTime = now
+        order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         order.ownerEmail = self.request.get("email")
         order.food = self.request.get("food")
         order.destination = self.request.get("location")
-        order.due_time = self.request.get("deadline")
+        time = self.request.get("deadline").split(":")
+        order.due_time = datetime(now.year, now.month, now.day, int(time[0]), int(time[1]))
         order.note = self.request.get("note")
 
         order.put()
