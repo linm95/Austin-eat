@@ -38,7 +38,7 @@ class User(ndb.Model):
 # [END User]
 
 # [START Order]
-class Order(ndb.model):
+class Order(ndb.Model):
     createTime = ndb.DateTimeProperty()
     orderID = ndb.StringProperty()
     ownerEmail = ndb.StringProperty()
@@ -51,7 +51,7 @@ class Order(ndb.model):
 
     #price
 
-    status = ndb.BooleanProprtty()
+    status = ndb.StringProperty()
 
     #version
 # [END Order]

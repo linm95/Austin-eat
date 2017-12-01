@@ -1,4 +1,4 @@
-
+# coding=utf-8
 #Copyright Team Wabler, UT Austin
 #Author: Po-Cheng Pan, Tian Tan, Meng Lin
 
@@ -243,9 +243,18 @@ class IssueTransaction(webapp2.RequestHandler):
 # [START GetProfile]
 class GetProfile(webapp2.RequestHandler):
     def get(self):
-        user_email = self.request.get("email")
-        user = User.query(User.email == user_email).get()
-        self.response.write(json.dumps(user.to_dict()))
+        # FIXME: TT add real implementation
+        ret = {
+            "first_name": "Tony",
+            "last_name": "Tan",
+            "avatar_url": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+            "intro": "Here goes my intro!",
+            "favorite_food_styles": ["Monkey", "rabbit"],
+            "favorite_foods": ["hole", "look", "read"],
+            "requester_rate": 3.3,
+            "deliveryperson_rate": 1.7
+        }
+        self.response.write(json.dumps(ret))
 # [END GetProfile]
 
 
@@ -280,11 +289,3 @@ class GetOrderHistory(webapp2.RequestHandler):
         orders_dict = map(lambda x: x.to_dict(), orders)
         self.response.write(json.dumps(orders_dict))
 # [END GetOrderHistory]
-
-# [START app]
-app = webapp2.WSGIApplication([
-    (VAR.WALLET_URL, GetClientToken),
-    ("/balance", GetBalance),
-    ("/topup", IssueTransaction),
-], debug=True)
-# [END app]

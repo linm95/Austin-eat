@@ -9,9 +9,10 @@ import AustinEat
 app = webapp2.WSGIApplication([
     (VAR.DISCOVER_PAGE, AustinEat.DiscoverEater),
     (VAR.DISCOVER_DETAIL_PAGE, AustinEat.DiscoverDetail),
-    (VAR.WALLET_URL, AustinEat.GetClientToken),
+    ("/wallet", AustinEat.GetClientToken),
     ("/balance", AustinEat.GetBalance),
     ("/topup", AustinEat.IssueTransaction),
+    ("/profile", AustinEat.GetProfile),
     # For Order Page
     (VAR.EATER_ORDER_PAGE, AustinEat.EaterOrder),
     (VAR.DELIVER_ORDER_PAGE, AustinEat.DeliverOrder)
