@@ -38,7 +38,7 @@ class User(ndb.Model):
 # [END User]
 
 # [START Order]
-class Order(ndb.model):
+class Order(ndb.Model):
     createTime = ndb.DateTimeProperty()
     orderID = ndb.StringProperty()
     ownerEmail = ndb.StringProperty()
@@ -47,11 +47,14 @@ class Order(ndb.model):
     destination_location = ndb.GeoPtProperty()
     due_time = ndb.DateTimeProperty()
     note = ndb.StringProperty()
+    deliverList = ndb.StringProperty(repeated=True)
     #distance = ndb.FloatProperty()
 
     #price
 
-    status = ndb.BooleanProprtty()
+
+    # created, pending, confirmed and fulfilled
+    status = ndb.StringProperty()
 
     #version
 # [END Order]

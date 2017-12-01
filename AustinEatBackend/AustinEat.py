@@ -1,4 +1,4 @@
-
+# coding=utf-8
 #Copyright Team Wabler, UT Austin
 #Author: Po-Cheng Pan, Tian Tan, Meng Lin
 
@@ -31,7 +31,7 @@ class DiscoverEater(webapp2.RequestHandler):
     def post(self):
         lat = float(self.request.get('lat'))
         lon = float(self.request.get('lng'))
-        orders = Order.query(Order.status == True).fetch()
+        orders = Order.query(Order.status == "created" or Order.status == "pending").fetch()
         toSend = []
         for order in orders:
             user = User.query(User.email == Order.ownerEmail)
@@ -90,50 +90,101 @@ class DiscoverDetail(webapp2.RequestHandler):
         self.response.write(json.dumps(toSend))
 # [END DiscoverDetail]
 
-# [START OrderDetail]
-class OrderDetail(webapp2.RequestHandler):
-    def get(self):
-        pass
-# [End OrderDetail]
 
 # [START MyOrder]
 # Redirect to EaterOrder or DeliverOrder
 class MyOrder(webapp2.RequestHandler):
     def get(self):
+        pass
+
+    def post(self):
         user_email = self.request.get("email")
         user = User.query(User.email == user_email).get()
-        if user.user_property=="eater":
+        if user.user_property == "eater":
             return webapp2.redirect('/eater-order')
         elif user.user_property == "deliver":
             return webapp2.redirect('/deliver-order')
         else:
+            print "INFO: User Property is neither deliver nor eater!"
             pass
-
-    def post(self):
-        pass
 # [END MyOrder]
 
 # [START EatOrder]
 # Redirect to EaterOrder or DeliverOrder
 class EaterOrder(webapp2.RequestHandler):
     # Get the info of my orders
-    def get(self):
-        pass
+    def post(self):
+        lat = float(self.request.get('lat'))
+        lon = float(self.request.get('lng'))
+        email = self.request.get('email')
+        order = Order.query(Order.status == email).fetch()
+        toSend = []
+
+        for deliver in order.deliverList:
+            user = User.query(User.email == deliver)
+            dic = {}
+            dic["id"] = order.orderID
+            dic["photoUrl"] = user.imageUrl
+            dic["name"] = user.name
+            dic["restaurant"] = order.restaurant
+            dic["food"] = order.food
+            dic["location"] = order.destination
+            dic["deadline"] = order.due_time.strftime("%H:%M")
+            dic["rating"] = user.rate
+            order_lat = order.destination_location.lat
+            order_lon = order.destination_location.lon
+            dic["distance"] = distance((lat, lon), (order_lat, order_lon))
+            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            toSend.append(dic)
+
+        self.response.write(json.dumps(toSend))
+# [END EatOrder]
+
+# [START ConfirmEaterOrder]
+class ConfirmEaterOrder(webapp2.RequestHandler):
     # Confirm the deliver and send notification to the deliver
+    # Update the order history
     def post(self):
         pass
-# [END EatOrder]
+# [END ConfirmEaterOrder]
 
 # [START DeliverOrder]
 class DeliverOrder(webapp2.RequestHandler):
     # Get the info of my orders (pending and confirmed)
-    def get(self):
-        pass
+    def post(self):
+        lat = float(self.request.get('lat'))
+        lon = float(self.request.get('lng'))
+        deliver = float(self.request.get('deliver'))
+
+        orders = Order.query(deliver == Order.deliverList).fetch()
+        toSend = []
+        for order in orders:
+            user = User.query(User.email == order.ownerEmail)
+            dic = {}
+            dic["id"] = order.orderID
+            dic["photoUrl"] = user.imageUrl
+            dic["name"] = user.name
+            dic["restaurant"] = order.restaurant
+            dic["food"] = order.food
+            dic["location"] = order.destination
+            dic["deadline"] = order.due_time.strftime("%H:%M")
+            dic["rating"] = user.rate
+            order_lat = order.destination_location.lat
+            order_lon = order.destination_location.lon
+            dic["distance"] = distance((lat, lon), (order_lat, order_lon))
+            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            dic["status"] = order.status
+            toSend.append(dic)
+        self.response.write(json.dumps(toSend))
+# [END DeliverOrder]
+
+# [START ConfirmDeliverOrder]
+class ConfirmDeliverOrder(webapp2.RequestHandler):
     # Confirm the eater and send notification to eater and wait to be confirmed
     # Change the order status to “waiting”
     def post(self):
         pass
-# [END DeliverOrder]
+# [END ConfirmDeliverOrder]
 
 # [START EaterOrderDetail]
 class EaterOrderDetail(webapp2.RequestHandler):
@@ -262,9 +313,18 @@ class IssueTransaction(webapp2.RequestHandler):
 # [START GetProfile]
 class GetProfile(webapp2.RequestHandler):
     def get(self):
-        user_email = self.request.get("email")
-        user = User.query(User.email == user_email).get()
-        self.response.write(json.dumps(user.to_dict()))
+        # FIXME: TT add real implementation
+        ret = {
+            "first_name": "Tony",
+            "last_name": "Tan",
+            "avatar_url": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+            "intro": "Here goes my intro!",
+            "favorite_food_styles": ["Monkey", "rabbit"],
+            "favorite_foods": ["hole", "look", "read"],
+            "requester_rate": 3.3,
+            "deliveryperson_rate": 1.7
+        }
+        self.response.write(json.dumps(ret))
 # [END GetProfile]
 
 
@@ -299,11 +359,3 @@ class GetOrderHistory(webapp2.RequestHandler):
         orders_dict = map(lambda x: x.to_dict(), orders)
         self.response.write(json.dumps(orders_dict))
 # [END GetOrderHistory]
-
-# [START app]
-app = webapp2.WSGIApplication([
-    (VAR.WALLET_URL, GetClientToken),
-    ("/balance", GetBalance),
-    ("/topup", IssueTransaction),
-], debug=True)
-# [END app]

@@ -43,6 +43,7 @@
         <activity android:name=".CreateOrder"></activity>
         <activity android:name=".EaterOrderDetailActivity" />
         <activity android:name=".DeliverOrderDetailActivity" />
+        <activity android:name=".EditProfileActivity"></activity>
 
     </application>
 

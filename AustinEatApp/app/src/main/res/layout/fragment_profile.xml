@@ -20,7 +20,9 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/loading" />
+            android:text="@string/loading"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/profileAvatar"
@@ -45,6 +47,7 @@
         <RatingBar
             android:id="@+id/profileDeliverRatingBar"
             style="?android:attr/ratingBarStyleSmall"
+            android:isIndicator="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profileDeliverRate"
@@ -60,11 +63,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_toEndOf="@+id/profileAvatar"
-            android:text="@string/deliver_rate" />
+            android:text="@string/eater_rate" />
 
         <RatingBar
             android:id="@+id/profileEaterRatingBar"
             style="?android:attr/ratingBarStyleSmall"
+            android:isIndicator="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profileEaterRate"
@@ -79,7 +83,8 @@
             android:layout_alignStart="@+id/profileAvatar"
             android:layout_below="@+id/profileEaterRatingBar"
             android:layout_marginTop="16dp"
-            android:text="@string/profile_intro" />
+            android:text="@string/profile_intro"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profileIntroContent"
@@ -98,7 +103,8 @@
             android:layout_alignStart="@+id/profileIntroContent"
             android:layout_below="@+id/profileIntroContent"
             android:layout_marginTop="16dp"
-            android:text="@string/profile_ffs" />
+            android:text="@string/profile_ffs"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profileFFSContent"
@@ -116,7 +122,8 @@
             android:layout_alignStart="@+id/profileFFSContent"
             android:layout_below="@+id/profileFFSContent"
             android:layout_marginTop="16dp"
-            android:text="@string/profile_ff" />
+            android:text="@string/profile_ff"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profileFFContent"
@@ -144,10 +151,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profileActivityHistoryBtn"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:onClick="onClickWallet"
             android:text="@string/profile_wallet"
             android:textAllCaps="false" />
 
@@ -155,13 +163,14 @@
             android:id="@+id/profileEditBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/profile_edit"
-            android:textAllCaps="false"
             android:layout_below="@+id/profileWalletBtn"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginEnd="16dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:onClick="onClickProfileEdit"
+            android:text="@string/profile_edit"
+            android:textAllCaps="false" />
 
     </RelativeLayout>
     </ScrollView>
