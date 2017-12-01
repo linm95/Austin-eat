@@ -117,7 +117,7 @@ public class LogInActivity extends AppCompatActivity implements
                 //Log.d("PHOTO URL", UserHelper.getPhotoUrl());
                 CreateUser createUser = new CreateUser();
                 createUser.execute();
-                Intent intent = new Intent(this, DiscoverActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             }
             else{

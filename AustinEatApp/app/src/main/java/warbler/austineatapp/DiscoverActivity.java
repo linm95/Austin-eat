@@ -81,7 +81,7 @@ public class DiscoverActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
             final ArrayList<Order> finalOrders = orders;
-            if(finalOrders.size() != 0) {
+            if(finalOrders != null && finalOrders.size() != 0) {
                 DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
                 mListView.setAdapter(adapter);
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
