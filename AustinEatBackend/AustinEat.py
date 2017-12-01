@@ -31,7 +31,7 @@ class DiscoverEater(webapp2.RequestHandler):
     def post(self):
         lat = float(self.request.get('lat'))
         lon = float(self.request.get('lng'))
-        orders = Order.query(Order.status == True).fetch()
+        orders = Order.query(Order.status == "created" or Order.status == "pending").fetch()
         toSend = []
         for order in orders:
             user = User.query(User.email == Order.ownerEmail)
@@ -95,18 +95,18 @@ class DiscoverDetail(webapp2.RequestHandler):
 # Redirect to EaterOrder or DeliverOrder
 class MyOrder(webapp2.RequestHandler):
     def get(self):
+        pass
+
+    def post(self):
         user_email = self.request.get("email")
         user = User.query(User.email == user_email).get()
-        if user.user_property=="eater":
+        if user.user_property == "eater":
             return webapp2.redirect('/eater-order')
         elif user.user_property == "deliver":
             return webapp2.redirect('/deliver-order')
         else:
             print "INFO: User Property is neither deliver nor eater!"
             pass
-
-    def post(self):
-        pass
 # [END MyOrder]
 
 # [START EatOrder]
@@ -116,10 +116,12 @@ class EaterOrder(webapp2.RequestHandler):
     def post(self):
         lat = float(self.request.get('lat'))
         lon = float(self.request.get('lng'))
-        orders = Order.query(Order.status == True).fetch()
+        email = self.request.get('email')
+        order = Order.query(Order.status == email).fetch()
         toSend = []
-        for order in orders:
-            user = User.query(User.email == Order.ownerEmail)
+
+        for deliver in order.deliverList:
+            user = User.query(User.email == deliver)
             dic = {}
             dic["id"] = order.orderID
             dic["photoUrl"] = user.imageUrl
@@ -134,6 +136,7 @@ class EaterOrder(webapp2.RequestHandler):
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
             dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
             toSend.append(dic)
+
         self.response.write(json.dumps(toSend))
 # [END EatOrder]
 
@@ -151,10 +154,12 @@ class DeliverOrder(webapp2.RequestHandler):
     def post(self):
         lat = float(self.request.get('lat'))
         lon = float(self.request.get('lng'))
-        orders = Order.query(Order.status == True).fetch()
+        deliver = float(self.request.get('deliver'))
+
+        orders = Order.query(deliver == Order.deliverList).fetch()
         toSend = []
         for order in orders:
-            user = User.query(User.email == Order.ownerEmail)
+            user = User.query(User.email == order.ownerEmail)
             dic = {}
             dic["id"] = order.orderID
             dic["photoUrl"] = user.imageUrl
@@ -168,6 +173,7 @@ class DeliverOrder(webapp2.RequestHandler):
             order_lon = order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
             dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            dic["status"] = order.status
             toSend.append(dic)
         self.response.write(json.dumps(toSend))
 # [END DeliverOrder]

@@ -52,7 +52,7 @@ class Order(ndb.model):
 
     #price
 
-    # pending, waiting, confirmed and fulfilled
+    # created, pending, confirmed and fulfilled
     status = ndb.StringProperty()
 
     #version
