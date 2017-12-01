@@ -23,11 +23,11 @@ public class CreateOrder extends AppCompatActivity {
         setContentView(R.layout.activity_create_order);
     }
 
-    private class PushOrder extends AsyncTask<ArrayList<String>, Void, Void>{
+    private class PushOrder extends AsyncTask<ArrayList<String>, Void, Integer>{
 
 
         @Override
-        protected Void doInBackground(ArrayList<String>... params) {
+        protected Integer doInBackground(ArrayList<String>... params) {
             ArrayList<String> info = params[0];
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
@@ -48,9 +48,8 @@ public class CreateOrder extends AppCompatActivity {
             }catch(IOException e){
                 e.printStackTrace();
             }
-            return Void;
+            return 0;
         }
-
     }
 
     private ArrayList<String> getInfo(){

@@ -18,9 +18,9 @@
     <string name="wallet_success_msg">Payment succeeded!</string>
     <string name="wallet_fail_msg">Sorry man, payment failed.</string>
     <string name="title_activity_profile">ProfileActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Discover</string>
+    <string name="title_dashboard">Order</string>
+    <string name="title_notifications">Profile</string>
 
     <string name="loading">loading...</string>
     <string name="deliver_rate">Deliver Rate</string>
@@ -31,6 +31,9 @@
     <string name="profile_ah">Activity History</string>
     <string name="profile_wallet">Wallet</string>
     <string name="profile_edit">Edit</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="no_property_message">Please request or pull an order.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
