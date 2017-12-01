@@ -47,10 +47,13 @@ class Order(ndb.Model):
     destination_location = ndb.GeoPtProperty()
     due_time = ndb.DateTimeProperty()
     note = ndb.StringProperty()
+    deliverList = ndb.StringProperty(repeated=True)
     #distance = ndb.FloatProperty()
 
     #price
 
+
+    # created, pending, confirmed and fulfilled
     status = ndb.StringProperty()
 
     #version
