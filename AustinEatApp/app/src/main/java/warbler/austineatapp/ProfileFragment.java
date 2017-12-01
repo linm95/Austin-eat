@@ -38,6 +38,17 @@ public class ProfileFragment extends Fragment {
 
     User user;
 
+    public String printStringArray(String[] stringArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < stringArray.length; i++) {
+            if (i > 0) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(stringArray[i]);
+        }
+        return stringBuilder.toString();
+    }
+
     public Void FetchProfile(String url) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
@@ -141,13 +152,13 @@ public class ProfileFragment extends Fragment {
     }
 
     public void onClickProfileEdit(View view) {
-        Intent intent = new Intent(getActivity(), WalletActivity.class);
+        Intent intent = new Intent(getActivity(), EditProfileActivity.class);
         intent.putExtra("user_first_name", user.first_name);
         intent.putExtra("user_last_name", user.last_name);
         intent.putExtra("user_avatar_url", user.avatar_url);
         intent.putExtra("user_intro", user.intro);
-        intent.putExtra("user_ffs", user.favorite_food_styles);
-        intent.putExtra("user_ff", user.favorite_foods);
+        intent.putExtra("user_ffs", printStringArray(user.favorite_food_styles));
+        intent.putExtra("user_ff", printStringArray(user.favorite_foods));
         getActivity().startActivity(intent);
     }
 

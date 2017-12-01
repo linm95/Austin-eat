@@ -2,6 +2,7 @@ package warbler.austineatapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,8 +80,10 @@ public class LogInActivity extends AppCompatActivity implements
                 UserHelper.setCurrentUserID(acct.getId());
                 UserHelper.setCurrentUserEmail(acct.getEmail());
                 //UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
-                Intent intent = new Intent(this, DiscoverActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(this, MainActivity.class);
+                //startActivity(intent);
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                NavUtils.navigateUpTo(this, upIntent);
             }
             else{
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
