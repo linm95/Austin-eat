@@ -9,12 +9,14 @@
         android:layout_width="wrap_content">
         <ImageView
             android:id="@+id/profile_image"
+            android:src="@mipmap/ic_launcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal">
         </ImageView>
         <TextView
             android:id="@+id/profile_name"
+            android:text="Andorid"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
@@ -28,34 +30,38 @@
         android:layout_width="wrap_content">
         <TextView
             android:id="@+id/restaurant_name"
+            android:text="Restaurant: KFC"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
         <TextView
             android:id="@+id/food_name"
+            android:text="Food: burger"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
         <TextView
             android:id="@+id/location_name"
+            android:text="Location:EER"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
         <TextView
             android:id="@+id/deadline"
+            android:text="Deadline: 12:30"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
         <RatingBar
@@ -63,6 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
             android:stepSize="1.0" />
     </LinearLayout>
     <LinearLayout
@@ -71,18 +79,20 @@
         android:layout_width="wrap_content">
         <TextView
             android:id="@+id/distance_display"
+            android:text="0 miles away"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
         <TextView
             android:id="@+id/time_display"
+            android:text="0 mins ago"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
     </LinearLayout>

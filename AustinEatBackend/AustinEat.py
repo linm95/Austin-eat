@@ -228,6 +228,22 @@ class DeliverOrderDetail(webapp2.RequestHandler):
         self.response.write(json.dumps(toSend))
 # [END DeliverOrderDetail]
 
+# [START CreateOrder]
+class CreateOrder(webapp2.RequestHandler):
+    def get(self):
+        pass
+    def post(self):
+        order = Order()
+        order.createTime = datetime.now()
+        order.orderID = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        order.ownerEmail = self.request.get("email")
+        order.food = self.request.get("food")
+        order.destination = self.request.get("location")
+        order.due_time = self.request.get("deadline")
+        order.note = self.request.get("note")
+
+        order.put()
+# [END CreateOrder]
 # [START MyProfile]
 class MyProfile(webapp2.RequestHandler):
     def get(self):
