@@ -38,6 +38,9 @@
     <string name="edit_profile_last_name">Last Name</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="no_property_message">Please request or pull an order.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

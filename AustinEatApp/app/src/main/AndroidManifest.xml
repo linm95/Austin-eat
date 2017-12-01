@@ -17,6 +17,7 @@
         <activity
             android:name=".WalletActivity"
             android:exported="true" />
+
         <activity
             android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
@@ -39,10 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CreateOrder"></activity>
         <activity android:name=".EaterOrderDetailActivity" />
         <activity android:name=".DeliverOrderDetailActivity" />
-        <activity android:name=".OrderActivity" />
         <activity android:name=".EditProfileActivity"></activity>
+
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ public class UserHelper {
     private static String userID;
     private static String userEmail;
     private static String photoUrl;
+    private static String userProperty="";
 
     public static boolean isSignedIn() {
         // FIXME: 10/26/17 TT: Add actual implementation
@@ -32,6 +33,14 @@ public class UserHelper {
     public static void setCurrentUserEmail(String userEmail) {
         // FIXME: 10/26/17 TT: Add actual implementation
         UserHelper.userEmail = userEmail;
+    }
+
+    public static String getCurrentUserProperty(){
+        return userProperty;
+    }
+
+    public static void setCurrentUserProperty(){
+        UserHelper.userProperty = userProperty;
     }
 
     public static void setPhotoUrl(String photoUrl){

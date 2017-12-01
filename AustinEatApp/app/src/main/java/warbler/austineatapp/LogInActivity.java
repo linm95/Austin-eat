@@ -76,8 +76,11 @@ public class LogInActivity extends AppCompatActivity implements
             if(acct.getEmail().endsWith("@utexas.edu")) {
                 mStatusTextView.setText("Hello! " + acct.getDisplayName());
                 updateUI(true);
-                //UserHelper.setCurrentUserID(acct.getId());
-                //UserHelper.setCurrentUserEmail(acct.getEmail())
+                UserHelper.setCurrentUserID(acct.getId());
+                UserHelper.setCurrentUserEmail(acct.getEmail());
+                //UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
+                Intent intent = new Intent(this, DiscoverActivity.class);
+                startActivity(intent);
             }
             else{
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -120,8 +123,9 @@ public class LogInActivity extends AppCompatActivity implements
                         if(status.isSuccess()) {
                             updateUI(false);
                             mStatusTextView.setText("You are signed out now");
-                            //UserHelper.setCurrentUserID(null);
-                            //UserHelper.setCurrentUserEmail(null);
+                            UserHelper.setCurrentUserID(null);
+                            UserHelper.setCurrentUserEmail(null);
+                            UserHelper.setPhotoUrl(null);
                         }
                         else{
                             mStatusTextView.setText("Sign out failed:" + status.getStatusMessage());

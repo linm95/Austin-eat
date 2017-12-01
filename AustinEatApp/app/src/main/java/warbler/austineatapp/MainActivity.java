@@ -14,20 +14,36 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     ProfileFragment profileFragment;
+    NoPropertyFragment noPropertyFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_dashboard:
+
+                    if (UserHelper.getCurrentUserProperty().equals("deliver")){
+
+                    }
+                    else if(UserHelper.getCurrentUserProperty().equals("eater")){
+
+                    }
+                    else{
+                        noPropertyFragment = new NoPropertyFragment();
+                        fragmentTransaction.replace(R.id.content, noPropertyFragment);
+                        fragmentTransaction.commit();
+                    }
+
                     return true;
                 case R.id.navigation_notifications:
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    //FragmentManager fragmentManager = getFragmentManager();
+                    //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     if (profileFragment == null) {
                         profileFragment = new ProfileFragment();
                     }
@@ -44,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, LogInActivity.class);
+        startActivity(intent);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

@@ -1,5 +1,12 @@
 package warbler.austineatapp;
 
+
+import android.os.Bundle;
+import android.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -21,28 +28,35 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class OrderActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class DicoverFragment extends Fragment {
 
-    private float lat = 0;
-    private float lon = 0;
+    private double lat = 0;
+    private double lon = 0;
     private String url = "";
     private ListView mListView;
     private Context context;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover);
-        context = this;
-        mListView = (ListView) findViewById(R.id.discover_list_view);
+
+    public DicoverFragment() {
+        // Required empty public constructor
+        //super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_discover);
+        context = getActivity();
+        lat = LocationHelper.getLatitude();
+        lon = LocationHelper.getLongitude();
+        mListView = (ListView) getActivity().findViewById(R.id.discover_list_view);
         setListView();
     }
 
+
     private void setListView(){
-        OrderActivity.PullOrders pullOrders = new OrderActivity.PullOrders();
+        PullOrders pullOrders = new PullOrders();
         pullOrders.execute();
     }
 
-    private class PullOrders extends AsyncTask<Object, Void, ArrayList<Order>> {
+    private class PullOrders extends AsyncTask<Object, Void, ArrayList<Order>>{
 
         @Override
         protected ArrayList<Order> doInBackground(Object... args){
@@ -87,4 +101,12 @@ public class OrderActivity extends AppCompatActivity {
             });
         }
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_dicover, container, false);
+    }
+
 }
