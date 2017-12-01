@@ -51,7 +51,7 @@ public class EaterOrderAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get view for row item
-        View rowView = mInflater.inflate(R.layout.discover_single_row, parent, false);
+        View rowView = mInflater.inflate(R.layout.eater_single_row, parent, false);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.profile_image);
         TextView name = (TextView) rowView.findViewById(R.id.profile_name);
         TextView restaurant = (TextView) rowView.findViewById(R.id.restaurant_name);

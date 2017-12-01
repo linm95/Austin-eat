@@ -100,14 +100,46 @@ public class DeliverOrderFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
-            final ArrayList<Order> finalOrders = orders;
-            DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
-            mConfirmedListView.setAdapter(adapter);
+            //final ArrayList<Order> finalOrders = orders;
+            // Split orders into pending and confirmed parts respectively
+            ArrayList<Order> pendingOrders = new ArrayList<>();
+            ArrayList<Order> confirmedOrders = new ArrayList<>();
+            for(Order order: orders){
+                if(order.status.equals("pending")){
+                    pendingOrders.add(order);
+                }
+                else if(order.status.equals("confirmed")){
+                    confirmedOrders.add(order);
+                }
+            }
+            final ArrayList<Order> finalPendingOrders = pendingOrders;
+            final ArrayList<Order> finalConfirmedOrders = confirmedOrders;
+
+
+            DeliverOrderAdapter confirmedAdapter = new DeliverOrderAdapter(context, confirmedOrders);
+            // Set ConfirmedListView
+            mConfirmedListView.setAdapter(confirmedAdapter);
             mConfirmedListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Order selectedOrder = finalOrders.get(position);
+                    Order selectedOrder = finalConfirmedOrders.get(position);
+
+                    Intent detailIntent = new Intent(context, DeliverOrderDetailActivity.class);
+
+                    detailIntent.putExtra("OrderId", selectedOrder.id);
+
+                    startActivity(detailIntent);
+                }
+            });
+            // Set PendingListView
+            DeliverOrderAdapter pendingAdapter = new DeliverOrderAdapter(context, pendingOrders);
+            mConfirmedListView.setAdapter(pendingAdapter);
+            mConfirmedListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Order selectedOrder = finalPendingOrders.get(position);
 
                     Intent detailIntent = new Intent(context, DeliverOrderDetailActivity.class);
 
