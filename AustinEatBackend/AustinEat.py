@@ -25,10 +25,10 @@ class LogIn(webapp2.RequestHandler):
 
     def post(self):
         email = self.request.get("email")
-        logging.info(email)
+        #logging.info(email)
         user = User.query(User.email == email).get()
         if not user:
-            logging.info("user is none")
+            #logging.info("user is none")
             user = User()
             user.first_name = self.request.get("firstName")
             user.last_name = self.request.get("lastName")
@@ -56,7 +56,7 @@ class DiscoverEater(webapp2.RequestHandler):
         orders = Order.query(Order.status == "created" or Order.status == "pending").fetch()
         toSend = []
         for order in orders:
-            logging.info(order.ownerEmail)
+            #logging.info(order.ownerEmail)
             user = User.query(User.email == order.ownerEmail).get()
             dic = {}
             dic["id"] = order.orderID
@@ -292,9 +292,9 @@ class CreateOrder(webapp2.RequestHandler):
         now = datetime.now()
         order.createTime = now
         order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
-        logging.info(order.orderID)
+        #logging.info(order.orderID)
         order.ownerEmail = self.request.get("email")
-        logging.info(order.ownerEmail)
+        #logging.info(order.ownerEmail)
         order.restaurant = self.request.get("restaurant")
         order.food = self.request.get("food")
         order.destination = self.request.get("location")
