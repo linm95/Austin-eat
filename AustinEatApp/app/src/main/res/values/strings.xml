@@ -38,6 +38,7 @@
     <string name="edit_profile_first_name">First Name</string>
     <string name="edit_profile_last_name">Last Name</string>
     <string name="edit_profile_save">Save</string>
+    <string name="edit_profile_url">/edit-profile</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="no_property_message">Please request or pull an order.</string>

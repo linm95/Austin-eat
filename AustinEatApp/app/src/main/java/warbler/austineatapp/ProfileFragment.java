@@ -16,8 +16,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -26,32 +28,28 @@ import okhttp3.Response;
  */
 public class ProfileFragment extends Fragment {
     private class User {
-        public String first_name;
-        public String last_name;
-        public String avatar_url;
-        public String intro;
-        public String[] favorite_food_styles;
-        public String[] favorite_foods;
-        public float requester_rate;
-        public float deliveryperson_rate;
+        String first_name;
+        String last_name;
+        String avatar_url;
+        String intro;
+        String favorite_food_styles;
+        String favorite_foods;
+        float requester_rate;
+        float deliveryperson_rate;
     }
 
     User user;
 
-    public String printStringArray(String[] stringArray) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < stringArray.length; i++) {
-            if (i > 0) {
-                stringBuilder.append(", ");
-            }
-            stringBuilder.append(stringArray[i]);
-        }
-        return stringBuilder.toString();
-    }
-
     public Void FetchProfile(String url) {
+        RequestBody body;
+        if (UserHelper.useEmailAsToken) {
+            body = new FormBody.Builder().add("email", UserHelper.getCurrentUserEmail()).build();
+        } else {
+            body = new FormBody.Builder().add("idToken", UserHelper.getUserIdToken()).build();
+        }
+
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder().url(url).post(body).build();
 
         try {
             Response response = client.newCall(request).execute();
@@ -89,25 +87,11 @@ public class ProfileFragment extends Fragment {
 
         // Favorate food style
         TextView ffs = getActivity().findViewById(R.id.profileFFSContent);
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < user.favorite_food_styles.length; i++) {
-            if (i > 0) {
-                stringBuilder.append(", ");
-            }
-            stringBuilder.append(user.favorite_food_styles[i]);
-        }
-        ffs.setText(stringBuilder.toString());
+        ffs.setText(user.favorite_food_styles);
 
         // Favorate food
         TextView ff = getActivity().findViewById(R.id.profileFFContent);
-        stringBuilder = new StringBuilder();
-        for (int i = 0; i < user.favorite_foods.length; i++) {
-            if (i > 0) {
-                stringBuilder.append(", ");
-            }
-            stringBuilder.append(user.favorite_foods[i]);
-        }
-        ff.setText(stringBuilder.toString());
+        ff.setText(user.favorite_foods);
     }
 
     public ProfileFragment() {
@@ -130,6 +114,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // adjust avatar size
+        ImageView avatar = getActivity().findViewById(R.id.profileAvatar);
+        avatar.setMaxWidth(avatar.getMaxHeight());
 
         AsyncTask<String, Void, Void> getProfile = new AsyncTask<String, Void, Void>() {
             @Override
@@ -161,8 +149,8 @@ public class ProfileFragment extends Fragment {
         intent.putExtra("user_last_name", user.last_name);
         intent.putExtra("user_avatar_url", user.avatar_url);
         intent.putExtra("user_intro", user.intro);
-        intent.putExtra("user_ffs", printStringArray(user.favorite_food_styles));
-        intent.putExtra("user_ff", printStringArray(user.favorite_foods));
+        intent.putExtra("user_ffs", user.favorite_food_styles);
+        intent.putExtra("user_ff", user.favorite_foods);
         getActivity().startActivity(intent);
     }
 

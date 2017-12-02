@@ -49,9 +49,12 @@
         <activity android:name=".CreateOrder" />
         <activity android:name=".EaterOrderDetailActivity" />
         <activity android:name=".DeliverOrderDetailActivity" />
-        <activity android:name=".EditProfileActivity" />
-        <activity android:name=".HistoryActivity" />
         <activity android:name=".SelectRestaurantLocationActivity"></activity>
+        <activity
+            android:name=".EditProfileActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".HistoryActivity"></activity>
     </application>
 
 </manifest>

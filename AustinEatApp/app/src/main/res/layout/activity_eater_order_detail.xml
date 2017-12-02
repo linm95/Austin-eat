@@ -6,25 +6,36 @@
     android:layout_height="match_parent"
     tools:context="warbler.austineatapp.DiscoverDetailActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:orientation="vertical"
-        android:gravity="top">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="3dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="Detail Information">
-        </TextView>
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:text="Detail Information"></TextView>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button" />
+
             <ImageView
                 android:id="@+id/detail_profile_image"
                 android:layout_width="wrap_content"
@@ -32,68 +43,109 @@
                 android:layout_gravity="center_horizontal"
                 android:scaleX="1"
                 android:scaleY="1"
-                android:src="@mipmap/ic_launcher">
-            </ImageView>
+                android:src="@mipmap/ic_launcher"></ImageView>
+
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/detail_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Name">
-                </TextView>
+                    android:text="Name"></TextView>
+
                 <TextView
                     android:id="@+id/detail_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Location">
-                </TextView>
+                    android:text="Location"></TextView>
+
                 <TextView
                     android:id="@+id/detail_deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Deadline">
-                </TextView>
+                    android:text="Deadline"></TextView>
+
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/detail_rating_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
                     <TextView
                         android:id="@+id/detail_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5.0/5.0"/>
+                        android:text="5.0/5.0" />
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/confirmBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_green_light"
+                android:drawableLeft="@android:drawable/checkbox_on_background"
+                android:text="Confirm" />
+
+            <Button
+                android:id="@+id/chatBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_blue_light"
+                android:drawableLeft="@android:drawable/sym_action_chat"
+                android:text="Chat" />
+
+            <Button
+                android:id="@+id/scanBarcodeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:drawableLeft="?android:attr/actionModeSelectAllDrawable"
+                android:text="Code"
+                android:textSize="14sp" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/detail_restaurant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Restaurant:"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:text="Restaurant:" />
+
         <TextView
             android:id="@+id/detail_food_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food:"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:text="Food:" />
+
         <TextView
             android:id="@+id/detail_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Note:"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:text="Note:" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
