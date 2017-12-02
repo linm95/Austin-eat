@@ -14,8 +14,8 @@ import json
 import re
 import math
 import logging
-from google.oauth2 import id_token
-from google.auth.transport import requests
+#from google.oauth2 import id_token
+#from google.auth.transport import requests
 import time
 import os
 

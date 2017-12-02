@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     NoPropertyFragment noPropertyFragment;
     DiscoverFragment discoverFragment;
     FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    //FragmentTransaction fragmentTransaction;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -26,13 +26,14 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();;
                     if(discoverFragment == null)
                         discoverFragment = new DiscoverFragment();
-                    fragmentTransaction.replace(R.id.content, discoverFragment);
-                    fragmentTransaction.commit();
+                    fragmentTransaction1.replace(R.id.content, discoverFragment);
+                    fragmentTransaction1.commit();
                     return true;
                 case R.id.navigation_dashboard:
-
+                    FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();;
                     if (UserHelper.getCurrentUserProperty().equals("deliver")){
 
                     }
@@ -41,19 +42,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{
                         noPropertyFragment = new NoPropertyFragment();
-                        fragmentTransaction.replace(R.id.content, noPropertyFragment);
-                        fragmentTransaction.commit();
+                        fragmentTransaction2.replace(R.id.content, noPropertyFragment);
+                        fragmentTransaction2.commit();
                     }
 
                     return true;
                 case R.id.navigation_notifications:
                     //FragmentManager fragmentManager = getFragmentManager();
                     //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();;
                     if (profileFragment == null) {
                         profileFragment = new ProfileFragment();
                     }
-                    fragmentTransaction.replace(R.id.content, profileFragment);
-                    fragmentTransaction.commit();
+                    fragmentTransaction3.replace(R.id.content, profileFragment);
+                    fragmentTransaction3.commit();
                     return true;
             }
             return false;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fragmentManager = getFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         discoverFragment = new DiscoverFragment();
         fragmentTransaction.replace(R.id.content, discoverFragment);
         fragmentTransaction.commit();
