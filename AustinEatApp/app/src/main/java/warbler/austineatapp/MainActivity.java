@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     ProfileFragment profileFragment;
     NoPropertyFragment noPropertyFragment;
+    EaterOrderFragment eaterOrderFragment;
     DiscoverFragment discoverFragment;
     FragmentManager fragmentManager;
     //FragmentTransaction fragmentTransaction;
@@ -33,12 +34,17 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction1.commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();;
+                    FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+
+
+
                     if (UserHelper.getCurrentUserProperty().equals("deliver")){
 
                     }
                     else if(UserHelper.getCurrentUserProperty().equals("eater")){
-
+                        eaterOrderFragment = new EaterOrderFragment();
+                        fragmentTransaction2.replace(R.id.content, eaterOrderFragment);
+                        fragmentTransaction2.commit();
                     }
                     else{
                         noPropertyFragment = new NoPropertyFragment();

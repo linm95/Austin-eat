@@ -304,12 +304,22 @@ class CreateOrder(webapp2.RequestHandler):
         pass
 
     def post(self):
+        email = self.request.get("email")
+        user = User.query(User.email == email).get()
+
+        if user.user_property=="deliver":
+            logging.info("The user is a deliver now. Hence, he/she can't create an order.")
+            return
+        if user.user_property == "eater":
+            logging.info("The user is an eater now. Please complete/cancel your order first.")
+            return
+        # Update order info
         order = Order()
         now = datetime.now()
         order.createTime = now
         order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         #logging.info(order.orderID)
-        order.ownerEmail = self.request.get("email")
+        order.ownerEmail = email
         #logging.info(order.ownerEmail)
         order.restaurant = self.request.get("restaurant")
         order.food = self.request.get("food")
@@ -319,6 +329,9 @@ class CreateOrder(webapp2.RequestHandler):
         order.note = self.request.get("note")
         order.status = "created"
         order.put()
+        # Update user info
+        user.user_property = "eater"
+        user.put()
 
 
 # [END CreateOrder]
@@ -494,3 +507,13 @@ class GetOrderHistory(webapp2.RequestHandler):
         pass
 
 # [END GetOrderHistory]
+
+# [START SetUserProperty]
+class GetUserProperty(webapp2.RequestHandler):
+    def get(self):
+        email = self.request.get("email")
+        user = User.query(User.email == email).get()
+        self.response.write(user.user_property)
+
+
+# [END SetUserProperty]

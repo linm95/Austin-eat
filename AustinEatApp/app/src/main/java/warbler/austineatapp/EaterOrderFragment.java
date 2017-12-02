@@ -38,7 +38,7 @@ public class EaterOrderFragment extends Fragment {
 
     private float lat = 0;
     private float lon = 0;
-    private String url = "";
+    private String tail = "/eater-order";
     private boolean confirmed = false;
     private ListView mListView;
     private Context context;
@@ -81,7 +81,7 @@ public class EaterOrderFragment extends Fragment {
                     .add("lon", "" + lon)
                     .build();
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             ArrayList<Order> orders = null;

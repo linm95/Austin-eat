@@ -86,6 +86,11 @@ public class CreateOrder extends AppCompatActivity {
             }catch(IOException e){
                 e.printStackTrace();
             }
+
+            // Update user property
+            if(UserHelper.getCurrentUserProperty().equals(""))
+                UserHelper.setCurrentUserProperty("eater");
+
             return 0;
         }
     }

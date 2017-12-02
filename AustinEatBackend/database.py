@@ -16,7 +16,7 @@ class User(ndb.Model):
     user_id = ndb.StringProperty()
 
     # EaterOrDeliver
-    user_property = ndb.StringProperty
+    user_property = ndb.StringProperty()
 
     # student_number
 

@@ -25,12 +25,14 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LogInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener{
 
     private String tail = "/create-user";
+    private String getPropertyTail = "/get-user-property";
     private TextView mStatusTextView;
     GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
@@ -112,13 +114,16 @@ public class LogInActivity extends AppCompatActivity implements
                 updateUI(true);
                 UserHelper.setCurrentUserID(acct.getId());
                 UserHelper.setCurrentUserEmail(acct.getEmail());
-
                 UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
                 UserHelper.setFirstName(acct.getGivenName());
                 UserHelper.setLastName(acct.getFamilyName());
                 //Log.d("PHOTO URL", UserHelper.getPhotoUrl());
                 CreateUser createUser = new CreateUser();
                 createUser.execute();
+
+                SetUserProperty setUserProperty = new SetUserProperty();
+                setUserProperty.execute();
+                //UserHelper.setCurrentUserProperty();
 
                 //Intent intent = new Intent(this, DiscoverActivity.class);
                 //startActivity(intent);
@@ -183,7 +188,32 @@ public class LogInActivity extends AppCompatActivity implements
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    private class SetUserProperty extends AsyncTask {
 
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + getPropertyTail + "?email=" + UserHelper.getCurrentUserEmail())
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+                String userProperty = response.body().string();
+                System.out.println("DEBUG: " + userProperty);
+                //System.out.println("DEBUG: " + response.body().string());
+                UserHelper.setCurrentUserProperty(userProperty);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+
+            return null;
+
+        }
+
+
+    }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);

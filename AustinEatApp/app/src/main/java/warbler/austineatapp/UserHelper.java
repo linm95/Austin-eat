@@ -49,7 +49,7 @@ public class UserHelper {
         return userProperty;
     }
 
-    public static void setCurrentUserProperty(){
+    public static void setCurrentUserProperty(String userProperty){
         UserHelper.userProperty = userProperty;
     }
 
