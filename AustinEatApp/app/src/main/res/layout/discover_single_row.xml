@@ -65,20 +65,29 @@
             android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
+        <TextView
+            android:id="@+id/price"
+            android:text="Price: $8.00"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="left"
+            android:textSize="15sp">
+        </TextView>
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleSmall"
             android:clickable="false"
             android:numStars="5"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
             android:stepSize="1.0" />
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal">
         <TextView
             android:id="@+id/distance_display"
             android:text="0 miles away"

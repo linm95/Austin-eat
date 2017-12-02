@@ -64,7 +64,7 @@ public class DiscoverFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(context, CreateOrder.class);
+                Intent intent = new Intent(context, SelectRestaurantLocationActivity.class);
                 startActivity(intent);
             }
         });

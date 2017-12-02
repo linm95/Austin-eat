@@ -1,7 +1,9 @@
 package warbler.austineatapp;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,17 +20,48 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
+
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class CreateOrder extends AppCompatActivity {
 
-    String tail = "/create-order";
-    Context context;
+    protected GeoDataClient mGeoDataClient;
+    protected PlaceDetectionClient mPlaceDetectionClient;
+    private int PLACE_PICKER_REQUEST = 1;
+    private String tail = "/create-order";
+    private Context context;
+    private Activity activity;
+    private double lat;
+    private double lon;
+    private String res;
+    private double res_lat;
+    private double res_lon;
+    private String food;
+    private String price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_order);
+
         context = this;
+        activity = this;
+
+        Intent intent = getIntent();
+        res_lat = intent.getDoubleExtra("res_lat", 0.0);
+        res_lon = intent.getDoubleExtra("res_lon", 0.0);
+        res = intent.getStringExtra("res");
+        food = intent.getStringExtra("food");
+        price = intent.getStringExtra("price");
+
+        mGeoDataClient = Places.getGeoDataClient(this, null);
+
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+
+
         final EditText timeinput = (EditText) findViewById(R.id.time_input);
         timeinput.setClickable(true);
         timeinput.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +84,22 @@ public class CreateOrder extends AppCompatActivity {
 
             }
         });
+        final EditText locationInput = (EditText) findViewById(R.id.location_input);
+        locationInput.setClickable(true);
+        locationInput.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
         Button button = (Button) findViewById(R.id.create_push);
         button.setOnClickListener(new View.OnClickListener(){
 
@@ -62,6 +111,18 @@ public class CreateOrder extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == PLACE_PICKER_REQUEST){
+            if(resultCode == RESULT_OK){
+                Place place = PlacePicker.getPlace(data, activity);
+                EditText locationInput = findViewById(R.id.location_input);
+                locationInput.setText(place.getName());
+                lat = place.getLatLng().latitude;
+                lon = place.getLatLng().longitude;
+            }
+        }
+    }
     private class PushOrder extends AsyncTask<ArrayList<String>, Void, Integer>{
 
 
@@ -70,11 +131,16 @@ public class CreateOrder extends AppCompatActivity {
             ArrayList<String> info = params[0];
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
-                    .add("restaurant", info.get(0))
-                    .add("food", info.get(1))
-                    .add("location", info.get(2))
-                    .add("deadline", info.get(3))
-                    .add("note", info.get(4))
+                    .add("restaurant", res)
+                    .add("res_lat", "" + res_lat)
+                    .add("res_lon", "" + res_lon)
+                    .add("food", food)
+                    .add("price", price)
+                    .add("location", info.get(0))
+                    .add("lat", "" + lat)
+                    .add("lon", "" + lon)
+                    .add("deadline", info.get(1))
+                    .add("note", info.get(2))
                     .add("email", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
@@ -92,10 +158,7 @@ public class CreateOrder extends AppCompatActivity {
 
     private ArrayList<String> getInfo(){
         ArrayList<String> list = new ArrayList<String>();
-        EditText text = (EditText)findViewById(R.id.restaurant_input);
-        list.add(text.getText().toString());
-        text = (EditText)findViewById(R.id.food_input);
-        list.add(text.getText().toString());
+        EditText text;
         text = (EditText)findViewById(R.id.location_input);
         list.add(text.getText().toString());
         text = (EditText)findViewById(R.id.time_input);

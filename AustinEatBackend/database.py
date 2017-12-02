@@ -41,6 +41,7 @@ class Order(ndb.Model):
     orderID = ndb.StringProperty()
     ownerEmail = ndb.StringProperty()
     restaurant = ndb.StringProperty()
+    restaurant_location = ndb.GeoPtProperty()
     food = ndb.StringProperty()
     destination = ndb.StringProperty()
     destination_location = ndb.GeoPtProperty()
@@ -48,7 +49,7 @@ class Order(ndb.Model):
     note = ndb.StringProperty()
     deliverList = ndb.StringProperty(repeated=True)
     #distance = ndb.FloatProperty()
-
+    price = ndb.FloatProperty()
     #price
 
 

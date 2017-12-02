@@ -69,15 +69,16 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LogInActivity.class);
             startActivity(intent);
         }
+        else {
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        fragmentManager = getFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        discoverFragment = new DiscoverFragment();
-        fragmentTransaction.replace(R.id.content, discoverFragment);
-        fragmentTransaction.commit();
+            fragmentManager = getFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            discoverFragment = new DiscoverFragment();
+            fragmentTransaction.replace(R.id.content, discoverFragment);
+            fragmentTransaction.commit();
+        }
     }
 
     public void onClickWallet(View view) {

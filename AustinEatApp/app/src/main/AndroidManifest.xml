@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="warbler.austineatapp">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,10 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB_kVAdbKfv9H9M9kxIu4WlgwSf9g5wzBA" />
+
         <activity
             android:name=".LogInActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".DiscoverActivity" />
         <activity android:name=".DiscoverDetailActivity" />
         <activity
             android:name=".WalletActivity"
@@ -44,8 +49,9 @@
         <activity android:name=".CreateOrder" />
         <activity android:name=".EaterOrderDetailActivity" />
         <activity android:name=".DeliverOrderDetailActivity" />
-        <activity android:name=".EditProfileActivity"></activity>
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".SelectRestaurantLocationActivity"></activity>
     </application>
 
 </manifest>

@@ -4,53 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="warbler.austineatapp.CreateOrder">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+    tools:context="warbler.austineatapp.SelectRestaurantLocationActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Step 2: Select destination"
-            android:textSize="20dp"/>
-
+            android:layout_height="wrap_content"
+            android:text="Step 1: Select restaurant and food"
+            ></TextView>
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/location_label"
+        android:id="@+id/restaurant_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Restaurant">
+        <EditText
+            android:id="@+id/restaurant_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Deliver Location">
+            android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/food_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Food">
             <EditText
-                android:id="@+id/location_input"
+                android:id="@+id/food_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
-
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/deadline_label"
+            android:id="@+id/price_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Deliver Time">
+            android:hint="Price">
             <EditText
-                android:id="@+id/time_input"
+                android:id="@+id/price_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="datetime"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/note_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Note">
-            <EditText
-                android:id="@+id/note_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:lines="3"/>
+                android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
@@ -58,15 +53,15 @@
             android:orientation="horizontal"
             android:gravity="bottom">
             <Button
-                android:id="@+id/create_push"
+                android:id="@+id/create_prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Push"/>
+                android:text="Prev"/>
             <Button
-                android:id="@+id/create_cancel"
+                android:id="@+id/create_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"/>
+                android:text="Next"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

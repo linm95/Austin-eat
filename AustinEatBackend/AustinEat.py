@@ -16,6 +16,7 @@ import math
 import logging
 
 
+
 # [END IMPORT]
 
 # [START LogIn]
@@ -51,8 +52,8 @@ class DiscoverEater(webapp2.RequestHandler):
         pass
 
     def post(self):
-        lat = 0  # float(self.request.get('lat'))
-        lon = 0  # float(self.request.get('lng'))
+        lat = float(self.request.get('lat'))
+        lon = float(self.request.get('lon'))
         orders = Order.query(Order.status == "created" or Order.status == "pending").fetch()
         toSend = []
         for order in orders:
@@ -67,8 +68,9 @@ class DiscoverEater(webapp2.RequestHandler):
             dic["location"] = order.destination
             dic["deadline"] = order.due_time.strftime("%H:%M")
             dic["rating"] = user.requester_rate
-            order_lat = 0  # order.destination_location.lat
-            order_lon = 0  # order.destination_location.lon
+            dic["price"] = order.price
+            order_lat = order.destination_location.lat
+            order_lon = order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
             dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
             toSend.append(dic)
@@ -112,8 +114,8 @@ class DiscoverDetail(webapp2.RequestHandler):
         toSend["deadline"] = order.due_time.strftime("%H:%M")
         toSend["rating"] = user.requester_rate
         toSend["note"] = order.note
-        toSend["lat"] = 0.0 #order.destination_location.lat
-        toSend["lon"] = 0.0 #order.destination_location.lon
+        toSend["lat"] = order.destination_location.lat
+        toSend["lon"] = order.destination_location.lon
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))
@@ -148,7 +150,7 @@ class EaterOrder(webapp2.RequestHandler):
     # Get the info of my orders
     def post(self):
         lat = float(self.request.get('lat'))
-        lon = float(self.request.get('lng'))
+        lon = float(self.request.get('lon'))
         email = self.request.get('email')
         order = Order.query(Order.status == email).fetch()
         toSend = []
@@ -190,7 +192,7 @@ class DeliverOrder(webapp2.RequestHandler):
     # Get the info of my orders (pending and confirmed)
     def post(self):
         lat = float(self.request.get('lat'))
-        lon = float(self.request.get('lng'))
+        lon = float(self.request.get('lon'))
         deliver = float(self.request.get('deliver'))
 
         orders = Order.query(deliver == Order.deliverList).fetch()
@@ -245,6 +247,7 @@ class EaterOrderDetail(webapp2.RequestHandler):
         toSend["deadline"] = order.due_time.strftime("%H:%M")
         toSend["rating"] = user.rate
         toSend["note"] = order.note
+        toSend["price"] = order.price
         toSend["lat"] = order.destination_location.lat
         toSend["lon"] = order.destination_location.lon
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
@@ -292,12 +295,19 @@ class CreateOrder(webapp2.RequestHandler):
         now = datetime.now()
         order.createTime = now
         order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
+        res_lat = float(self.request.get("res_lat"))
+        res_lon = float(self.request.get("res_lon"))
+        order.restaurant_location = ndb.GeoPt(res_lat, res_lon)
         #logging.info(order.orderID)
         order.ownerEmail = self.request.get("email")
         #logging.info(order.ownerEmail)
+        order.price = float(self.request.get("price"))
         order.restaurant = self.request.get("restaurant")
         order.food = self.request.get("food")
         order.destination = self.request.get("location")
+        lat = float(self.request.get("lat"))
+        lon = float(self.request.get("lon"))
+        order.destination_location = ndb.GeoPt(lat, lon)
         time = self.request.get("deadline").split(":")
         order.due_time = datetime(now.year, now.month, now.day, int(time[0]), int(time[1]))
         order.note = self.request.get("note")
