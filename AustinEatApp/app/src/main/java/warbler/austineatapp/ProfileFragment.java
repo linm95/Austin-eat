@@ -16,8 +16,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -50,8 +52,16 @@ public class ProfileFragment extends Fragment {
     }
 
     public Void FetchProfile(String url) {
+        String idToken = UserHelper.getUserIdToken();
+        RequestBody body;
+        if (UserHelper.useEmailAsToken) {
+            body = new FormBody.Builder().add("email", UserHelper.getCurrentUserEmail()).build();
+        } else {
+            body = new FormBody.Builder().add("idToken", idToken).build();
+        }
+
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder().url(url).post(body).build();
 
         try {
             Response response = client.newCall(request).execute();

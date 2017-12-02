@@ -13,6 +13,7 @@ class User(ndb.Model):
     name = ndb.ComputedProperty(lambda self: "{} {}".format(self.first_name, self.last_name))
     avatar_url = ndb.StringProperty()
     email = ndb.StringProperty()
+    user_id = ndb.StringProperty()
 
     # EaterOrDeliver
     user_property = ndb.StringProperty
@@ -21,6 +22,7 @@ class User(ndb.Model):
 
     # paypal_account
     balance = ndb.FloatProperty()
+    transaction_history = ndb.StringProperty(repeated=True)
 
     intro = ndb.TextProperty()
     favorite_food_styles = ndb.StringProperty()

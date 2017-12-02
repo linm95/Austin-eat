@@ -15,16 +15,21 @@ public class MainActivity extends AppCompatActivity {
 
     ProfileFragment profileFragment;
     NoPropertyFragment noPropertyFragment;
+    DiscoverFragment discoverFragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    if(discoverFragment == null)
+                        discoverFragment = new DiscoverFragment();
+                    fragmentTransaction.replace(R.id.content, discoverFragment);
+                    fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_dashboard:
 
@@ -67,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        discoverFragment = new DiscoverFragment();
+        fragmentTransaction.replace(R.id.content, discoverFragment);
+        fragmentTransaction.commit();
     }
 
     public void onClickWallet(View view) {
