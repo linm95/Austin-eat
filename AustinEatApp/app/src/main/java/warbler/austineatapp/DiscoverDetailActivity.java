@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -32,9 +33,11 @@ public class DiscoverDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getStringExtra("orderID");
         context = this;
+        PullOrder pullOrder = new PullOrder();
+        pullOrder.execute();
     }
 
-    private class PullOrders extends AsyncTask<Object, Void, OrderDetail> {
+    private class PullOrder extends AsyncTask<Object, Void, OrderDetail> {
 
         @Override
         protected OrderDetail doInBackground(Object... args){
@@ -49,6 +52,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             OrderDetail order = null;
             try{
                 Response response = client.newCall(request).execute();
+                //Log.d("Response", response.body().string());
                 Gson gson = new Gson();
                 order = gson.fromJson(response.body().string(), OrderDetail.class);
             }catch(IOException e){
@@ -65,7 +69,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             TextView deadline = (TextView) findViewById(R.id.detail_deadline);
             RatingBar star = (RatingBar) findViewById(R.id.detail_rating_bar);
             TextView rating = (TextView) findViewById(R.id.detail_rating);
-            TextView restaurant = (TextView) findViewById(R.id.detail_rating);
+            TextView restaurant = (TextView) findViewById(R.id.detail_restaurant);
             TextView food = (TextView) findViewById(R.id.detail_food_name);
             TextView note = (TextView) findViewById(R.id.detail_note);
 

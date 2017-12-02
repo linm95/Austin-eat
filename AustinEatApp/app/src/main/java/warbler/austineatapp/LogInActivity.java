@@ -119,10 +119,12 @@ public class LogInActivity extends AppCompatActivity implements
                 //Log.d("PHOTO URL", UserHelper.getPhotoUrl());
                 CreateUser createUser = new CreateUser();
                 createUser.execute();
+
                 //Intent intent = new Intent(this, DiscoverActivity.class);
                 //startActivity(intent);
                 Intent upIntent = NavUtils.getParentActivityIntent(this);
                 NavUtils.navigateUpTo(this, upIntent);
+
             }
             else{
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(

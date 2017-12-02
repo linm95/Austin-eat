@@ -3,6 +3,8 @@ package warbler.austineatapp;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,29 +33,41 @@ import okhttp3.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DicoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment {
 
     private double lat = 0;
     private double lon = 0;
-    private String url = "";
     private ListView mListView;
     private Context context;
+    private String tail = "/discover";
 
-    public DicoverFragment() {
+    public DiscoverFragment() {
         // Required empty public constructor
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_discover);
+    }
+
+    @Override
+
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
         context = getActivity();
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
-        mListView = (ListView) getActivity().findViewById(R.id.discover_list_view);
+        mListView = getActivity().findViewById(R.id.discover_list_view);
         setListView();
     }
-
 
     private void setListView(){
         PullOrders pullOrders = new PullOrders();
         pullOrders.execute();
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(context, CreateOrder.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private class PullOrders extends AsyncTask<Object, Void, ArrayList<Order>>{
@@ -66,12 +80,13 @@ public class DicoverFragment extends Fragment {
                     .add("lon", "" + lon)
                     .build();
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             ArrayList<Order> orders = null;
             try{
                 Response response = client.newCall(request).execute();
+                //Log.d("!!!!!!!!!!!!!", response.body().string());
                 Gson gson = new Gson();
                 TypeToken<ArrayList<Order>> token = new TypeToken<ArrayList<Order>>(){};
                 orders = gson.fromJson(response.body().string(), token.getType());
@@ -84,21 +99,23 @@ public class DicoverFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
             final ArrayList<Order> finalOrders = orders;
-            DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
-            mListView.setAdapter(adapter);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            if(finalOrders.size() != 0) {
+                DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
+                mListView.setAdapter(adapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Order selectedOrder = finalOrders.get(position);
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Order selectedOrder = finalOrders.get(position);
 
-                    Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
+                        Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
 
-                    detailIntent.putExtra("OrderId", selectedOrder.id);
+                        detailIntent.putExtra("orderID", selectedOrder.id);
 
-                    startActivity(detailIntent);
-                }
-            });
+                        startActivity(detailIntent);
+                    }
+                });
+            }
         }
     }
 
@@ -106,7 +123,7 @@ public class DicoverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dicover, container, false);
+        return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
 }
