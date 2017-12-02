@@ -11,6 +11,7 @@ public class UserHelper {
     private static String userProperty="";
     private static String firstName;
     private static String lastName;
+    public static Boolean useEmailAsToken = true;
 
     public static void reset(){
         userID = null;

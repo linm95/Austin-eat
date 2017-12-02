@@ -14,9 +14,25 @@ import json
 import re
 import math
 import logging
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import time
+import os
 
 
 # [END IMPORT]
+
+
+# [START AuthorizeUser]
+def authorize_user(token):
+    idinfo = id_token.verify_oauth2_token(token, requests.Request(), VAR.CLIENT_ID)
+    if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+        raise ValueError('Wrong issuer.')
+    if idinfo['hd'] != VAR.GSUITE_DOMAIN_NAME:
+        raise ValueError('Wrong hosted domain.')
+    return idinfo['sub']
+# [END AuthorizeUser]
+
 
 # [START LogIn]
 class LogIn(webapp2.RequestHandler):
@@ -333,9 +349,21 @@ class GetClientToken(webapp2.RequestHandler):
 
 # [START GetBalance]
 class GetBalance(webapp2.RequestHandler):
-    def get(self):
-        # fixme: TT add implementation
-        self.response.write("42.50")
+    def post(self):
+        token = self.request.get("idToken")
+        if token:
+            try:
+                userid = authorize_user(token)
+            except ValueError:
+                # Invalid token
+                self.error(401)
+                return
+            user = User.query(User.user_id == userid).get()
+        else:
+            email = self.request.get("email")
+            user = User.query(User.email == email).get()
+
+        self.response.write(user.balance)
 
 
 # [END GetBalance]
@@ -346,6 +374,19 @@ class IssueTransaction(webapp2.RequestHandler):
         # Use the App Engine Requests adapter. This makes sure that Requests uses
         # URLFetch.
         requests_toolbelt.adapters.appengine.monkeypatch()
+
+        token = self.request.get("idToken")
+        if token:
+            try:
+                userid = authorize_user(token)
+            except ValueError:
+                # Invalid token
+                self.error(401)
+                return
+            user = User.query(User.user_id == userid).get()
+        else:
+            email = self.request.get("email")
+            user = User.query(User.email == email).get()
 
         gateway = braintree.BraintreeGateway(access_token=VAR.paypal_access_token)
         result = gateway.transaction.sale({
@@ -364,10 +405,19 @@ class IssueTransaction(webapp2.RequestHandler):
         })
 
         if result.is_success:
-            self.response.write("success")
+            user.transaction_history.append(result.transaction.id)
+            user.balance += result.transaction.amount
+
+            user.put()
+            if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+                pass
+            else:
+                time.sleep(3)
+
+            self.response.write(user.balance)
         else:
-            print format(result.message)
-            self.error(500)
+            self.response.write(result.message)
+            self.set_status(500)
 
 
 # [END IssueTransaction]
@@ -375,17 +425,29 @@ class IssueTransaction(webapp2.RequestHandler):
 
 # [START GetProfile]
 class GetProfile(webapp2.RequestHandler):
-    def get(self):
-        # FIXME: TT add real implementation
+    def post(self):
+        token = self.request.get("idToken")
+        if token:
+            try:
+                userid = authorize_user(token)
+            except ValueError:
+                # Invalid token
+                self.error(401)
+                return
+            user = User.query(User.user_id == userid).get()
+        else:
+            email = self.request.get("email")
+            user = User.query(User.email == email).get()
+
         ret = {
-            "first_name": "Tony",
-            "last_name": "Tan",
-            "avatar_url": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-            "intro": "Here goes my intro!",
-            "favorite_food_styles": ["Monkey", "rabbit"],
-            "favorite_foods": ["hole", "look", "read"],
-            "requester_rate": 3.3,
-            "deliveryperson_rate": 1.7
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "avatar_url": user.avatar_url,
+            "intro": user.intro,
+            "favorite_food_styles": user.favorite_food_styles,
+            "favorite_foods": user.favorite_foods,
+            "requester_rate": user.requester_rate,
+            "deliveryperson_rate": user.deliveryperson_rate
         }
         self.response.write(json.dumps(ret))
 
@@ -396,22 +458,31 @@ class GetProfile(webapp2.RequestHandler):
 # [START EditProfile]
 class EditProfile(webapp2.RequestHandler):
     def post(self):
-        user_email = self.request.get("email")
-        user = User.query(User.email == user_email).get()
+        token = self.request.get("idToken")
+        if token:
+            try:
+                userid = authorize_user(token)
+            except ValueError:
+                # Invalid token
+                self.error(401)
+                return
+            user = User.query(User.user_id == userid).get()
+        else:
+            email = self.request.get("email")
+            user = User.query(User.email == email).get()
 
         user.first_name = self.request.get("first_name")
         user.last_name = self.request.get("last_name")
         user.intro = self.request.get("intro")
 
-        favorite_food_styles_str = self.request.get("favorite_food_styles")
-        favorite_food_styles_list = re.split(",\s*", favorite_food_styles_str)
-        user.favorite_food_styles = favorite_food_styles_list
-
-        favorite_foods_str = self.request.get("favorite_foods")
-        favorite_foods_list = re.split(",\s*", favorite_foods_str)
-        user.favorite_foods = favorite_foods_list
+        user.favorite_food_styles = self.request.get("favorite_food_styles")
+        user.favorite_foods = self.request.get("favorite_foods")
 
         user.put()
+        if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+            pass
+        else:
+            time.sleep(3)
 
 
 # [END EditProfile]
@@ -420,10 +491,6 @@ class EditProfile(webapp2.RequestHandler):
 # [START GetOrderHistory]
 class GetOrderHistory(webapp2.RequestHandler):
     def get(self):
-        user_email = self.request.get("email")
-        user = User.query(User.email == user_email).get()
-        orders = Order.query(ancestor=user.key()).order(-Order.date).fetch()
-        orders_dict = map(lambda x: x.to_dict(), orders)
-        self.response.write(json.dumps(orders_dict))
+        pass
 
 # [END GetOrderHistory]

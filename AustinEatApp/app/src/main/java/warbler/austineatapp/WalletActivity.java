@@ -78,12 +78,22 @@ public class WalletActivity extends AppCompatActivity implements PaymentMethodNo
 
     public boolean Topup(String url) {
         PostalAddress shippingAddress = nonce.getShippingAddress();
+        String tag, token;
+
+        if (UserHelper.useEmailAsToken) {
+            tag = "email";
+            token = UserHelper.getCurrentUserEmail();
+        } else {
+            tag = "idToken";
+            token = UserHelper.getUserIdToken();
+        }
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("amount", topupAmount)
                 .addFormDataPart("payment_method_nonce", nonce.getNonce())
+                .addFormDataPart(tag, token)
                 //.addFormDataPart("first_name", nonce.getFirstName())
                 //.addFormDataPart("last_name", nonce.getLastName())
                 //.addFormDataPart("street_address", shippingAddress.getStreetAddress())
@@ -105,17 +115,24 @@ public class WalletActivity extends AppCompatActivity implements PaymentMethodNo
     }
 
      public String GetBalance(String url) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
+         RequestBody body;
+         if (UserHelper.useEmailAsToken) {
+             body = new FormBody.Builder().add("email", UserHelper.getCurrentUserEmail()).build();
+         } else {
+             body = new FormBody.Builder().add("idToken", UserHelper.getUserIdToken()).build();
+         }
 
-        try {
-            Response response = client.newCall(request).execute();
-            return response.body().string();
-        } catch (java.io.IOException e) {
-            System.err.println("- Error: IO Exception getting balance");
-            System.err.println("- Error: " + e.toString());
-            return null;
-        }
+         OkHttpClient client = new OkHttpClient();
+         Request request = new Request.Builder().url(url).post(body).build();
+
+         try {
+             Response response = client.newCall(request).execute();
+             return response.body().string();
+         } catch (java.io.IOException e) {
+             System.err.println("- Error: IO Exception getting balance");
+             System.err.println("- Error: " + e.toString());
+             return null;
+         }
     }
 
     public void SetBalance(String balance) {
