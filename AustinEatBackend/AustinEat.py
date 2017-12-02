@@ -95,15 +95,15 @@ class DiscoverDetail(webapp2.RequestHandler):
         user = User.query(User.email == order.ownerEmail).get()
         toSend = {}
         toSend["photoUrl"] = user.avatar_url
-        toSend["name"] = user.last_name
+        toSend["name"] = user.first_name
         toSend["restaurant"] = order.restaurant
         toSend["food"] = order.food
         toSend["location"] = order.destination
         toSend["deadline"] = order.due_time.strftime("%H:%M")
         toSend["rating"] = user.requester_rate
         toSend["note"] = order.note
-        toSend["lat"] = order.destination_location.lat
-        toSend["lon"] = order.destination_location.lon
+        toSend["lat"] = 0.0 #order.destination_location.lat
+        toSend["lon"] = 0.0 #order.destination_location.lon
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))

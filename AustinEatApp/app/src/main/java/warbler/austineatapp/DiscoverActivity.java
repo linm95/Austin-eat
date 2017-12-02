@@ -92,7 +92,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
                         Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
 
-                        detailIntent.putExtra("OrderId", selectedOrder.id);
+                        detailIntent.putExtra("orderID", selectedOrder.id);
 
                         startActivity(detailIntent);
                     }

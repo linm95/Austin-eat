@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     ProfileFragment profileFragment;
     NoPropertyFragment noPropertyFragment;
+    DiscoverFragment discoverFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -25,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    if(discoverFragment == null)
+                        discoverFragment = new DiscoverFragment();
+                    fragmentTransaction.replace(R.id.content, discoverFragment);
+                    fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_dashboard:
 
