@@ -20,6 +20,16 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     //FragmentTransaction fragmentTransaction;
 
+    // encode three tabs
+    enum TAB {
+        DISCOVER,
+        ORDER,
+        PROFILE
+    }
+
+    // remember where are we
+    private static TAB tab = TAB.DISCOVER;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -32,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         discoverFragment = new DiscoverFragment();
                     fragmentTransaction1.replace(R.id.content, discoverFragment);
                     fragmentTransaction1.commit();
+                    tab = TAB.DISCOVER;
                     return true;
                 case R.id.navigation_dashboard:
                     FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
@@ -51,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction2.replace(R.id.content, noPropertyFragment);
                         fragmentTransaction2.commit();
                     }
+                    tab = TAB.ORDER;
 
                     return true;
                 case R.id.navigation_notifications:
@@ -62,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     fragmentTransaction3.replace(R.id.content, profileFragment);
                     fragmentTransaction3.commit();
+                    tab = TAB.PROFILE;
                     return true;
             }
             return false;
@@ -83,8 +96,27 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        discoverFragment = new DiscoverFragment();
-        fragmentTransaction.replace(R.id.content, discoverFragment);
+
+        // go back to where we left
+        if (tab == TAB.DISCOVER) {
+            if (discoverFragment == null) {
+                discoverFragment = new DiscoverFragment();
+            }
+            fragmentTransaction.replace(R.id.content, discoverFragment);
+            navigation.setSelectedItemId(R.id.navigation_home);
+        } else if (tab == TAB.ORDER) {
+            if (noPropertyFragment == null) {
+                noPropertyFragment = new NoPropertyFragment();
+            }
+            fragmentTransaction.replace(R.id.content, noPropertyFragment);
+            navigation.setSelectedItemId(R.id.navigation_dashboard);
+        } else if (tab == TAB.PROFILE) {
+            if (profileFragment == null) {
+                profileFragment = new ProfileFragment();
+            }
+            fragmentTransaction.replace(R.id.content, profileFragment);
+            navigation.setSelectedItemId(R.id.navigation_notifications);
+        }
         fragmentTransaction.commit();
     }
 
