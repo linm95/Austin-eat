@@ -97,16 +97,19 @@ public class MainActivity extends AppCompatActivity {
                 discoverFragment = new DiscoverFragment();
             }
             fragmentTransaction.replace(R.id.content, discoverFragment);
+            navigation.setSelectedItemId(R.id.navigation_home);
         } else if (tab == TAB.ORDER) {
             if (noPropertyFragment == null) {
                 noPropertyFragment = new NoPropertyFragment();
             }
             fragmentTransaction.replace(R.id.content, noPropertyFragment);
+            navigation.setSelectedItemId(R.id.navigation_dashboard);
         } else if (tab == TAB.PROFILE) {
             if (profileFragment == null) {
                 profileFragment = new ProfileFragment();
             }
             fragmentTransaction.replace(R.id.content, profileFragment);
+            navigation.setSelectedItemId(R.id.navigation_notifications);
         }
         fragmentTransaction.commit();
     }

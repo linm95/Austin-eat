@@ -115,6 +115,10 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // adjust avatar size
+        ImageView avatar = getActivity().findViewById(R.id.profileAvatar);
+        avatar.setMaxWidth(avatar.getMaxHeight());
+
         AsyncTask<String, Void, Void> getProfile = new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... urls) {
