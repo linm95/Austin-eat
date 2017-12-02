@@ -19,6 +19,7 @@ app = webapp2.WSGIApplication([
     (VAR.DELIVER_ORDER_PAGE, AustinEat.DeliverOrder),
     (VAR.GET_USER_PROPERTY, AustinEat.GetUserProperty),
 
+    (VAR.PULL_ORDER, AustinEat.PullOrder),
     (VAR.CREATE_USER, AustinEat.LogIn),
     (VAR.CREATE_ORDER, AustinEat.CreateOrder)
 ], debug = True)

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CreateOrder extends AppCompatActivity {
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
 
-        final EditText timeinput = (EditText) findViewById(R.id.time_input);
+        final EditText timeinput = findViewById(R.id.time_input);
         timeinput.setClickable(true);
         timeinput.setOnClickListener(new View.OnClickListener() {
 
@@ -100,13 +101,24 @@ public class CreateOrder extends AppCompatActivity {
             }
         });
 
-        Button button = (Button) findViewById(R.id.create_push);
+        Button button = findViewById(R.id.create_push);
         button.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 PushOrder pushOrder = new PushOrder();
                 pushOrder.execute(getInfo());
+                Toast.makeText(activity, "Order pushed successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(activity, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        button = findViewById(R.id.create_prev);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

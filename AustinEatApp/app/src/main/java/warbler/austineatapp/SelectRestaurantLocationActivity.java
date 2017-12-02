@@ -55,6 +55,14 @@ public class SelectRestaurantLocationActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        button = findViewById(R.id.create_cancel);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

@@ -6,14 +6,17 @@
     android:layout_height="match_parent"
     tools:context="warbler.austineatapp.CreateOrder">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_margin="8dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Step 2: Select destination"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="16dp"
             android:textSize="20dp"/>
 
         <android.support.design.widget.TextInputLayout
@@ -25,6 +28,7 @@
                 android:id="@+id/location_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -37,6 +41,7 @@
                 android:id="@+id/time_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:inputType="datetime"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -50,23 +55,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
+                android:layout_margin="8dp"
                 android:lines="3"/>
         </android.support.design.widget.TextInputLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="16dp"
             android:gravity="bottom">
+            <Button
+                android:id="@+id/create_prev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prev"/>
             <Button
                 android:id="@+id/create_push"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
                 android:text="Push"/>
-            <Button
-                android:id="@+id/create_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancel"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

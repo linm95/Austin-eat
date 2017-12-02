@@ -95,6 +95,7 @@ class DiscoverEater(webapp2.RequestHandler):
 
 # [END DiscoverOrder]
 
+
 # [START distance]
 def distance(loc1, loc2):
     lat1, lon1 = loc1
@@ -108,9 +109,15 @@ def distance(loc1, loc2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     d = earthRadius * c
     return d
-
-
 # [END distance]
+
+# [START PullOrder]
+class PullOrder(webapp2.RequestHandler):
+    def post(self):
+        orderID = self.request.get("id")
+        order = Order.query(Order.orderID == orderID).get()
+        order.status = "pending"
+# [END PullOrder]
 
 # [START DiscoverDetail]
 class DiscoverDetail(webapp2.RequestHandler):
@@ -130,6 +137,7 @@ class DiscoverDetail(webapp2.RequestHandler):
         toSend["deadline"] = order.due_time.strftime("%H:%M")
         toSend["rating"] = user.requester_rate
         toSend["note"] = order.note
+        toSend["price"] = order.price
         toSend["lat"] = order.destination_location.lat
         toSend["lon"] = order.destination_location.lon
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")

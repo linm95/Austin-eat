@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -25,7 +27,9 @@ public class DiscoverDetailActivity extends AppCompatActivity {
 
     private String id;
     private String tail = "/discover-detail";
+    private String pullTail = "/pull-order";
     private Context context;
+    private OrderDetail order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +39,37 @@ public class DiscoverDetailActivity extends AppCompatActivity {
         context = this;
         PullOrder pullOrder = new PullOrder();
         pullOrder.execute();
+        Button button = findViewById(R.id.detail_pull);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                UserPullOrder userPullOrder = new UserPullOrder();
+                userPullOrder.execute();
+            }
+        });
     }
 
+    private class UserPullOrder extends AsyncTask{
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("id",id)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + pullTail)
+                    .post(body)
+                    .build();
+            try{
+                client.newCall(request).execute();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
     private class PullOrder extends AsyncTask<Object, Void, OrderDetail> {
 
         @Override
@@ -49,7 +82,6 @@ public class DiscoverDetailActivity extends AppCompatActivity {
                     .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
-            OrderDetail order = null;
             try{
                 Response response = client.newCall(request).execute();
                 //Log.d("Response", response.body().string());
@@ -63,25 +95,27 @@ public class DiscoverDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(OrderDetail order){
-            ImageView image = (ImageView) findViewById(R.id.detail_profile_image);
-            TextView name = (TextView) findViewById(R.id.detail_profile_name);
-            TextView location = (TextView) findViewById(R.id.detail_location);
-            TextView deadline = (TextView) findViewById(R.id.detail_deadline);
-            RatingBar star = (RatingBar) findViewById(R.id.detail_rating_bar);
-            TextView rating = (TextView) findViewById(R.id.detail_rating);
-            TextView restaurant = (TextView) findViewById(R.id.detail_restaurant);
-            TextView food = (TextView) findViewById(R.id.detail_food_name);
-            TextView note = (TextView) findViewById(R.id.detail_note);
+            ImageView image = findViewById(R.id.detail_profile_image);
+            TextView name = findViewById(R.id.detail_profile_name);
+            TextView location = findViewById(R.id.detail_location);
+            TextView deadline = findViewById(R.id.detail_deadline);
+            RatingBar star = findViewById(R.id.detail_rating_bar);
+            TextView rating = findViewById(R.id.detail_rating);
+            TextView restaurant = findViewById(R.id.detail_restaurant);
+            TextView food = findViewById(R.id.detail_food_name);
+            TextView note = findViewById(R.id.detail_note);
+            TextView price = findViewById(R.id.detail_price);
 
             Picasso.with(context).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(image);
-            name.setText("name: " + order.name);
-            location.setText("Location: " + order.location);
+            name.setText("Name: " + order.name);
+            location.setText("Destination: " + order.location);
             deadline.setText("Deadline: " + order.deadline);
             star.setRating(order.rating);
             rating.setText(order.rating + "/5.0");
             restaurant.setText("Restaurant: " + order.restaurant);
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
+            price.setText("Money you get: " + order.price);
         }
     }
 }
