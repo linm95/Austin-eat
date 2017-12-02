@@ -12,6 +12,7 @@ public class Order {
     String food;
     String location;
     String deadline;
+    String status;
     float rating;
     float distance;
     float time;

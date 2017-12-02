@@ -60,6 +60,10 @@ public class UserHelper {
         return photoUrl;
     }
 
+    public static String getUserIdToken() {
+        // FIXME: 12/1/17 TT: Add actual implementation
+        return null;
+    }
     public static void setFirstName(String firstName){
         UserHelper.firstName = firstName;
     }
