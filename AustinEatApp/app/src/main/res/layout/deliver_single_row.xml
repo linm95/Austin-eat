@@ -100,11 +100,13 @@
         </TextView>
 
         <Button
-            android:id="@+id/ConfirmBtn"
+            android:id="@+id/StatusBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.00"
             android:text="Pending"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:clickable="false"
+            />
     </LinearLayout>
 </LinearLayout>

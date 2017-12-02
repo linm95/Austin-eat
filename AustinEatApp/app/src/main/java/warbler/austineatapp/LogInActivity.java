@@ -122,6 +122,7 @@ public class LogInActivity extends AppCompatActivity implements
 
                 //Intent intent = new Intent(this, DiscoverActivity.class);
                 //startActivity(intent);
+
                 Intent upIntent = NavUtils.getParentActivityIntent(this);
                 NavUtils.navigateUpTo(this, upIntent);
 

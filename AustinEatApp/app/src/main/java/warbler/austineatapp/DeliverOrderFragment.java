@@ -100,7 +100,6 @@ public class DeliverOrderFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
-            //final ArrayList<Order> finalOrders = orders;
             // Split orders into pending and confirmed parts respectively
             ArrayList<Order> pendingOrders = new ArrayList<>();
             ArrayList<Order> confirmedOrders = new ArrayList<>();
@@ -132,10 +131,11 @@ public class DeliverOrderFragment extends Fragment {
                     startActivity(detailIntent);
                 }
             });
+
             // Set PendingListView
             DeliverOrderAdapter pendingAdapter = new DeliverOrderAdapter(context, pendingOrders);
-            mConfirmedListView.setAdapter(pendingAdapter);
-            mConfirmedListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            mPendingListView.setAdapter(pendingAdapter);
+            mPendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
