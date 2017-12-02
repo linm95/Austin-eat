@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="warbler.austineatapp.DiscoverFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_input_add"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/discover_list_view"
+            android:descendantFocusability="blocksDescendants"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+        </ListView>
+    </RelativeLayout>
+
+</FrameLayout>

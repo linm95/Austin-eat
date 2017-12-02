@@ -7,8 +7,8 @@
     <string name="introductionApp">The world\'s Greatest Food Delivery APP(TM). By APT Warbler.</string>
     <string name="viewStreamsButton">View Streams</string>
 
-    <!--string name="root_url">http://10.0.2.2:8080</string-->
-    <string name="root_url">https://austineat-186301.appspot.com</string>
+    <string name="root_url">http://10.0.2.2:8080</string>
+    <!--string name="root_url">https://austineat-186301.appspot.com</string-->
     <string name="wallet_url">/wallet</string>
     <string name="topup_url">/topup</string>
     <string name="balance_url">/balance</string>
