@@ -115,8 +115,11 @@ def distance(loc1, loc2):
 class PullOrder(webapp2.RequestHandler):
     def post(self):
         orderID = self.request.get("id")
+        deliverEmail = self.request.get("deliverEmail")
         order = Order.query(Order.orderID == orderID).get()
         order.status = "pending"
+        order.deliverList.append()
+        order.put()
 # [END PullOrder]
 
 # [START DiscoverDetail]
@@ -176,25 +179,28 @@ class EaterOrder(webapp2.RequestHandler):
         lat = float(self.request.get('lat'))
         lon = float(self.request.get('lon'))
         email = self.request.get('email')
-        order = Order.query(Order.status == email).fetch()
+        order = Order.query(Order.ownerEmail == email).fetch()
         toSend = []
-
-        for deliver in order.deliverList:
-            user = User.query(User.email == deliver)
-            dic = {}
-            dic["id"] = order.orderID
-            dic["photoUrl"] = user.imageUrl
-            dic["name"] = user.name
-            dic["restaurant"] = order.restaurant
-            dic["food"] = order.food
-            dic["location"] = order.destination
-            dic["deadline"] = order.due_time.strftime("%H:%M")
-            dic["rating"] = user.rate
-            order_lat = order.destination_location.lat
-            order_lon = order.destination_location.lon
-            dic["distance"] = distance((lat, lon), (order_lat, order_lon))
-            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
-            toSend.append(dic)
+        logging.error(order)
+        if hasattr(order, 'deliverList'):
+            for deliver in order.deliverList:
+                user = User.query(User.email == deliver)
+                dic = {}
+                dic["id"] = order.orderID
+                dic["photoUrl"] = user.imageUrl
+                dic["name"] = user.name
+                dic["restaurant"] = order.restaurant
+                dic["food"] = order.food
+                dic["location"] = order.destination
+                dic["deadline"] = order.due_time.strftime("%H:%M")
+                dic["rating"] = user.rate
+                order_lat = order.destination_location.lat
+                order_lon = order.destination_location.lon
+                dic["distance"] = distance((lat, lon), (order_lat, order_lon))
+                dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+                toSend.append(dic)
+        else:
+            logging.info("DEBUG: deliver list is empty.")
 
         self.response.write(json.dumps(toSend))
 
@@ -319,10 +325,10 @@ class CreateOrder(webapp2.RequestHandler):
         user = User.query(User.email == email).get()
 
         if user.user_property=="deliver":
-            logging.info("The user is a deliver now. Hence, he/she can't create an order.")
+            logging.info("DEBUG: The user is a deliver now. Hence, he/she can't create an order.")
             return
         if user.user_property == "eater":
-            logging.info("The user is an eater now. Please complete/cancel your order first.")
+            logging.info("DEBUG: The user is an eater now. Please complete/cancel your order first.")
             return
         # Update order info
         order = Order()
@@ -346,6 +352,8 @@ class CreateOrder(webapp2.RequestHandler):
         order.due_time = datetime(now.year, now.month, now.day, int(time[0]), int(time[1]))
         order.note = self.request.get("note")
         order.status = "created"
+        order.deliverList = []
+
         order.put()
         # Update user info
         user.user_property = "eater"
@@ -353,6 +361,7 @@ class CreateOrder(webapp2.RequestHandler):
 
 
 # [END CreateOrder]
+
 # [START MyProfile]
 class MyProfile(webapp2.RequestHandler):
     def get(self):
@@ -531,7 +540,13 @@ class GetUserProperty(webapp2.RequestHandler):
     def get(self):
         email = self.request.get("email")
         user = User.query(User.email == email).get()
-        self.response.write(user.user_property)
+
+        if user is not None:
+            logging.info("DEBUG: user is " + user.email)
+            logging.info("DEBUG: user_property is " + user.user_property)
+            self.response.write(user.user_property)
+        else:
+            logging.info("DEBUG: user is none")
 
 
 # [END SetUserProperty]

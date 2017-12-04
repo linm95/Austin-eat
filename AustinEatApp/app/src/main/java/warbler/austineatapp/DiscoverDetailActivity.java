@@ -26,6 +26,7 @@ import okhttp3.Response;
 public class DiscoverDetailActivity extends AppCompatActivity {
 
     private String id;
+    private String email;
     private String tail = "/discover-detail";
     private String pullTail = "/pull-order";
     private Context context;
@@ -36,6 +37,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_discover_detail);
         Intent intent = getIntent();
         id = intent.getStringExtra("orderID");
+        email = intent.getStringExtra("deliverEmail");
         context = this;
         PullOrder pullOrder = new PullOrder();
         pullOrder.execute();
@@ -57,6 +59,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("id",id)
+                    .add("deliverEmail", email)
                     .build();
             Request request = new Request.Builder()
                     .url(getString(R.string.root_url) + pullTail)

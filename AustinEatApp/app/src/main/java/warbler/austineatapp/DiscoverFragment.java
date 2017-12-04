@@ -109,6 +109,7 @@ public class DiscoverFragment extends Fragment {
                         Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
 
                         detailIntent.putExtra("orderID", selectedOrder.id);
+                        detailIntent.putExtra("deliverEmail", UserHelper.getCurrentUserEmail());
 
                         startActivity(detailIntent);
                     }

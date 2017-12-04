@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
 
-
+                    System.out.println("DEBUG: currentUserProperty is " + UserHelper.getCurrentUserProperty());
 
                     if (UserHelper.getCurrentUserProperty().equals("deliver")){
 

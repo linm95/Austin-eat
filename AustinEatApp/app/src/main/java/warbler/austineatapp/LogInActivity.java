@@ -200,8 +200,7 @@ public class LogInActivity extends AppCompatActivity implements
             try{
                 Response response = client.newCall(request).execute();
                 String userProperty = response.body().string();
-                System.out.println("DEBUG: " + userProperty);
-                //System.out.println("DEBUG: " + response.body().string());
+                System.out.println("DEBUG: userProperty is " + userProperty);
                 UserHelper.setCurrentUserProperty(userProperty);
             }catch(IOException e){
                 e.printStackTrace();
