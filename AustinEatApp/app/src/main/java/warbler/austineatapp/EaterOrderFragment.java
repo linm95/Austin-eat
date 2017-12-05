@@ -36,8 +36,8 @@ public class EaterOrderFragment extends Fragment {
     }
 
 
-    private float lat = 0;
-    private float lon = 0;
+    private double lat = 0;
+    private double lon = 0;
     private String tail = "/eater-order";
     private boolean confirmed = false;
     private ListView mListView;
@@ -59,7 +59,10 @@ public class EaterOrderFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         context = getActivity();
+        lat = LocationHelper.getLatitude();
+        lon = LocationHelper.getLongitude();
         mListView = getActivity().findViewById(R.id.eater_order_list_view);
         setListView();
     }
@@ -79,6 +82,7 @@ public class EaterOrderFragment extends Fragment {
             RequestBody body = new FormBody.Builder()
                     .add("lat", "" + lat)
                     .add("lon", "" + lon)
+                    .add("email", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
                     .url(getString(R.string.root_url) + tail)
@@ -99,21 +103,29 @@ public class EaterOrderFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
             final ArrayList<Order> finalOrders = orders;
-            DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
-            mListView.setAdapter(adapter);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            if(orders.size()==0){
+                System.out.println("DEBUG: No pending or confirmed order.");
+            }
+            else{
+                DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
+                mListView.setAdapter(adapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Order selectedOrder = finalOrders.get(position);
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Order selectedOrder = finalOrders.get(position);
 
-                    Intent detailIntent = new Intent(context, EaterOrderDetailActivity.class);
+                        Intent detailIntent = new Intent(context, EaterOrderDetailActivity.class);
 
-                    detailIntent.putExtra("OrderId", selectedOrder.id);
+                        detailIntent.putExtra("OrderId", selectedOrder.id);
 
-                    startActivity(detailIntent);
-                }
-            });
+                        startActivity(detailIntent);
+                    }
+                });
+            }
+
+
+
         }
     }
 
