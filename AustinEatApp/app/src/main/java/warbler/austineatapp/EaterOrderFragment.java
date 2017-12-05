@@ -7,10 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,6 +45,7 @@ public class EaterOrderFragment extends Fragment {
     private String tail = "/eater-order";
     private boolean confirmed = false;
     private ListView mListView;
+    private HorizontalScrollView scrollView;
     private Context context;
 
     @Override
@@ -53,7 +58,7 @@ public class EaterOrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_deliver_order, container, false);
+        return inflater.inflate(R.layout.fragment_eater_order, container, false);
     }
 
     @Override
@@ -63,7 +68,12 @@ public class EaterOrderFragment extends Fragment {
         context = getActivity();
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
+        if(confirmed) {
+            TextView statusTextView = getActivity().findViewById(R.id.status_text);
+            statusTextView.setText("Confirmed");
+        }
         mListView = getActivity().findViewById(R.id.eater_order_list_view);
+        //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
         setListView();
     }
 
@@ -107,7 +117,8 @@ public class EaterOrderFragment extends Fragment {
                 System.out.println("DEBUG: No pending or confirmed order.");
             }
             else{
-                DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
+                EaterOrderAdapter adapter = new EaterOrderAdapter(context, orders);
+
                 mListView.setAdapter(adapter);
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -117,10 +128,12 @@ public class EaterOrderFragment extends Fragment {
 
                         Intent detailIntent = new Intent(context, EaterOrderDetailActivity.class);
 
-                        detailIntent.putExtra("OrderId", selectedOrder.id);
-
+                        detailIntent.putExtra("orderID", selectedOrder.id);
+                        detailIntent.putExtra("deliverEmail", selectedOrder.deliver);
                         startActivity(detailIntent);
                     }
+
+
                 });
             }
 

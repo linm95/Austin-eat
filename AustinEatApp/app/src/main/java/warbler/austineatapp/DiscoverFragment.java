@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -62,8 +63,16 @@ public class DiscoverFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(context, SelectRestaurantLocationActivity.class);
-                startActivity(intent);
+                if(!UserHelper.getCurrentUserProperty().equals("eater")){
+                    Intent intent = new Intent(context, SelectRestaurantLocationActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    CharSequence text = "Before creating new order, please finish or cancel your ongoing order first!";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(context, text, duration).show();
+                }
+
             }
         });
     }
@@ -114,6 +123,9 @@ public class DiscoverFragment extends Fragment {
                         startActivity(detailIntent);
                     }
                 });
+            }
+            else{
+                System.out.println("DEBUG: no order is discovered");
             }
         }
     }

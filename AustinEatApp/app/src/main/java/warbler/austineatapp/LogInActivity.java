@@ -50,6 +50,8 @@ public class LogInActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         mStatusTextView = (TextView) findViewById(R.id.status);
+        SetUserProperty setUserProperty = new SetUserProperty();
+        setUserProperty.execute();
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);

@@ -38,7 +38,7 @@ public class DeliverOrderFragment extends Fragment {
 
     private float lat = 0;
     private float lon = 0;
-    private String url = "";
+    private String url = "/deliver-order";
     private ListView mConfirmedListView;
     private ListView mPendingListView;
     private Context context;
@@ -81,6 +81,7 @@ public class DeliverOrderFragment extends Fragment {
             RequestBody body = new FormBody.Builder()
                     .add("lat", "" + lat)
                     .add("lon", "" + lon)
+                    .add("deliverEmail", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
                     .url(url)

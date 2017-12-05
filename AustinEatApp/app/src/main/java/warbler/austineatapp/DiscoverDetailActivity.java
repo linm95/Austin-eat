@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -31,6 +32,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
     private String pullTail = "/pull-order";
     private Context context;
     private OrderDetail order;
+    private boolean pullSuccessful = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +48,23 @@ public class DiscoverDetailActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                UserPullOrder userPullOrder = new UserPullOrder();
-                userPullOrder.execute();
+                System.out.println("DEBUG: userProperty is " + UserHelper.getCurrentUserProperty());
+                if(UserHelper.getCurrentUserProperty().equals("eater")){
+                    CharSequence text = "Before pulling an order, please finish or cancel your ongoing order first!";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(context, text, duration).show();
+                }
+                else{
+                    UserPullOrder userPullOrder = new UserPullOrder();
+                    userPullOrder.execute();
+                    /*
+                    CharSequence text = "Pull order successfully";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(context, text, duration).show();
+                    */
+
+                }
+
             }
         });
     }
@@ -67,10 +84,34 @@ public class DiscoverDetailActivity extends AppCompatActivity {
                     .build();
             try{
                 client.newCall(request).execute();
+                pullSuccessful = true;
             }catch(IOException e){
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object ret) {
+            System.out.println("DEBUG: return response: " + ret);
+            if(ret!=null && ret.equals("HasPulled")){
+                CharSequence text = "You've pulled this order";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
+            }
+            else if(ret!=null && ret.equals("HasConfirmed")){
+                CharSequence text = "This order has been confirmed by others, please pull other orders";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
+            }
+            else if(pullSuccessful){
+                CharSequence text = "Pull order successfully";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
+                UserHelper.setCurrentUserProperty("deliver");
+            }
+            pullSuccessful = false;
+
         }
     }
     private class PullOrder extends AsyncTask<Object, Void, OrderDetail> {
@@ -119,6 +160,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
             price.setText("Money you get: " + order.price);
+
         }
     }
 }

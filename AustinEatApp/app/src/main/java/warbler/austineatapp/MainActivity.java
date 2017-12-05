@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     ProfileFragment profileFragment;
     NoPropertyFragment noPropertyFragment;
     EaterOrderFragment eaterOrderFragment;
+    DeliverOrderFragment deliverOrderFragment;
     DiscoverFragment discoverFragment;
     FragmentManager fragmentManager;
     //FragmentTransaction fragmentTransaction;
@@ -50,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("DEBUG: currentUserProperty is " + UserHelper.getCurrentUserProperty());
 
                     if (UserHelper.getCurrentUserProperty().equals("deliver")){
-
+                        deliverOrderFragment = new DeliverOrderFragment();
+                        fragmentTransaction2.replace(R.id.content, deliverOrderFragment);
+                        fragmentTransaction2.commit();
                     }
                     else if(UserHelper.getCurrentUserProperty().equals("eater")){
                         eaterOrderFragment = new EaterOrderFragment();

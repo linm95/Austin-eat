@@ -14,9 +14,13 @@ app = webapp2.WSGIApplication([
     ("/topup", AustinEat.IssueTransaction),
     ("/profile", AustinEat.GetProfile),
     ("/edit-profile", AustinEat.EditProfile),
-    # For Order Page
+    # For Eater Order Page
     (VAR.EATER_ORDER_PAGE, AustinEat.EaterOrder),
+    (VAR.EATER_ORDER_DETAIL_PAGE, AustinEat.EaterOrderDetail),
+    (VAR.CONFIMR_EATER_ORDER_PAGE, AustinEat.ConfirmEaterOrder),
+    # For Deliver Order Page
     (VAR.DELIVER_ORDER_PAGE, AustinEat.DeliverOrder),
+
     (VAR.GET_USER_PROPERTY, AustinEat.GetUserProperty),
 
     (VAR.PULL_ORDER, AustinEat.PullOrder),

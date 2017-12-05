@@ -166,8 +166,8 @@ public class CreateOrder extends AppCompatActivity {
             }
 
             // Update user property
-            if(UserHelper.getCurrentUserProperty().equals(""))
-                UserHelper.setCurrentUserProperty("eater");
+            //if(UserHelper.getCurrentUserProperty().equals("idle"))
+            UserHelper.setCurrentUserProperty("eater");
 
             return 0;
         }

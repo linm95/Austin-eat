@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -52,26 +53,32 @@ public class EaterOrderAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get view for row item
         View rowView = mInflater.inflate(R.layout.eater_single_row, parent, false);
+        //rowView.getParent().requestDisallowInterceptTouchEvent(true);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.profile_image);
-        TextView name = (TextView) rowView.findViewById(R.id.profile_name);
+        TextView deliverName = (TextView) rowView.findViewById(R.id.profile_name);
         TextView restaurant = (TextView) rowView.findViewById(R.id.restaurant_name);
-        TextView food = (TextView) rowView.findViewById(R.id.food_name);
+        //TextView food = (TextView) rowView.findViewById(R.id.food_name);
         TextView location = (TextView) rowView.findViewById(R.id.location_name);
         TextView deadline = (TextView) rowView.findViewById(R.id.deadline);
         RatingBar star = (RatingBar) rowView.findViewById(R.id.ratingBar);
         TextView distance = (TextView) rowView.findViewById(R.id.distance_display);
         TextView time = (TextView) rowView.findViewById(R.id.time_display);
+        TextView status = (TextView) rowView.findViewById(R.id.order_status);
+        //Button statusBtn = (Button) rowView.findViewById(R.id.StatusBtn);
 
         Order order = (Order)getItem(position);
+        System.out.println("DEBUG: Order: " + order.restaurant);
         Picasso.with(mContext).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(imageView);
-        name.setText(order.name);
+        deliverName.setText(order.name);
         restaurant.setText("Restaurant: " + order.restaurant);
-        food.setText("Food: " + order.food);
+        //food.setText("Food: " + order.food);
         location.setText("Location: " + order.location);
         deadline.setText("Deadline: " + order.deadline);
         star.setRating(order.rating);
         distance.setText(order.distance + " miles away");
         time.setText(order.time + " mins ago");
+        status.setText("Status: " + order.status);
+        //statusBtn.setText(order.status);
         return rowView;
     }
 }
