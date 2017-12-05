@@ -336,6 +336,39 @@ class DeliverOrderDetail(webapp2.RequestHandler):
 
 # [END DeliverOrderDetail]
 
+# [START DeliverCancelOrder]
+class DeliverCancelOrder(webapp2.RequestHandler):
+    # Confirm the eater and send notification to eater and wait to be confirmed
+    # Change the order status to “waiting”
+    def post(self):
+        orderID = self.request.get("id")
+        deliverEmail = self.request.get("deliverEmail")
+        order = Order.query(Order.orderID == orderID).get()
+        #status = order.status
+        deliverList = order.deliverList
+        logging.info("DEBUG: deliver list before updated is " + str(deliverList))
+        if deliverEmail in deliverList:
+            logging.info("DEBUG: remove deliver: " + deliverEmail + " from the deliverList")
+            deliverList.remove(deliverEmail)
+        logging.info("DEBUG: deliver list after updated is " + str(deliverList))
+        order.deliverList = deliverList
+        order.put()
+
+        # Check deliver's pulled order list. If it's empty, update the status of deliver to idle
+        #testList = []
+        #testList.append(deliverEmail)
+        deliverOrders = Order.query(Order.deliverList == deliverEmail).fetch()
+
+        logging.info("DEBUG: deliver's pulled order list after cancelling is " + str(deliverOrders))
+        if not deliverOrders:
+            logging.info("DEBUG: deliver's pulled order list is empty, update the deliver's status.")
+            deliver = User.query(User.email == deliverEmail).get()
+            deliver.status = "idle"
+            deliver.put()
+
+
+# [END DeliverCancelOrder]
+
 # [START ConfirmDeliverOrder]
 class ConfirmDeliverOrder(webapp2.RequestHandler):
     # Confirm the eater and send notification to eater and wait to be confirmed

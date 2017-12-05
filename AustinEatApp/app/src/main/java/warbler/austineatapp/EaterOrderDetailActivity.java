@@ -29,6 +29,7 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
     private String deliverEmail;
     private Context context;
     private String tail = "/eater-order-detail";
+    private String confirmTail = "/eater-confirm-order";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +127,7 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
                     .add("deliverEmail", deliverEmail)
                     .build();
             Request request = new Request.Builder()
-                    .url(getString(R.string.root_url) + tail)
+                    .url(getString(R.string.root_url) + confirmTail)
                     .post(body)
                     .build();
             try{

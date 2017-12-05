@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,7 +26,9 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
 
     private String id;
     private Context context;
+    // Each tail represents different handler
     private String tail = "/deliver-order-detail";
+    private String cancelTail = "/deliver-cancel-order";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,20 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
 
         DeliverOrderDetailActivity.PullOrders pullOrder = new DeliverOrderDetailActivity.PullOrders();
         pullOrder.execute();
+
+        // The deliver cancels this order
+        Button cancelBtn = findViewById(R.id.cancelBtn);
+        cancelBtn.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                System.out.println("DEBUG: confirmBtn is clicked");
+                DeliverOrderDetailActivity.CancelOrder cancelOrder = new DeliverOrderDetailActivity.CancelOrder();
+                cancelOrder.execute();
+                finish();
+            }
+
+        });
+
     }
 
     private class PullOrders extends AsyncTask<Object, Void, OrderDetail> {
@@ -83,6 +101,27 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
             status.setText("Status: " + order.status);
+        }
+    }
+    // Cancel Order Function
+    private class CancelOrder extends AsyncTask<Object, Void, OrderDetail> {
+        @Override
+        protected OrderDetail doInBackground(Object... args){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("id",id)
+                    .add("deliverEmail", UserHelper.getCurrentUserEmail())
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + cancelTail)
+                    .post(body)
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }
