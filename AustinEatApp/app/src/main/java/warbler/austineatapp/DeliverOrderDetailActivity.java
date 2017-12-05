@@ -24,13 +24,17 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
 
     private String id;
     private Context context;
+    private String tail = "/deliver-order-detail";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover_detail);
+        setContentView(R.layout.activity_deliver_order_detail);
         Intent intent = getIntent();
         id = intent.getStringExtra("orderID");
         context = this;
+
+        DeliverOrderDetailActivity.PullOrders pullOrder = new DeliverOrderDetailActivity.PullOrders();
+        pullOrder.execute();
     }
 
     private class PullOrders extends AsyncTask<Object, Void, OrderDetail> {
@@ -42,7 +46,7 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
                     .add("id",id)
                     .build();
             Request request = new Request.Builder()
-                    .url("")
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             OrderDetail order = null;
@@ -64,9 +68,10 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
             TextView deadline = (TextView) findViewById(R.id.detail_deadline);
             RatingBar star = (RatingBar) findViewById(R.id.detail_rating_bar);
             TextView rating = (TextView) findViewById(R.id.detail_rating);
-            TextView restaurant = (TextView) findViewById(R.id.detail_rating);
+            TextView restaurant = (TextView) findViewById(R.id.detail_restaurant);
             TextView food = (TextView) findViewById(R.id.detail_food_name);
             TextView note = (TextView) findViewById(R.id.detail_note);
+            TextView status = (TextView) findViewById(R.id.order_status);
 
             Picasso.with(context).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(image);
             name.setText("name: " + order.name);
@@ -77,6 +82,7 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
             restaurant.setText("Restaurant: " + order.restaurant);
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
+            status.setText("Status: " + order.status);
         }
     }
 }

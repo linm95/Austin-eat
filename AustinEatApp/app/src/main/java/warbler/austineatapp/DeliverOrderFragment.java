@@ -38,7 +38,7 @@ public class DeliverOrderFragment extends Fragment {
 
     private float lat = 0;
     private float lon = 0;
-    private String url = "/deliver-order";
+    private String tail = "/deliver-order";
     private ListView mConfirmedListView;
     private ListView mPendingListView;
     private Context context;
@@ -84,7 +84,7 @@ public class DeliverOrderFragment extends Fragment {
                     .add("deliverEmail", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             ArrayList<Order> orders = null;
@@ -127,7 +127,7 @@ public class DeliverOrderFragment extends Fragment {
 
                     Intent detailIntent = new Intent(context, DeliverOrderDetailActivity.class);
 
-                    detailIntent.putExtra("OrderId", selectedOrder.id);
+                    detailIntent.putExtra("orderID", selectedOrder.id);
 
                     startActivity(detailIntent);
                 }
@@ -144,7 +144,7 @@ public class DeliverOrderFragment extends Fragment {
 
                     Intent detailIntent = new Intent(context, DeliverOrderDetailActivity.class);
 
-                    detailIntent.putExtra("OrderId", selectedOrder.id);
+                    detailIntent.putExtra("orderID", selectedOrder.id);
 
                     startActivity(detailIntent);
                 }

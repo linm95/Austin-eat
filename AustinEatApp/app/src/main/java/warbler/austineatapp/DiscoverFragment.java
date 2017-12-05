@@ -66,6 +66,7 @@ public class DiscoverFragment extends Fragment {
     private void setListView(){
         PullOrders pullOrders = new PullOrders();
         pullOrders.execute();
+        // For creating a new order
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
