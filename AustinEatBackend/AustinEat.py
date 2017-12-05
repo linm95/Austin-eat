@@ -117,6 +117,10 @@ class PullOrder(webapp2.RequestHandler):
         orderID = self.request.get("id")
         order = Order.query(Order.orderID == orderID).get()
         order.status = "pending"
+        tempList = order.deliverList
+        templist = templist.append(self.request.get("mail"))
+        order.deliverList = tempList
+        order.put()
 # [END PullOrder]
 
 # [START DiscoverDetail]

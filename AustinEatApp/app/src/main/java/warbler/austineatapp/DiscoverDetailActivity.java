@@ -56,7 +56,8 @@ public class DiscoverDetailActivity extends AppCompatActivity {
         protected Object doInBackground(Object[] params) {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
-                    .add("id",id)
+                    .add("id", id)
+                    .add("mail", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
                     .url(getString(R.string.root_url) + pullTail)
