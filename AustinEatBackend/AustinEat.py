@@ -58,6 +58,7 @@ class LogIn(webapp2.RequestHandler):
             user.requester_rate = 0.0
             user.deliveryperson_rate = 0.0
             user.user_property = "idle"
+            user.owned_orders = []
             user.put()
 
 
@@ -131,6 +132,7 @@ class PullOrder(webapp2.RequestHandler):
         order.deliverList.append(deliverEmail)
         order.put()
 
+        deliver.owned_orders.append(orderID)
         deliver.user_property = "deliver"
         deliver.put()
 
@@ -343,6 +345,7 @@ class DeliverCancelOrder(webapp2.RequestHandler):
     def post(self):
         orderID = self.request.get("id")
         deliverEmail = self.request.get("deliverEmail")
+        deliver = User.query(User.email == deliverEmail).get()
         order = Order.query(Order.orderID == orderID).get()
         #status = order.status
         deliverList = order.deliverList
@@ -357,14 +360,23 @@ class DeliverCancelOrder(webapp2.RequestHandler):
         # Check deliver's pulled order list. If it's empty, update the status of deliver to idle
         #testList = []
         #testList.append(deliverEmail)
-        deliverOrders = Order.query(Order.deliverList == deliverEmail).fetch()
+        #deliverOwnedOrders = deliver.owned_orders
+        logging.info("DEBUG: deliver owned order before updated is " + str(deliver.owned_orders))
+        deliver.owned_orders.remove(orderID)
+        logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
+        if len(deliver.owned_orders)==0:
+            deliver.status = "idle"
+        deliver.put()
 
+        #deliverOrders = Order.query().fetch()
+        '''
         logging.info("DEBUG: deliver's pulled order list after cancelling is " + str(deliverOrders))
         if not deliverOrders:
             logging.info("DEBUG: deliver's pulled order list is empty, update the deliver's status.")
             deliver = User.query(User.email == deliverEmail).get()
             deliver.status = "idle"
             deliver.put()
+        '''
 
 
 # [END DeliverCancelOrder]
@@ -422,6 +434,7 @@ class CreateOrder(webapp2.RequestHandler):
         order.put()
         # Update user info
         user.user_property = "eater"
+        user.owned_orders.append(orderID)
         user.put()
 
 
