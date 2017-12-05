@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/sort_price"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Price" />
+
+    <item
+        android:id="@+id/sort_distance"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="distance" />
+
+    <item
+        android:id="@+id/sort_time"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="time" />
+
+</menu>

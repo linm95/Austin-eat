@@ -6,6 +6,9 @@ import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +25,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -39,6 +44,7 @@ public class DiscoverFragment extends Fragment {
     private ListView mListView;
     private Context context;
     private String tail = "/discover";
+    private ArrayList<Order> orders;
 
     public DiscoverFragment() {
         // Required empty public constructor
@@ -54,6 +60,7 @@ public class DiscoverFragment extends Fragment {
         lon = LocationHelper.getLongitude();
         mListView = getActivity().findViewById(R.id.discover_list_view);
         setListView();
+        //sortList(2);
     }
 
     private void setListView(){
@@ -90,10 +97,8 @@ public class DiscoverFragment extends Fragment {
                     .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
-            ArrayList<Order> orders = null;
             try{
                 Response response = client.newCall(request).execute();
-                //Log.d("!!!!!!!!!!!!!", response.body().string());
                 Gson gson = new Gson();
                 TypeToken<ArrayList<Order>> token = new TypeToken<ArrayList<Order>>(){};
                 orders = gson.fromJson(response.body().string(), token.getType());
@@ -130,11 +135,83 @@ public class DiscoverFragment extends Fragment {
         }
     }
 
+    private void sortList(int option){
+        switch (option){
+            case 0:
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return Float.compare(o2.price, o1.price);
+                    }
+                });
+                break;
+            case 1:
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return Float.compare(o1.distance, o2.distance);
+                    }
+                });
+                break;
+            case 2:
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return Float.compare(o1.time, o2.time);
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+        final ArrayList<Order> finalOrders = orders;
+        if(finalOrders != null && finalOrders.size() != 0) {
+            DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
+            mListView.setAdapter(adapter);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Order selectedOrder = finalOrders.get(position);
+
+                    Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
+
+                    detailIntent.putExtra("orderID", selectedOrder.id);
+                    detailIntent.putExtra("deliverEmail", UserHelper.getCurrentUserEmail());
+
+                    startActivity(detailIntent);
+                }
+            });
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        inflater.inflate(R.menu.sort, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.sort_price:
+                sortList(0);
+                return true;
+            case R.id.sort_distance:
+                sortList(1);
+                return true;
+            case R.id.sort_time:
+                sortList(2);
+                return true;
+            default:
+                sortList(-1);
+                return true;
+        }
+    }
 }

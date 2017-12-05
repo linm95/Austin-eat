@@ -64,7 +64,7 @@
             android:text="DEST.: EER"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="8dp"
             android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
@@ -73,16 +73,7 @@
             android:text="DDL: 12:30"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="left"
-            android:textSize="15sp">
-        </TextView>
-        <TextView
-            android:id="@+id/price"
-            android:text="Price: $8.00"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="8dp"
             android:layout_gravity="left"
             android:textSize="15sp">
         </TextView>
@@ -93,6 +84,15 @@
         android:layout_width="wrap_content"
         android:layout_gravity="right"
         android:layout_margin="8dp">
+        <TextView
+            android:id="@+id/price"
+            android:text="Price: $8.00"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="left"
+            android:textSize="15sp">
+        </TextView>
         <TextView
             android:id="@+id/distance_display"
             android:text="0 miles away"
@@ -106,7 +106,7 @@
             android:text="0 mins ago"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:textSize="15sp">
         </TextView>
     </LinearLayout>
