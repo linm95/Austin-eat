@@ -71,8 +71,8 @@ public class DiscoverAdapter extends BaseAdapter {
         location.setText("DEST.: " + order.location);
         deadline.setText("DDL.: " + order.deadline);
         star.setRating(order.rating);
-        distance.setText(order.distance + " miles away");
-        time.setText(order.time + " mins ago");
+        distance.setText(String.format("%.2f", order.distance) + " miles away");
+        time.setText(String.format("%.1f", order.time) + " mins ago");
         price.setText("Price: $" + order.price);
         return rowView;
     }

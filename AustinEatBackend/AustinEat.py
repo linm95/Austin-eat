@@ -56,8 +56,8 @@ class LogIn(webapp2.RequestHandler):
             user.intro = ""
             user.favorite_food_styles = ""
             user.favorite_foods = ""
-            user.requester_rate = 0.0
-            user.deliveryperson_rate = 0.0
+            user.requester_rate = 3.5
+            user.deliveryperson_rate = 3.5
             user.user_property = "idle"
             user.owned_orders = []
             user.put()
@@ -75,6 +75,10 @@ class TimeoutDetect(webapp2.RequestHandler):
                 if timenow > order.due_time:
                     order.status = "timeout"
                     order.put()
+                    user = User.query(User.email == order.ownerEmail).get()
+                    if user.user_property == "created":
+                        user.user_property = "idle"
+                        user.put()
 
 # [END TimeoutDetect]
 
