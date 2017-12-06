@@ -14,6 +14,7 @@ public class OrderDetail {
     String deadline;
     String note;
     String status;
+    String email;
     double price;
     double lat;
     double lon;
