@@ -23,7 +23,10 @@
         <activity
             android:name=".LogInActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".DiscoverDetailActivity" />
+
+        <activity android:name=".DiscoverDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+
         <activity
             android:name=".WalletActivity"
             android:exported="true" />

@@ -108,9 +108,11 @@ public class CreateOrder extends AppCompatActivity {
             public void onClick(View v) {
                 PushOrder pushOrder = new PushOrder();
                 pushOrder.execute(getInfo());
-                Toast.makeText(activity, "Order pushed successfully", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity, MainActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(activity, MainActivity.class);
+                //startActivity(intent);
+                //getParent().getParent().finish();
+                //getParent().finish();
+                //Intent data = new Intent();
             }
         });
         button = findViewById(R.id.create_prev);
@@ -118,6 +120,8 @@ public class CreateOrder extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                //Intent intent = new Intent(context, MainActivity.class);
+                //startActivity(intent);
                 finish();
             }
         });
@@ -171,16 +175,23 @@ public class CreateOrder extends AppCompatActivity {
 
             return 0;
         }
+
+        @Override
+        protected void onPostExecute(Integer result){
+            Toast.makeText(activity, "Order pushed successfully", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK, null);
+            finish();
+        }
     }
 
     private ArrayList<String> getInfo(){
         ArrayList<String> list = new ArrayList<String>();
         EditText text;
-        text = (EditText)findViewById(R.id.location_input);
+        text = findViewById(R.id.location_input);
         list.add(text.getText().toString());
-        text = (EditText)findViewById(R.id.time_input);
+        text = findViewById(R.id.time_input);
         list.add(text.getText().toString());
-        text = (EditText)findViewById(R.id.note_input);
+        text = findViewById(R.id.note_input);
         list.add(text.getText().toString());
         return list;
     }
