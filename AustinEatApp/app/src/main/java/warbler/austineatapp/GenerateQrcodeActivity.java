@@ -38,7 +38,7 @@ public class GenerateQrcodeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_generate_qrcode);
         Intent intent = getIntent();
         orderID = intent.getStringExtra("orderID");
-        TextView qrInput = (TextView) findViewById(R.id.qrInput);
+        qrInput = (TextView) findViewById(R.id.qrInput);
         qrInput.setText(orderID);
         //Button button1 = (Button) findViewById(R.id.button1);
         //button1.setOnClickListener(this);
