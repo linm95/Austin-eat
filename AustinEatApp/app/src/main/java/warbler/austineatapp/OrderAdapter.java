@@ -70,8 +70,8 @@ public class OrderAdapter extends BaseAdapter {
         location.setText("Location: " + order.location);
         deadline.setText("Deadline: " + order.deadline);
         star.setRating(order.rating);
-        distance.setText(order.distance + " miles away");
-        time.setText(order.time + " mins ago");
+        distance.setText(String.format("%.2f", order.distance) + " miles away");
+        time.setText(String.format("%.1f", order.time) + " mins ago");
         return rowView;
     }
 }

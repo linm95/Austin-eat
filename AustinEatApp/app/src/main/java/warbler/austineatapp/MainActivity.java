@@ -89,6 +89,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent mainIntent = getIntent();
+        int temp = mainIntent.getIntExtra("tab", 0);
+        switch(temp){
+            case 1:
+                tab = TAB.ORDER;
+                break;
+            case 2:
+                tab = TAB.PROFILE;
+                break;
+            default:
+                tab = TAB.DISCOVER;
+        }
+
         if (!UserHelper.isSignedIn()) {
             Intent intent = new Intent(this, LogInActivity.class);
             startActivity(intent);

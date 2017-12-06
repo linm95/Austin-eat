@@ -1,9 +1,11 @@
 package warbler.austineatapp;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +45,7 @@ public class DiscoverFragment extends Fragment {
     private double lon = 0;
     private ListView mListView;
     private Context context;
+    private Activity activity;
     private String tail = "/discover";
     private ArrayList<Order> orders;
 
@@ -56,17 +59,12 @@ public class DiscoverFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         context = getActivity();
+        activity = getActivity();
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
         mListView = getActivity().findViewById(R.id.discover_list_view);
         setListView();
-        //sortList(2);
-    }
 
-    private void setListView(){
-        PullOrders pullOrders = new PullOrders();
-        pullOrders.execute();
-        // For creating a new order
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -83,6 +81,23 @@ public class DiscoverFragment extends Fragment {
 
             }
         });
+
+        final SwipeRefreshLayout swipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+
+            @Override
+            public void onRefresh() {
+                setListView();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        //sortList(2);
+    }
+
+    private void setListView(){
+        PullOrders pullOrders = new PullOrders();
+        pullOrders.execute();
+        // For creating a new order
     }
 
     private class PullOrders extends AsyncTask<Object, Void, ArrayList<Order>>{
@@ -111,28 +126,7 @@ public class DiscoverFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
-            final ArrayList<Order> finalOrders = orders;
-            if(finalOrders != null && finalOrders.size() != 0) {
-                DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
-                mListView.setAdapter(adapter);
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Order selectedOrder = finalOrders.get(position);
-
-                        Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
-
-                        detailIntent.putExtra("orderID", selectedOrder.id);
-                        detailIntent.putExtra("deliverEmail", UserHelper.getCurrentUserEmail());
-
-                        startActivity(detailIntent);
-                    }
-                });
-            }
-            else{
-                System.out.println("DEBUG: no order is discovered");
-            }
+            sortList(-1);
         }
     }
 
@@ -181,6 +175,7 @@ public class DiscoverFragment extends Fragment {
                     detailIntent.putExtra("deliverEmail", UserHelper.getCurrentUserEmail());
 
                     startActivity(detailIntent);
+                    //activity.finish();
                 }
             });
         }

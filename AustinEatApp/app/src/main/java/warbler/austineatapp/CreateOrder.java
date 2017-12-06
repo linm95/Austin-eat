@@ -111,6 +111,9 @@ public class CreateOrder extends AppCompatActivity {
                 Toast.makeText(activity, "Order pushed successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(activity, MainActivity.class);
                 startActivity(intent);
+                //getParent().getParent().finish();
+                //getParent().finish();
+                finish();
             }
         });
         button = findViewById(R.id.create_prev);
@@ -118,6 +121,8 @@ public class CreateOrder extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                //Intent intent = new Intent(context, MainActivity.class);
+                //startActivity(intent);
                 finish();
             }
         });

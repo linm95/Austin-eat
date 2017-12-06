@@ -61,6 +61,8 @@ public class SelectRestaurantLocationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                //Intent intent = new Intent(activity, MainActivity.class);
+                //startActivity(intent);
             }
         });
     }

@@ -57,6 +57,14 @@ public class DiscoverDetailActivity extends AppCompatActivity {
                 else{
                     UserPullOrder userPullOrder = new UserPullOrder();
                     userPullOrder.execute();
+                    CharSequence text = "Pull Successfully";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(context, text, duration).show();
+                    //Intent intent = new Intent(context, MainActivity.class);
+                    //intent.putExtra("tab", 1);
+                    //startActivity(intent);
+                    //getParent().finish();
+                    finish();
                     /*
                     CharSequence text = "Pull order successfully";
                     int duration = Toast.LENGTH_SHORT;
@@ -169,7 +177,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             location.setText("Destination: " + order.location);
             deadline.setText("Deadline: " + order.deadline);
             star.setRating(order.rating);
-            rating.setText(order.rating + "/5.0");
+            rating.setText(String.format("%.1f", order.rating) + "/5.0");
             restaurant.setText("Restaurant: " + order.restaurant);
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
