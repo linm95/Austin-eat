@@ -480,8 +480,8 @@ class DeliverCancelOrder(webapp2.RequestHandler):
 # [START DeliverCompleteOrder]
 class DeliverCompleteOrder(webapp2.RequestHandler):
     def post(self):
-        orderID = self.request.get("orderID")
-        scanID = self.request.get("scanCode")
+        orderID = self.request.get("orderID").trim()
+        scanID = self.request.get("scanCode").trim()
         logging.info("DEBUG: orderID is " + orderID)
         logging.info("DEBUG: scanID is " + scanID)
         if orderID == scanID:
