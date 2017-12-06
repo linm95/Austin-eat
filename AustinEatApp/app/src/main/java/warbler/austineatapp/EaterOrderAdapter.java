@@ -65,6 +65,7 @@ public class EaterOrderAdapter extends BaseAdapter{
         TextView time = (TextView) rowView.findViewById(R.id.time_display);
         TextView status = (TextView) rowView.findViewById(R.id.order_status);
         //Button statusBtn = (Button) rowView.findViewById(R.id.StatusBtn);
+        TextView price = (TextView) rowView.findViewById(R.id.price);
 
         Order order = (Order)getItem(position);
         System.out.println("DEBUG: Order: " + order.restaurant);
@@ -78,6 +79,7 @@ public class EaterOrderAdapter extends BaseAdapter{
         distance.setText(order.distance + " miles away");
         time.setText(order.time + " mins ago");
         status.setText("Status: " + order.status);
+        price.setText("Price: " + order.price);
         //statusBtn.setText(order.status);
         return rowView;
     }

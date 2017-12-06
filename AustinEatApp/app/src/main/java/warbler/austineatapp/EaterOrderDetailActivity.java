@@ -53,6 +53,7 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
     private Context context;
     private String tail = "/eater-order-detail";
     private String confirmTail = "/eater-confirm-order";
+    private String completeTail = "/eater-complete-order";
 
     // Send bird
     final String appId = "D4B1661C-35A0-49B1-9D04-BD721ED6DD74";
@@ -70,6 +71,17 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
         EaterOrderDetailActivity.PullOrder pullOrder = new EaterOrderDetailActivity.PullOrder();
         pullOrder.execute();
 
+        Button completeBtn = findViewById(R.id.completeBtn);
+        completeBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("DEBUG: completeBtn is clicked");
+                EaterOrderDetailActivity.CompleteOrder completeOrder = new EaterOrderDetailActivity.CompleteOrder();
+                completeOrder.execute();
+            }
+        });
+
         Button confirmBtn = findViewById(R.id.confirmBtn);
         confirmBtn.setOnClickListener(new View.OnClickListener(){
 
@@ -78,20 +90,6 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
                 System.out.println("DEBUG: confirmBtn is clicked");
                 EaterOrderDetailActivity.ConfirmOrder confirmOrder = new EaterOrderDetailActivity.ConfirmOrder();
                 confirmOrder.execute();
-                finish();
-                /*
-                if(UserHelper.getCurrentUserProperty().equals("eater")){
-                    CharSequence text = "Before pulling an order, please finish or cancel your ongoing order first!";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast.makeText(context, text, duration).show();
-                }
-                else{
-                    DiscoverDetailActivity.UserPullOrder userPullOrder = new DiscoverDetailActivity.UserPullOrder();
-                    userPullOrder.execute();
-
-                }
-                */
-
             }
         });
     }
@@ -161,7 +159,7 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
         protected OrderDetail doInBackground(Object... args){
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
-                    .add("id",id)
+                    .add("orderID",id)
                     .add("deliverEmail", deliverEmail)
                     .build();
             Request request = new Request.Builder()
@@ -174,17 +172,41 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return null;
-            /*
-            OrderDetail order = null;
+        }
+        @Override
+        protected void onPostExecute(OrderDetail orderDetail) {
+            String message = "Confirm this order successfully!";
+            EaterOrderDetailActivity.ResultDialogFragment dialogFragment = new EaterOrderDetailActivity.ResultDialogFragment();
+            dialogFragment.message = message;
+            dialogFragment.show(getSupportFragmentManager(), "result");
+        }
+
+    }
+    private class CompleteOrder extends AsyncTask<Object, Void, OrderDetail> {
+        @Override
+        protected OrderDetail doInBackground(Object... args){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("orderID",id)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + completeTail)
+                    .post(body)
+                    .build();
             try{
                 Response response = client.newCall(request).execute();
-                Gson gson = new Gson();
-                order = gson.fromJson(response.body().string(), OrderDetail.class);
             }catch(IOException e){
                 e.printStackTrace();
             }
-            return order;
-            */
+            return null;
         }
+        @Override
+        protected void onPostExecute(OrderDetail orderDetail) {
+            String message = "Complete this order successfully!";
+            EaterOrderDetailActivity.ResultDialogFragment dialogFragment = new EaterOrderDetailActivity.ResultDialogFragment();
+            dialogFragment.message = message;
+            dialogFragment.show(getSupportFragmentManager(), "result");
+        }
+
     }
 }

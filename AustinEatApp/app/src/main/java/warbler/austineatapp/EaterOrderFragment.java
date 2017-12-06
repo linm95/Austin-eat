@@ -48,6 +48,7 @@ public class EaterOrderFragment extends Fragment {
     private boolean confirmed = false;
     private ListView mListView;
     private Context context;
+    private TextView statusText;
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
@@ -68,20 +69,20 @@ public class EaterOrderFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         context = getActivity();
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
+
+        mListView = getActivity().findViewById(R.id.eater_order_list_view);
+        //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
+        confirmed = true;
+        setListView();
+        mySwipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
         if(confirmed) {
             TextView statusTextView = getActivity().findViewById(R.id.status_text);
             statusTextView.setText("Confirmed");
         }
-        mListView = getActivity().findViewById(R.id.eater_order_list_view);
-        //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
-        setListView();
-        mySwipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
-
-        setListView();
-
                 /*
          * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
          * performs a swipe-to-refresh gesture.
@@ -150,7 +151,8 @@ public class EaterOrderFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Order selectedOrder = finalOrders.get(position);
-
+                        if(selectedOrder.status!="Confirmed")
+                            confirmed = false;
                         Intent detailIntent = new Intent(context, EaterOrderDetailActivity.class);
 
                         detailIntent.putExtra("orderID", selectedOrder.id);

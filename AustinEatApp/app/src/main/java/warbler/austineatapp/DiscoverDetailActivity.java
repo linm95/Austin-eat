@@ -57,7 +57,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("DEBUG: userProperty is " + UserHelper.getCurrentUserProperty());
-                if(!UserHelper.getCurrentUserProperty().equals("eater")){
+                if(UserHelper.getCurrentUserProperty().equals("eater")){
                     CharSequence text = "Before pulling an order, please finish or cancel your ongoing order first!";
                     int duration = Toast.LENGTH_SHORT;
                     Toast.makeText(context, text, duration).show();

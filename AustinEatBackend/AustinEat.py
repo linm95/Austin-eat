@@ -336,6 +336,37 @@ class EaterCancelOrder(webapp2.RequestHandler):
 
 # [END EaterCancelOrder]
 
+# [START EaterCompleteOrder]
+class EaterCompleteOrder(webapp2.RequestHandler):
+    def post(self):
+        orderID = self.request.get("orderID")
+        #deliverEmail = self.request.get("deliverEmail")
+        orderKey = Order.query(Order.orderID == orderID)
+        order = orderKey.get()
+        logging.info("DEBUG: EaterCompleteOrder is " + str(order))
+        eater = User.query(User.email == order.ownerEmail).get()
+        eater.own_orders = []
+        eater.user_property = "idle"
+        eater.put()
+
+        deliverEmail = order.deliverList[0]
+        deliver = User.query(User.email == deliverEmail).get()
+        updated_owned_orders = []
+        for owned_order in deliver.owned_orders:
+            if owned_order != orderID:
+                updated_owned_orders.append(owned_order)
+        deliver.owned_orders = updated_owned_orders
+        logging.info("DEBUG: Updated owned orders is " + str(updated_owned_orders))
+        #logging.info("DEBUG: Updated owned orders len is " + str(len(updated_owned_orders)))
+        if len(updated_owned_orders) == 0:
+            #logging.info("DEBUG: Updated owned orders len is 0")
+            deliver.user_property = "idle"
+        deliver.put()
+
+        order.key.delete()
+
+# [END EaterCompleteOrder]
+
 # [START DeliverOrder]
 class DeliverOrder(webapp2.RequestHandler):
     # Get the info of my orders (pending and confirmed)
@@ -491,7 +522,7 @@ class CreateOrder(webapp2.RequestHandler):
         order.note = self.request.get("note")
         order.status = "created"
         order.deliverList = []
-
+        logging.info("DEBUG: Create Order: " + str(order))
         order.put()
         # Update user info
         user.user_property = "eater"

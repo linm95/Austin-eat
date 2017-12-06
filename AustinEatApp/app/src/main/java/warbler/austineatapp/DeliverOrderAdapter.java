@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.android.gms.vision.text.Text;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class DeliverOrderAdapter extends BaseAdapter {
         RatingBar star = (RatingBar) rowView.findViewById(R.id.ratingBar);
         TextView distance = (TextView) rowView.findViewById(R.id.distance_display);
         TextView time = (TextView) rowView.findViewById(R.id.time_display);
+        TextView price = (TextView) rowView.findViewById(R.id.price);
 
         Order order = (Order)getItem(position);
         Picasso.with(mContext).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(imageView);
@@ -72,6 +74,8 @@ public class DeliverOrderAdapter extends BaseAdapter {
         star.setRating(order.rating);
         distance.setText(order.distance + " miles away");
         time.setText(order.time + " mins ago");
+        price.setText("Price: " + order.price);
+
         return rowView;
     }
 }
