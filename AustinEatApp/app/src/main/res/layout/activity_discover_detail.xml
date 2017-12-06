@@ -105,6 +105,14 @@
             android:text="Location">
         </TextView>
         <TextView
+            android:id="@+id/detail_creation_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="8dp"
+            android:text="Creation Time">
+        </TextView>
+        <TextView
             android:id="@+id/detail_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,6 +127,12 @@
             android:text="Note:"
             android:layout_gravity="left"
             android:layout_margin="8dp"/>
+        <Button
+            android:id="@+id/detail_on_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Details on map"/>
         <Button
             android:id="@+id/detail_pull"
             android:layout_width="match_parent"
