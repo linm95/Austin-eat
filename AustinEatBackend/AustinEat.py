@@ -456,7 +456,10 @@ class DeliverCancelOrder(webapp2.RequestHandler):
             deliverList.remove(deliverEmail)
         logging.info("DEBUG: deliver list after updated is " + str(deliverList))
         order.deliverList = deliverList
-        order.status = "pending"
+        if not deliverList:
+            order.status = "created"
+        else:
+            order.status = "pending"
         order.put()
 
         # Check deliver's pulled order list. If it's empty, update the status of deliver to idle
