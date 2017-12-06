@@ -3,8 +3,10 @@ package warbler.austineatapp;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -106,13 +108,17 @@ public class CreateOrder extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                PushOrder pushOrder = new PushOrder();
-                pushOrder.execute(getInfo());
-                //Intent intent = new Intent(activity, MainActivity.class);
-                //startActivity(intent);
-                //getParent().getParent().finish();
-                //getParent().finish();
-                //Intent data = new Intent();
+                new AlertDialog.Builder(activity)
+                        .setTitle("Confirm")
+                        .setMessage("Do you want to push this order?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                PushOrder pushOrder = new PushOrder();
+                                pushOrder.execute(getInfo());
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
         button = findViewById(R.id.create_prev);
@@ -120,8 +126,6 @@ public class CreateOrder extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(context, MainActivity.class);
-                //startActivity(intent);
                 finish();
             }
         });

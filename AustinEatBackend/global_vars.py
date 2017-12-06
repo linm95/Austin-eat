@@ -20,3 +20,6 @@ GET_USER_PROPERTY = "/get-user-property"
 PULL_ORDER = "/pull-order"
 
 TIMEOUT_DETECT = "/timeout-detect"
+
+SET_CHANNEL = "/set-channel"
+GET_CHANNEL = "/get-channel"

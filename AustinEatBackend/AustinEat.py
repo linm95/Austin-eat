@@ -666,7 +666,26 @@ class EditProfile(webapp2.RequestHandler):
 
 # [END EditProfile]
 
+# [START GetChatChannel]
+class GetChatChannel(webapp2.RequestHandler):
+    def post(self):
+        ID = self.request.get("id")
+        order = Order.query(Order.orderID == ID).get()
+        if order.chatChannel:
+            res = {
+            "channel" : order.chatChannel
+            }
+        else:
+            res = {"channel" : ""}
+        self.response.write(json.dumps(res))
+# [END GetChatChannel]
 
+class SetChatChannel(webapp2.RequestHandler):
+    def post(self):
+        ID = self.request.get("id")
+        order = Order.query(Order.orderID == ID).get()
+        order.chatChannel = self.request.get("channel")
+        order.put()
 # [START GetOrderHistory]
 class GetOrderHistory(webapp2.RequestHandler):
     def get(self):

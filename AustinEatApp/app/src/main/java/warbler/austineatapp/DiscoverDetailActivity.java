@@ -62,8 +62,8 @@ public class DiscoverDetailActivity extends AppCompatActivity {
                 }
                 else{
                     new AlertDialog.Builder(activity)
-                            .setTitle("Title")
-                            .setMessage("Do you really want to whatever?")
+                            .setTitle("Confirm")
+                            .setMessage("Do you want to pull this order?")
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
