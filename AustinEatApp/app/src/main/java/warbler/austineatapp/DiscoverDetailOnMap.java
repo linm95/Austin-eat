@@ -39,6 +39,7 @@ public class DiscoverDetailOnMap extends AppCompatActivity implements OnMapReady
         googleMap.addMarker(new MarkerOptions().position(cur).title("You"));
         googleMap.addMarker(new MarkerOptions().position(res).title("Restaurant"));
         googleMap.addMarker(new MarkerOptions().position(dest).title("Destination"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cur));
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(cur));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cur, 16.0f));
     }
 }

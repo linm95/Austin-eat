@@ -72,7 +72,7 @@ class TimeoutDetect(webapp2.RequestHandler):
         if orders:
             for order in orders:
                 timenow = datetime.utcnow() - timedelta(hours=6)
-                if timenow < order.deadline:
+                if timenow > order.due_time:
                     order.status = "timeout"
                     order.put()
 
@@ -119,7 +119,7 @@ class DiscoverEater(webapp2.RequestHandler):
 def distance(loc1, loc2):
     lat1, lon1 = loc1
     lat2, lon2 = loc2
-    earthRadius = 6371000.0  # m
+    earthRadius = 3959  # miles
 
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
@@ -238,7 +238,7 @@ class EaterOrder(webapp2.RequestHandler):
                     order_lat = order.destination_location.lat
                     order_lon = order.destination_location.lon
                     dic["distance"] = distance((lat, lon), (order_lat, order_lon))
-                    dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+                    dic["time"] = (datetime.utcnow() - timedelta(hours=6) - order.createTime).seconds / 60.0
                     dic["deliver"] = deliver
                     dic["status"] = order.status
                     toSend.append(dic)
@@ -392,7 +392,7 @@ class DeliverOrder(webapp2.RequestHandler):
             order_lat = order.destination_location.lat
             order_lon = order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
-            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            dic["time"] = (datetime.utcnow() - timedelta(hours=6) - order.createTime).seconds / 60.0
             dic["status"] = order.status
             toSend.append(dic)
         self.response.write(json.dumps(toSend))
