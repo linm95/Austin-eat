@@ -57,6 +57,7 @@ public class ScanQrcodeActivity extends AppCompatActivity {
         scanResults = (TextView) findViewById(R.id.scan_results);
         Intent intent = getIntent();
         orderID = intent.getStringExtra("orderID");
+        Log.d("DEBUG", "orderID is " + orderID);
         if (savedInstanceState != null) {
             imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
             scanResults.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
