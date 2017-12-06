@@ -4,8 +4,9 @@ DISCOVER_DETAIL_PAGE = '/discover-detail'
 # Eater Order Page
 EATER_ORDER_PAGE = '/eater-order'
 EATER_ORDER_DETAIL_PAGE = '/eater-order-detail'
-CONFIMR_EATER_ORDER_PAGE = '/confirm-eater-order'
+CONFIRM_EATER_ORDER_PAGE = '/eater-confirm-order'
 EATER_CANCEL_ORDER_PAGE = '/eater-cancel-order'
+EATER_COMPLETE_ORDER_PAGE = '/eater-complete-order'
 # Deliver Order Page
 DELIVER_ORDER_PAGE = '/deliver-order'
 DELIVER_ORDER_DETAIL_PAGE = '/deliver-order-detail'

@@ -159,14 +159,15 @@
                 android:text="Chat" />
 
             <Button
-                android:id="@+id/codeBtn"
+                android:id="@+id/completeBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_orange_light"
                 android:drawableLeft="?android:attr/actionModeSelectAllDrawable"
                 android:text="Code"
-                android:textSize="8sp" />
+                android:textSize="8sp"
+                android:onClick="codeBtnClick"/>
         </LinearLayout>
 
         <TextView
