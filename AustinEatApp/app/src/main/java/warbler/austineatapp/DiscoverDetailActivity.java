@@ -189,7 +189,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             restaurant.setText("Restaurant: " + order.restaurant);
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
-            price.setText("Money you get: " + order.price);
+            price.setText("Money you get: $" + order.price);
             createTime.setText("Creation Time: " + order.creationTime);
         }
     }

@@ -72,7 +72,7 @@ class TimeoutDetect(webapp2.RequestHandler):
         if orders:
             for order in orders:
                 timenow = datetime.utcnow() - timedelta(hours=6)
-                if timenow < order.deadline:
+                if timenow > order.deadline:
                     order.status = "timeout"
                     order.put()
 
@@ -119,7 +119,7 @@ class DiscoverEater(webapp2.RequestHandler):
 def distance(loc1, loc2):
     lat1, lon1 = loc1
     lat2, lon2 = loc2
-    earthRadius = 6371000.0  # m
+    earthRadius = 3959  # miles
 
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
@@ -309,6 +309,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
                 logging.info("DEBUG: remove deliver: " + deliverEmail + " from the deliverList")
                 deliverList.remove(deliverEmail)
             logging.info("DEBUG: deliver list after updated is " + str(deliverList))
+
             order.deliverList = deliverList
             order.put()
 
@@ -321,7 +322,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
             logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
 
             if len(deliver.owned_orders) == 0:
-                deliver.status = "idle"
+                deliver.user_property = "idle"
             deliver.put()
 
             # deliverOrders = Order.query().fetch()
@@ -335,6 +336,37 @@ class EaterCancelOrder(webapp2.RequestHandler):
             '''
 
 # [END EaterCancelOrder]
+
+# [START EaterCompleteOrder]
+class EaterCompleteOrder(webapp2.RequestHandler):
+    def post(self):
+        orderID = self.request.get("orderID")
+        #deliverEmail = self.request.get("deliverEmail")
+        orderKey = Order.query(Order.orderID == orderID)
+        order = orderKey.get()
+        logging.info("DEBUG: EaterCompleteOrder is " + str(order))
+        eater = User.query(User.email == order.ownerEmail).get()
+        eater.own_orders = []
+        eater.user_property = "idle"
+        eater.put()
+
+        deliverEmail = order.deliverList[0]
+        deliver = User.query(User.email == deliverEmail).get()
+        updated_owned_orders = []
+        for owned_order in deliver.owned_orders:
+            if owned_order != orderID:
+                updated_owned_orders.append(owned_order)
+        deliver.owned_orders = updated_owned_orders
+        logging.info("DEBUG: Updated owned orders is " + str(updated_owned_orders))
+        #logging.info("DEBUG: Updated owned orders len is " + str(len(updated_owned_orders)))
+        if len(updated_owned_orders) == 0:
+            #logging.info("DEBUG: Updated owned orders len is 0")
+            deliver.user_property = "idle"
+        deliver.put()
+
+        order.key.delete()
+
+# [END EaterCompleteOrder]
 
 # [START DeliverOrder]
 class DeliverOrder(webapp2.RequestHandler):
@@ -491,7 +523,7 @@ class CreateOrder(webapp2.RequestHandler):
         order.note = self.request.get("note")
         order.status = "created"
         order.deliverList = []
-
+        logging.info("DEBUG: Create Order: " + str(order))
         order.put()
         # Update user info
         user.user_property = "eater"
