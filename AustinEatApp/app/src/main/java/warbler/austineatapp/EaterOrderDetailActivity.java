@@ -70,17 +70,20 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
 
         EaterOrderDetailActivity.PullOrder pullOrder = new EaterOrderDetailActivity.PullOrder();
         pullOrder.execute();
-
+        /*
         Button completeBtn = findViewById(R.id.completeBtn);
         completeBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 System.out.println("DEBUG: completeBtn is clicked");
+
                 EaterOrderDetailActivity.CompleteOrder completeOrder = new EaterOrderDetailActivity.CompleteOrder();
                 completeOrder.execute();
+
             }
         });
+        */
 
         Button confirmBtn = findViewById(R.id.confirmBtn);
         confirmBtn.setOnClickListener(new View.OnClickListener(){
@@ -208,5 +211,13 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "result");
         }
 
+    }
+    public void codeBtnClick(View view){
+        System.out.println("DEBUG: codeBtn is clicked");
+        Intent intent = new Intent(this, GenerateQrcodeActivity.class);
+        //EditText editText = (EditText) findViewById(R.id.editText);
+        //String message = editText.getText().toString();
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 }

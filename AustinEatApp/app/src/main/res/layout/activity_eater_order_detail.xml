@@ -165,7 +165,8 @@
                 android:backgroundTint="@android:color/holo_orange_light"
                 android:drawableLeft="?android:attr/actionModeSelectAllDrawable"
                 android:text="Code"
-                android:textSize="8sp" />
+                android:textSize="8sp"
+                android:onClick="codeBtnClick"/>
         </LinearLayout>
 
         <TextView
