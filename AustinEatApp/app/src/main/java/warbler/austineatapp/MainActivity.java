@@ -90,16 +90,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent mainIntent = getIntent();
-        int temp = mainIntent.getIntExtra("tab", 0);
+        int temp = mainIntent.getIntExtra("tab", 42);
         switch(temp){
+            case 0:
+                tab = TAB.DISCOVER;
+                break;
             case 1:
                 tab = TAB.ORDER;
                 break;
             case 2:
                 tab = TAB.PROFILE;
                 break;
-            default:
-                tab = TAB.DISCOVER;
         }
 
         if (!UserHelper.isSignedIn()) {

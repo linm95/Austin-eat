@@ -585,7 +585,7 @@ class IssueTransaction(webapp2.RequestHandler):
 
         if result.is_success:
             user.transaction_history.append(result.transaction.id)
-            user.balance += result.transaction.amount
+            user.balance += float(result.transaction.amount)
 
             user.put()
             if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
@@ -596,6 +596,7 @@ class IssueTransaction(webapp2.RequestHandler):
             self.response.write(user.balance)
         else:
             self.response.write(result.message)
+            logging.error(result.message)
             self.set_status(500)
 
 

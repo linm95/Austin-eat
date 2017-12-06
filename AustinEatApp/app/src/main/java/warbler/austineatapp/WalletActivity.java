@@ -35,6 +35,7 @@ public class WalletActivity extends AppCompatActivity implements PaymentMethodNo
     private BraintreeFragment braintreeFragment;
     private PayPalAccountNonce nonce;
     String topupAmount;
+    private String errorMsg;
 
     public static class RetryDialogFragment extends DialogFragment {
         public String message;
@@ -106,6 +107,7 @@ public class WalletActivity extends AppCompatActivity implements PaymentMethodNo
 
         try {
             Response response = client.newCall(request).execute();
+            errorMsg = response.body().toString();
             return response.isSuccessful();
         } catch (IOException e) {
             System.err.println("- Error: IO Exception sending nonce to server");
@@ -159,6 +161,7 @@ public class WalletActivity extends AppCompatActivity implements PaymentMethodNo
         } else {
             RetryDialogFragment dialogFragment = new RetryDialogFragment();
             dialogFragment.message = getString(R.string.wallet_fail_msg);
+            dialogFragment.message += "\n" + errorMsg;
             dialogFragment.show(getSupportFragmentManager(), "success");
         }
     }
