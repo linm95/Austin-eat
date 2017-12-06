@@ -39,7 +39,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_margin="8dp">
         <TextView
             android:id="@+id/restaurant_name"
