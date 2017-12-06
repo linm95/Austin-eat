@@ -309,6 +309,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
                 logging.info("DEBUG: remove deliver: " + deliverEmail + " from the deliverList")
                 deliverList.remove(deliverEmail)
             logging.info("DEBUG: deliver list after updated is " + str(deliverList))
+
             order.deliverList = deliverList
             order.put()
 
@@ -321,7 +322,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
             logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
 
             if len(deliver.owned_orders) == 0:
-                deliver.status = "idle"
+                deliver.user_property = "idle"
             deliver.put()
 
             # deliverOrders = Order.query().fetch()

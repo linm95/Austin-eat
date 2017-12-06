@@ -2,10 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="warbler.austineatapp">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,10 +29,9 @@
         <activity
             android:name=".LogInActivity"
             android:parentActivityName=".MainActivity" />
-
-        <activity android:name=".DiscoverDetailActivity"
-            android:parentActivityName=".MainActivity"/>
-
+        <activity
+            android:name=".DiscoverDetailActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".WalletActivity"
             android:exported="true" />
@@ -46,8 +50,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_profile"
-            >
+            android:label="@string/title_activity_profile">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,19 +58,40 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateOrder" />
-        <activity android:name=".EaterOrderDetailActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".DeliverOrderDetailActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".SelectRestaurantLocationActivity">
-        </activity>
+        <activity
+            android:name=".EaterOrderDetailActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".DeliverOrderDetailActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".SelectRestaurantLocationActivity"></activity>
         <activity
             android:name=".EditProfileActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <!-- activity android:name=".HistoryActivity"></activity -->
-        <activity android:name=".DiscoverDetailOnMap"></activity>
-        <activity android:name=".SendBirdMessagingActivity"/>
-        <activity android:name=".SendBirdMemberListActivity"/>
+        <activity android:name=".DiscoverDetailOnMap" />
+        <activity android:name=".SendBirdMessagingActivity" />
+        <activity android:name=".SendBirdMemberListActivity" />
+
+        <!-- For Scanning QR codes -->
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity android:name=".ScanQrcodeActivity"
+            android:parentActivityName=".DeliverOrderDetailActivity" >
+
+        </activity>
     </application>
 
 </manifest>

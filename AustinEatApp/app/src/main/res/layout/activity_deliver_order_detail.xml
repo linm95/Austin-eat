@@ -155,7 +155,8 @@
                 android:backgroundTint="@android:color/holo_green_light"
                 android:drawableLeft="@android:drawable/checkbox_on_background"
                 android:text="Complete"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:onClick="completeBtnClick"/>
         </LinearLayout>
 
         <TextView

@@ -91,6 +91,8 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
 
     }
 
+
+
     public void cancelBtnClick(View view){
         System.out.println("DEBUG: cancelBtn is clicked");
         DeliverOrderDetailActivity.CancelOrder cancelOrder = new DeliverOrderDetailActivity.CancelOrder();
@@ -98,6 +100,15 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
         //finish();
         //Intent upIntent = NavUtils.getParentActivityIntent(this);
         //NavUtils.navigateUpTo(this, upIntent);
+    }
+
+    public void completeBtnClick(View view){
+        System.out.println("DEBUG: completeBtn is clicked");
+        Intent intent = new Intent(this, ScanQrcodeActivity.class);
+        //EditText editText = (EditText) findViewById(R.id.editText);
+        //String message = editText.getText().toString();
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 
     private class PullOrders extends AsyncTask<Object, Void, OrderDetail> {
