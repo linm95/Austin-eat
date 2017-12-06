@@ -486,8 +486,10 @@ class DeliverCancelOrder(webapp2.RequestHandler):
 # [START DeliverCompleteOrder]
 class DeliverCompleteOrder(webapp2.RequestHandler):
     def post(self):
-
-
+        orderID = self.request.get("orderID")
+        scanID = self.request.get("scanCode")
+        logging.info("DEBUG: orderID is " + orderID)
+        logging.info("DEBUG: scanID is " + scanID)
         if orderID == scanID:
             logging.info("DEBUG: orderID is equal to scanID")
             #deliverEmail = self.request.get("deliverEmail")
@@ -502,16 +504,20 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
             eater.put()
 
             deliverEmail = order.deliverList[0]
+            logging.info("DEBUG: deliverEmail " + deliverEmail)
             deliver = User.query(User.email == deliverEmail).get()
-            updated_owned_orders = []
+            updated_owned_orders = deliver.owned_orders
+            updated_owned_orders.remove(orderID)
+            '''
             for owned_order in deliver.owned_orders:
                 if owned_order != orderID:
                     updated_owned_orders.append(owned_order)
+            '''
             deliver.owned_orders = updated_owned_orders
             logging.info("DEBUG: Updated owned orders is " + str(updated_owned_orders))
             #logging.info("DEBUG: Updated owned orders len is " + str(len(updated_owned_orders)))
             if len(updated_owned_orders) == 0:
-                #logging.info("DEBUG: Updated owned orders len is 0")
+                logging.info("DEBUG: Updated owned orders len is 0")
                 deliver.user_property = "idle"
             deliver.put()
 
