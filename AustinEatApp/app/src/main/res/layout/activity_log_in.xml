@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/titleHeight"
             android:gravity="center_horizontal"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/titleColor"
             android:textSize="@dimen/titleSize"
             android:text="@string/title" />
 

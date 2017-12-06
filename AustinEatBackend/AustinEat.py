@@ -75,6 +75,10 @@ class TimeoutDetect(webapp2.RequestHandler):
                 if timenow > order.due_time:
                     order.status = "timeout"
                     order.put()
+                    user = User.query(User.email == order.ownerEmail).fetch()
+                    if user.user_property == "created":
+                        user.user_property = "idle"
+                        user.put()
 
 # [END TimeoutDetect]
 
