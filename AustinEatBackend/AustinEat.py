@@ -20,6 +20,7 @@ import time
 import os
 
 
+
 # [END IMPORT]
 
 
@@ -56,6 +57,8 @@ class LogIn(webapp2.RequestHandler):
             user.favorite_foods = ""
             user.requester_rate = 0.0
             user.deliveryperson_rate = 0.0
+            user.user_property = "idle"
+            user.owned_orders = []
             user.put()
 
 
@@ -67,12 +70,15 @@ class DiscoverEater(webapp2.RequestHandler):
         pass
 
     def post(self):
-        lat = 0  # float(self.request.get('lat'))
-        lon = 0  # float(self.request.get('lng'))
-        orders = Order.query(Order.status == "created" or Order.status == "pending").fetch()
+        lat = float(self.request.get('lat'))
+        lon = float(self.request.get('lon'))
+        #all_orders = Order.query().fetch()
+        #logging.info(all_orders)
+        orders = Order.query(ndb.OR(Order.status == "created", Order.status == "pending")).fetch()
         toSend = []
+        logging.info(orders)
         for order in orders:
-            #logging.info(order.ownerEmail)
+            logging.info("DEBUG:" + order.ownerEmail)
             user = User.query(User.email == order.ownerEmail).get()
             dic = {}
             dic["id"] = order.orderID
@@ -83,8 +89,9 @@ class DiscoverEater(webapp2.RequestHandler):
             dic["location"] = order.destination
             dic["deadline"] = order.due_time.strftime("%H:%M")
             dic["rating"] = user.requester_rate
-            order_lat = 0  # order.destination_location.lat
-            order_lon = 0  # order.destination_location.lon
+            dic["price"] = order.price
+            order_lat = order.destination_location.lat
+            order_lon = order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
             dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
             toSend.append(dic)
@@ -92,6 +99,7 @@ class DiscoverEater(webapp2.RequestHandler):
 
 
 # [END DiscoverOrder]
+
 
 # [START distance]
 def distance(loc1, loc2):
@@ -106,9 +114,29 @@ def distance(loc1, loc2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     d = earthRadius * c
     return d
-
-
 # [END distance]
+
+# [START PullOrder]
+class PullOrder(webapp2.RequestHandler):
+    def post(self):
+        orderID = self.request.get("id")
+        deliverEmail = self.request.get("deliverEmail")
+        deliver = User.query(User.email == deliverEmail).get()
+        order = Order.query(Order.orderID == orderID).get()
+        if(deliverEmail in order.deliverList):
+            self.response.write("HasPulled")
+        if(order.status == "confirmed"):
+            self.response.write("HasConfirmed")
+
+        order.status = "pending"
+        order.deliverList.append(deliverEmail)
+        order.put()
+
+        deliver.owned_orders.append(orderID)
+        deliver.user_property = "deliver"
+        deliver.put()
+
+# [END PullOrder]
 
 # [START DiscoverDetail]
 class DiscoverDetail(webapp2.RequestHandler):
@@ -128,8 +156,9 @@ class DiscoverDetail(webapp2.RequestHandler):
         toSend["deadline"] = order.due_time.strftime("%H:%M")
         toSend["rating"] = user.requester_rate
         toSend["note"] = order.note
-        toSend["lat"] = 0.0 #order.destination_location.lat
-        toSend["lon"] = 0.0 #order.destination_location.lon
+        toSend["price"] = order.price
+        toSend["lat"] = order.destination_location.lat
+        toSend["lon"] = order.destination_location.lon
         toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
 
         self.response.write(json.dumps(toSend))
@@ -164,40 +193,87 @@ class EaterOrder(webapp2.RequestHandler):
     # Get the info of my orders
     def post(self):
         lat = float(self.request.get('lat'))
-        lon = float(self.request.get('lng'))
+        lon = float(self.request.get('lon'))
         email = self.request.get('email')
-        order = Order.query(Order.status == email).fetch()
+        orders = Order.query(Order.ownerEmail == email).fetch()
         toSend = []
+        #logging.info(vars(order))
+        #logging.info("DEBUG: order data: " + str(order))
+        #logging.info(order.deliverList)
 
-        for deliver in order.deliverList:
-            user = User.query(User.email == deliver)
-            dic = {}
-            dic["id"] = order.orderID
-            dic["photoUrl"] = user.imageUrl
-            dic["name"] = user.name
-            dic["restaurant"] = order.restaurant
-            dic["food"] = order.food
-            dic["location"] = order.destination
-            dic["deadline"] = order.due_time.strftime("%H:%M")
-            dic["rating"] = user.rate
-            order_lat = order.destination_location.lat
-            order_lon = order.destination_location.lon
-            dic["distance"] = distance((lat, lon), (order_lat, order_lon))
-            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
-            toSend.append(dic)
-
+        for order in orders:
+            if hasattr(order, "deliverList"):
+                logging.info("DEBUG: deliver list is " + str(order.deliverList))
+                for deliver in order.deliverList:
+                    #logging.info("DEBUG: deliver is " + deliver)
+                    #logging.info("DEBUG: deliver is " + str(deliver))
+                    user = User.query(User.email == str(deliver)).get()
+                    logging.info("DEBUG: user is  " + str(user))
+                    logging.info("DEBUG: order is  " + str(order))
+                    dic = {}
+                    dic["id"] = order.orderID
+                    dic["photoUrl"] = user.avatar_url
+                    dic["name"] = user.name
+                    dic["restaurant"] = order.restaurant
+                    dic["food"] = order.food
+                    dic["location"] = order.destination
+                    dic["deadline"] = order.due_time.strftime("%H:%M")
+                    dic["rating"] = user.deliveryperson_rate
+                    order_lat = order.destination_location.lat
+                    order_lon = order.destination_location.lon
+                    dic["distance"] = distance((lat, lon), (order_lat, order_lon))
+                    dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+                    dic["deliver"] = deliver
+                    dic["status"] = order.status
+                    toSend.append(dic)
+            else:
+                logging.info("DEBUG: deliver list is empty.")
         self.response.write(json.dumps(toSend))
 
 
 # [END EatOrder]
+
+# [START EaterOrderDetail]
+class EaterOrderDetail(webapp2.RequestHandler):
+    def get(self):
+        pass
+
+    def post(self):
+        orderID = self.request.get("id")
+        deliverEmail = self.request.get("deliverEmail")
+        order = Order.query(Order.orderID == orderID).get()
+        user = User.query(User.email == deliverEmail).get()
+        toSend = {}
+        toSend["photoUrl"] = user.avatar_url
+        toSend["name"] = user.first_name
+        toSend["restaurant"] = order.restaurant
+        toSend["food"] = order.food
+        toSend["location"] = order.destination
+        toSend["deadline"] = order.due_time.strftime("%H:%M")
+        toSend["rating"] = user.deliveryperson_rate
+        toSend["note"] = order.note
+        toSend["price"] = order.price
+        toSend["lat"] = order.destination_location.lat
+        toSend["lon"] = order.destination_location.lon
+        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
+        toSend["status"] = order.status
+
+        self.response.write(json.dumps(toSend))
+
+# [END EaterOrderDetail]
 
 # [START ConfirmEaterOrder]
 class ConfirmEaterOrder(webapp2.RequestHandler):
     # Confirm the deliver and send notification to the deliver
     # Update the order history
     def post(self):
-        pass
-
+        orderID = self.request.get("orderID")
+        deliverEmail = self.request.get("deliverEmail")
+        order = Order.query(Order.orderID == orderID).get()
+        updatedDeliverList = [deliverEmail]
+        order.status = "confirmed"
+        order.deliverList = updatedDeliverList
+        order.put()
 
 # [END ConfirmEaterOrder]
 
@@ -206,22 +282,22 @@ class DeliverOrder(webapp2.RequestHandler):
     # Get the info of my orders (pending and confirmed)
     def post(self):
         lat = float(self.request.get('lat'))
-        lon = float(self.request.get('lng'))
-        deliver = float(self.request.get('deliver'))
+        lon = float(self.request.get('lon'))
+        deliverEmail = self.request.get('deliverEmail')
 
-        orders = Order.query(deliver == Order.deliverList).fetch()
+        orders = Order.query(deliverEmail == Order.deliverList).fetch()
         toSend = []
         for order in orders:
-            user = User.query(User.email == order.ownerEmail)
+            user = User.query(User.email == order.ownerEmail).get()
             dic = {}
             dic["id"] = order.orderID
-            dic["photoUrl"] = user.imageUrl
+            dic["photoUrl"] = user.avatar_url
             dic["name"] = user.name
             dic["restaurant"] = order.restaurant
             dic["food"] = order.food
             dic["location"] = order.destination
             dic["deadline"] = order.due_time.strftime("%H:%M")
-            dic["rating"] = user.rate
+            dic["rating"] = user.requester_rate
             order_lat = order.destination_location.lat
             order_lon = order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
@@ -233,6 +309,78 @@ class DeliverOrder(webapp2.RequestHandler):
 
 # [END DeliverOrder]
 
+# [START DeliverOrderDetail]
+class DeliverOrderDetail(webapp2.RequestHandler):
+    def get(self):
+        pass
+
+    def post(self):
+        orderID = self.request.get("id")
+        #deliverEmail = self.request.get("deliverEmail")
+        order = Order.query(Order.orderID == orderID).get()
+        user = User.query(User.email == order.ownerEmail).get()
+        toSend = {}
+        toSend["photoUrl"] = user.avatar_url
+        toSend["name"] = user.first_name
+        toSend["restaurant"] = order.restaurant
+        toSend["food"] = order.food
+        toSend["location"] = order.destination
+        toSend["deadline"] = order.due_time.strftime("%H:%M")
+        toSend["rating"] = user.requester_rate
+        toSend["note"] = order.note
+        toSend["price"] = order.price
+        toSend["lat"] = order.destination_location.lat
+        toSend["lon"] = order.destination_location.lon
+        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
+        toSend["status"] = order.status
+        logging.info("DEBUG: DeliverOrderDetail toSend: " + str(toSend))
+        self.response.write(json.dumps(toSend))
+
+# [END DeliverOrderDetail]
+
+# [START DeliverCancelOrder]
+class DeliverCancelOrder(webapp2.RequestHandler):
+    # Confirm the eater and send notification to eater and wait to be confirmed
+    # Change the order status to “waiting”
+    def post(self):
+        orderID = self.request.get("id")
+        deliverEmail = self.request.get("deliverEmail")
+        deliver = User.query(User.email == deliverEmail).get()
+        order = Order.query(Order.orderID == orderID).get()
+        #status = order.status
+        deliverList = order.deliverList
+        logging.info("DEBUG: deliver list before updated is " + str(deliverList))
+        if deliverEmail in deliverList:
+            logging.info("DEBUG: remove deliver: " + deliverEmail + " from the deliverList")
+            deliverList.remove(deliverEmail)
+        logging.info("DEBUG: deliver list after updated is " + str(deliverList))
+        order.deliverList = deliverList
+        order.put()
+
+        # Check deliver's pulled order list. If it's empty, update the status of deliver to idle
+        #testList = []
+        #testList.append(deliverEmail)
+        #deliverOwnedOrders = deliver.owned_orders
+        logging.info("DEBUG: deliver owned order before updated is " + str(deliver.owned_orders))
+        deliver.owned_orders.remove(orderID)
+        logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
+        if len(deliver.owned_orders)==0:
+            deliver.status = "idle"
+        deliver.put()
+
+        #deliverOrders = Order.query().fetch()
+        '''
+        logging.info("DEBUG: deliver's pulled order list after cancelling is " + str(deliverOrders))
+        if not deliverOrders:
+            logging.info("DEBUG: deliver's pulled order list is empty, update the deliver's status.")
+            deliver = User.query(User.email == deliverEmail).get()
+            deliver.status = "idle"
+            deliver.put()
+        '''
+
+
+# [END DeliverCancelOrder]
+
 # [START ConfirmDeliverOrder]
 class ConfirmDeliverOrder(webapp2.RequestHandler):
     # Confirm the eater and send notification to eater and wait to be confirmed
@@ -243,60 +391,6 @@ class ConfirmDeliverOrder(webapp2.RequestHandler):
 
 # [END ConfirmDeliverOrder]
 
-# [START EaterOrderDetail]
-class EaterOrderDetail(webapp2.RequestHandler):
-    def get(self):
-        pass
-
-    def post(self):
-        orderID = self.request.get("id")
-        order = Order.query(Order.orderID == orderID).get()
-        user = User.query(User.email == order.ownerEmail).get()
-        toSend = {}
-        toSend["photoUrl"] = user.imageUrl
-        toSend["name"] = user.name
-        toSend["restaurant"] = order.restaurant
-        toSend["food"] = order.food
-        toSend["location"] = order.destination
-        toSend["deadline"] = order.due_time.strftime("%H:%M")
-        toSend["rating"] = user.rate
-        toSend["note"] = order.note
-        toSend["lat"] = order.destination_location.lat
-        toSend["lon"] = order.destination_location.lon
-        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
-
-        self.response.write(json.dumps(toSend))
-
-
-# [END EaterOrderDetail]
-
-# [START DeliverOrderDetail]
-class DeliverOrderDetail(webapp2.RequestHandler):
-    def get(self):
-        pass
-
-    def post(self):
-        orderID = self.request.get("id")
-        order = Order.query(Order.orderID == orderID).get()
-        toSend = {}
-        if not order:
-            user = User.query(User.email == order.ownerEmail).get()
-            toSend["photoUrl"] = user.imageUrl
-            toSend["name"] = user.name
-            toSend["restaurant"] = order.restaurant
-            toSend["food"] = order.food
-            toSend["location"] = order.destination
-            toSend["deadline"] = order.due_time.strftime("%H:%M")
-            toSend["rating"] = user.rate
-            toSend["note"] = order.note
-            toSend["lat"] = order.destination_location.lat
-            toSend["lon"] = order.destination_location.lon
-            toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
-
-        self.response.write(json.dumps(toSend))
-
-
-# [END DeliverOrderDetail]
 
 # [START CreateOrder]
 class CreateOrder(webapp2.RequestHandler):
@@ -304,24 +398,48 @@ class CreateOrder(webapp2.RequestHandler):
         pass
 
     def post(self):
+        email = self.request.get("email")
+        user = User.query(User.email == email).get()
+
+        if user.user_property=="deliver":
+            logging.info("DEBUG: The user is a deliver now. Hence, he/she can't create an order.")
+            return
+        if user.user_property == "eater":
+            logging.info("DEBUG: The user is an eater now. Please complete/cancel your order first.")
+            return
+        # Update order info
         order = Order()
         now = datetime.now()
         order.createTime = now
         order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
+        res_lat = float(self.request.get("res_lat"))
+        res_lon = float(self.request.get("res_lon"))
+        order.restaurant_location = ndb.GeoPt(res_lat, res_lon)
         #logging.info(order.orderID)
-        order.ownerEmail = self.request.get("email")
+        order.ownerEmail = email
         #logging.info(order.ownerEmail)
+        order.price = float(self.request.get("price"))
         order.restaurant = self.request.get("restaurant")
         order.food = self.request.get("food")
         order.destination = self.request.get("location")
+        lat = float(self.request.get("lat"))
+        lon = float(self.request.get("lon"))
+        order.destination_location = ndb.GeoPt(lat, lon)
         time = self.request.get("deadline").split(":")
         order.due_time = datetime(now.year, now.month, now.day, int(time[0]), int(time[1]))
         order.note = self.request.get("note")
         order.status = "created"
+        order.deliverList = []
+
         order.put()
+        # Update user info
+        user.user_property = "eater"
+        user.owned_orders.append(orderID)
+        user.put()
 
 
 # [END CreateOrder]
+
 # [START MyProfile]
 class MyProfile(webapp2.RequestHandler):
     def get(self):
@@ -494,3 +612,22 @@ class GetOrderHistory(webapp2.RequestHandler):
         pass
 
 # [END GetOrderHistory]
+
+# [START SetUserProperty]
+class GetUserProperty(webapp2.RequestHandler):
+    def get(self):
+        email = self.request.get("email")
+        user = User.query(User.email == email).get()
+
+        if user is not None:
+            logging.info("DEBUG: user is " + user.email)
+
+            if user.user_property is not None:
+                logging.info("DEBUG: user_property is " + user.user_property)
+
+            self.response.write(user.user_property)
+        else:
+            logging.info("DEBUG: user is none")
+
+
+# [END SetUserProperty]

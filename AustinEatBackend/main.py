@@ -18,6 +18,7 @@ import webapp2
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
+        #logging.getLogger().setLevel(logging.DEBUG)
         self.response.write('Hello world!')
 
 app = webapp2.WSGIApplication([

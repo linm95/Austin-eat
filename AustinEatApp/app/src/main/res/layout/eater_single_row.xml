@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        >
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content">
+        android:layout_margin="8dp"
+        >
+
         <ImageView
             android:id="@+id/profile_image"
             android:src="@mipmap/ic_launcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"
+            >
         </ImageView>
         <TextView
             android:id="@+id/profile_name"
@@ -21,90 +35,129 @@
             android:layout_height="20dp"
             android:layout_marginTop="0dp"
             android:layout_gravity="center_horizontal"
-            android:textSize="15sp">
+            android:textSize="15sp"
+            >
         </TextView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/restaurant_name"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_gravity="left"
-            android:layout_marginTop="0dp"
-            android:text="Restaurant: KFC"
-            android:textSize="15sp"></TextView>
-
-        <TextView
-            android:id="@+id/food_name"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_gravity="left"
-            android:layout_marginTop="0dp"
-            android:text="Food: burger"
-            android:textSize="15sp"></TextView>
-
-        <TextView
-            android:id="@+id/location_name"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_gravity="left"
-            android:layout_marginTop="0dp"
-            android:text="Location:EER"
-            android:textSize="15sp"></TextView>
-
-        <TextView
-            android:id="@+id/deadline"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_gravity="left"
-            android:layout_marginTop="0dp"
-            android:text="Deadline: 12:30"
-            android:textSize="15sp"></TextView>
-
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleSmall"
+            android:isIndicator="true"
             android:numStars="5"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
-            android:stepSize="1.0" />
+            android:stepSize="0.1"
+            />
     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/restaurant_name"
+                android:text="RES.: KFC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:layout_width="wrap_content">
-        <TextView
-            android:id="@+id/distance_display"
-            android:text="0 miles away"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="left"
-            android:textSize="15sp">
-        </TextView>
-        <TextView
-            android:id="@+id/time_display"
-            android:text="0 mins ago"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="left"
-            android:textSize="15sp">
-        </TextView>
+                android:textSize="15sp"
+                >
+            </TextView>
+            <!--TextView
+                android:id="@+id/food_name"
+                android:text="Food: burger"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="left"
+                android:textSize="15sp">
+            </TextView-->
+            <TextView
+                android:id="@+id/location_name"
+                android:text="DEST.: EER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="left"
+                android:textSize="15sp"
+                >
+            </TextView>
+            <TextView
+                android:id="@+id/deadline"
+                android:text="DDL: 12:30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="left"
+                android:textSize="15sp"
+                >
+            </TextView>
+            <TextView
+                android:id="@+id/price"
+                android:text="Price: $8.00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="left"
+                android:textSize="15sp"
+                >
+            </TextView>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/StatusBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.00"
-            android:text="Pending"
-            android:textSize="10sp" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_margin="8dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <TextView
+                android:id="@+id/distance_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="0 miles away"
+                android:textSize="15sp"
+                >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/time_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="0 mins ago"
+                android:textSize="15sp"
+                >
+
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/order_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Status: Pending"
+                android:textSize="15sp"
+                >
+
+            </TextView>
+            <!--
+            <Button
+                android:id="@+id/StatusBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="Pending"
+                android:textSize="10sp" />
+                -->
+        </LinearLayout>
+        </LinearLayout>
+
 </LinearLayout>

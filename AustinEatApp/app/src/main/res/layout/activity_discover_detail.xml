@@ -7,17 +7,22 @@
     tools:context="warbler.austineatapp.DiscoverDetailActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:orientation="vertical"
-        android:gravity="top">
+        android:gravity="top"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="Detail Information">
+            android:text="Detail Information"
+            android:layout_margin="8dp"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimary">
         </TextView>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
@@ -27,38 +32,25 @@
             android:gravity="center">
             <ImageView
                 android:id="@+id/detail_profile_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
                 android:layout_gravity="center_horizontal"
-                android:scaleX="1"
-                android:scaleY="1"
                 android:src="@mipmap/ic_launcher">
             </ImageView>
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_margin="8dp"
                 android:gravity="center">
                 <TextView
                     android:id="@+id/detail_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
+                    android:layout_margin="8dp"
                     android:text="Name">
-                </TextView>
-                <TextView
-                    android:id="@+id/detail_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="Location">
-                </TextView>
-                <TextView
-                    android:id="@+id/detail_deadline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="Deadline">
                 </TextView>
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
@@ -69,34 +61,69 @@
                         android:id="@+id/detail_rating_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
-                        android:scaleX="0.5"
-                        android:scaleY="0.5"/>
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:isIndicator="true"
+                        android:layout_margin="8dp"
+                        android:stepSize="0.1"/>
                     <TextView
                         android:id="@+id/detail_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
                         android:text="5.0/5.0"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <TextView
+            android:id="@+id/detail_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="8dp"
+            android:text="Money you get: ">
+        </TextView>
+        <TextView
             android:id="@+id/detail_restaurant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Restaurant:"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:layout_margin="8dp"/>
         <TextView
             android:id="@+id/detail_food_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food:"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:id="@+id/detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="8dp"
+            android:text="Location">
+        </TextView>
+        <TextView
+            android:id="@+id/detail_deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="8dp"
+            android:text="Deadline">
+        </TextView>
         <TextView
             android:id="@+id/detail_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Note:"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:layout_margin="8dp"/>
+        <Button
+            android:id="@+id/detail_pull"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="PULL"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

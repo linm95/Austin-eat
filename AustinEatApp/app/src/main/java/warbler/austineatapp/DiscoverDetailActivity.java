@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -25,8 +27,13 @@ import okhttp3.Response;
 public class DiscoverDetailActivity extends AppCompatActivity {
 
     private String id;
+    private String email;
     private String tail = "/discover-detail";
+    private String pullTail = "/pull-order";
     private Context context;
+
+    private OrderDetail order;
+    private boolean pullSuccessful = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +41,81 @@ public class DiscoverDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_discover_detail);
         Intent intent = getIntent();
         id = intent.getStringExtra("orderID");
+        email = intent.getStringExtra("deliverEmail");
         context = this;
         PullOrder pullOrder = new PullOrder();
         pullOrder.execute();
+        Button button = findViewById(R.id.detail_pull);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("DEBUG: userProperty is " + UserHelper.getCurrentUserProperty());
+                if(UserHelper.getCurrentUserProperty().equals("eater")){
+                    CharSequence text = "Before pulling an order, please finish or cancel your ongoing order first!";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(context, text, duration).show();
+                }
+                else{
+                    UserPullOrder userPullOrder = new UserPullOrder();
+                    userPullOrder.execute();
+                    /*
+                    CharSequence text = "Pull order successfully";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(context, text, duration).show();
+                    */
+
+                }
+
+            }
+        });
     }
 
+    private class UserPullOrder extends AsyncTask{
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("id",id)
+                    .add("deliverEmail", email)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + pullTail)
+                    .post(body)
+                    .build();
+            try{
+                client.newCall(request).execute();
+                pullSuccessful = true;
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object ret) {
+            System.out.println("DEBUG: return response: " + ret);
+            if(ret!=null && ret.equals("HasPulled")){
+                CharSequence text = "You've pulled this order";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
+            }
+            else if(ret!=null && ret.equals("HasConfirmed")){
+                CharSequence text = "This order has been confirmed by others, please pull other orders";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
+            }
+            else if(pullSuccessful){
+                CharSequence text = "Pull order successfully";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
+                UserHelper.setCurrentUserProperty("deliver");
+            }
+            pullSuccessful = false;
+
+        }
+    }
     private class PullOrder extends AsyncTask<Object, Void, OrderDetail> {
 
         @Override
@@ -51,7 +128,6 @@ public class DiscoverDetailActivity extends AppCompatActivity {
                     .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
-            OrderDetail order = null;
             try{
                 Response response = client.newCall(request).execute();
                 //Log.d("Response", response.body().string());
@@ -65,25 +141,28 @@ public class DiscoverDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(OrderDetail order){
-            ImageView image = (ImageView) findViewById(R.id.detail_profile_image);
-            TextView name = (TextView) findViewById(R.id.detail_profile_name);
-            TextView location = (TextView) findViewById(R.id.detail_location);
-            TextView deadline = (TextView) findViewById(R.id.detail_deadline);
-            RatingBar star = (RatingBar) findViewById(R.id.detail_rating_bar);
-            TextView rating = (TextView) findViewById(R.id.detail_rating);
-            TextView restaurant = (TextView) findViewById(R.id.detail_restaurant);
-            TextView food = (TextView) findViewById(R.id.detail_food_name);
-            TextView note = (TextView) findViewById(R.id.detail_note);
+            ImageView image = findViewById(R.id.detail_profile_image);
+            TextView name = findViewById(R.id.detail_profile_name);
+            TextView location = findViewById(R.id.detail_location);
+            TextView deadline = findViewById(R.id.detail_deadline);
+            RatingBar star = findViewById(R.id.detail_rating_bar);
+            TextView rating = findViewById(R.id.detail_rating);
+            TextView restaurant = findViewById(R.id.detail_restaurant);
+            TextView food = findViewById(R.id.detail_food_name);
+            TextView note = findViewById(R.id.detail_note);
+            TextView price = findViewById(R.id.detail_price);
 
             Picasso.with(context).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(image);
-            name.setText("name: " + order.name);
-            location.setText("Location: " + order.location);
+            name.setText("Name: " + order.name);
+            location.setText("Destination: " + order.location);
             deadline.setText("Deadline: " + order.deadline);
             star.setRating(order.rating);
             rating.setText(order.rating + "/5.0");
             restaurant.setText("Restaurant: " + order.restaurant);
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
+            price.setText("Money you get: " + order.price);
+
         }
     }
 }

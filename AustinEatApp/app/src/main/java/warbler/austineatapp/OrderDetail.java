@@ -13,6 +13,8 @@ public class OrderDetail {
     String location;
     String deadline;
     String note;
+    String status;
+    double price;
     double lat;
     double lon;
     float rating;

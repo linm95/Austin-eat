@@ -7,10 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,11 +40,12 @@ public class EaterOrderFragment extends Fragment {
     }
 
 
-    private float lat = 0;
-    private float lon = 0;
-    private String url = "";
+    private double lat = 0;
+    private double lon = 0;
+    private String tail = "/eater-order";
     private boolean confirmed = false;
     private ListView mListView;
+    private HorizontalScrollView scrollView;
     private Context context;
 
     @Override
@@ -53,14 +58,22 @@ public class EaterOrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_deliver_order, container, false);
+        return inflater.inflate(R.layout.fragment_eater_order, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         context = getActivity();
+        lat = LocationHelper.getLatitude();
+        lon = LocationHelper.getLongitude();
+        if(confirmed) {
+            TextView statusTextView = getActivity().findViewById(R.id.status_text);
+            statusTextView.setText("Confirmed");
+        }
         mListView = getActivity().findViewById(R.id.eater_order_list_view);
+        //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
         setListView();
     }
 
@@ -79,9 +92,10 @@ public class EaterOrderFragment extends Fragment {
             RequestBody body = new FormBody.Builder()
                     .add("lat", "" + lat)
                     .add("lon", "" + lon)
+                    .add("email", UserHelper.getCurrentUserEmail())
                     .build();
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getString(R.string.root_url) + tail)
                     .post(body)
                     .build();
             ArrayList<Order> orders = null;
@@ -99,21 +113,32 @@ public class EaterOrderFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<Order> orders){
             final ArrayList<Order> finalOrders = orders;
-            DiscoverAdapter adapter = new DiscoverAdapter(context, orders);
-            mListView.setAdapter(adapter);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            if(orders.size()==0){
+                System.out.println("DEBUG: No pending or confirmed order.");
+            }
+            else{
+                EaterOrderAdapter adapter = new EaterOrderAdapter(context, orders);
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Order selectedOrder = finalOrders.get(position);
+                mListView.setAdapter(adapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-                    Intent detailIntent = new Intent(context, EaterOrderDetailActivity.class);
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Order selectedOrder = finalOrders.get(position);
 
-                    detailIntent.putExtra("OrderId", selectedOrder.id);
+                        Intent detailIntent = new Intent(context, EaterOrderDetailActivity.class);
 
-                    startActivity(detailIntent);
-                }
-            });
+                        detailIntent.putExtra("orderID", selectedOrder.id);
+                        detailIntent.putExtra("deliverEmail", selectedOrder.deliver);
+                        startActivity(detailIntent);
+                    }
+
+
+                });
+            }
+
+
+
         }
     }
 

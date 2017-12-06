@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
 
     ProfileFragment profileFragment;
     NoPropertyFragment noPropertyFragment;
+    EaterOrderFragment eaterOrderFragment;
+    DeliverOrderFragment deliverOrderFragment;
     DiscoverFragment discoverFragment;
     FragmentManager fragmentManager;
     //FragmentTransaction fragmentTransaction;
@@ -44,12 +46,19 @@ public class MainActivity extends AppCompatActivity {
                     tab = TAB.DISCOVER;
                     return true;
                 case R.id.navigation_dashboard:
-                    FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();;
-                    if (UserHelper.getCurrentUserProperty().equals("deliver")){
+                    FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
 
+                    System.out.println("DEBUG: currentUserProperty is " + UserHelper.getCurrentUserProperty());
+
+                    if (UserHelper.getCurrentUserProperty().equals("deliver")){
+                        deliverOrderFragment = new DeliverOrderFragment();
+                        fragmentTransaction2.replace(R.id.content, deliverOrderFragment);
+                        fragmentTransaction2.commit();
                     }
                     else if(UserHelper.getCurrentUserProperty().equals("eater")){
-
+                        eaterOrderFragment = new EaterOrderFragment();
+                        fragmentTransaction2.replace(R.id.content, eaterOrderFragment);
+                        fragmentTransaction2.commit();
                     }
                     else{
                         noPropertyFragment = new NoPropertyFragment();
@@ -83,35 +92,35 @@ public class MainActivity extends AppCompatActivity {
         if (!UserHelper.isSignedIn()) {
             Intent intent = new Intent(this, LogInActivity.class);
             startActivity(intent);
+        } else {
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+            fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // go back to where we left
+            if (tab == TAB.DISCOVER) {
+                if (discoverFragment == null) {
+                    discoverFragment = new DiscoverFragment();
+                }
+                fragmentTransaction.replace(R.id.content, discoverFragment);
+                navigation.setSelectedItemId(R.id.navigation_home);
+            } else if (tab == TAB.ORDER) {
+                if (noPropertyFragment == null) {
+                    noPropertyFragment = new NoPropertyFragment();
+                }
+                fragmentTransaction.replace(R.id.content, noPropertyFragment);
+                navigation.setSelectedItemId(R.id.navigation_dashboard);
+            } else if (tab == TAB.PROFILE) {
+                if (profileFragment == null) {
+                    profileFragment = new ProfileFragment();
+                }
+                fragmentTransaction.replace(R.id.content, profileFragment);
+                navigation.setSelectedItemId(R.id.navigation_notifications);
+            }
+            fragmentTransaction.commit();
         }
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        // go back to where we left
-        if (tab == TAB.DISCOVER) {
-            if (discoverFragment == null) {
-                discoverFragment = new DiscoverFragment();
-            }
-            fragmentTransaction.replace(R.id.content, discoverFragment);
-            navigation.setSelectedItemId(R.id.navigation_home);
-        } else if (tab == TAB.ORDER) {
-            if (noPropertyFragment == null) {
-                noPropertyFragment = new NoPropertyFragment();
-            }
-            fragmentTransaction.replace(R.id.content, noPropertyFragment);
-            navigation.setSelectedItemId(R.id.navigation_dashboard);
-        } else if (tab == TAB.PROFILE) {
-            if (profileFragment == null) {
-                profileFragment = new ProfileFragment();
-            }
-            fragmentTransaction.replace(R.id.content, profileFragment);
-            navigation.setSelectedItemId(R.id.navigation_notifications);
-        }
-        fragmentTransaction.commit();
     }
 
     public void onClickWallet(View view) {

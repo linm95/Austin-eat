@@ -52,26 +52,28 @@ public class DiscoverAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get view for row item
         View rowView = mInflater.inflate(R.layout.discover_single_row, parent, false);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.profile_image);
-        TextView name = (TextView) rowView.findViewById(R.id.profile_name);
-        TextView restaurant = (TextView) rowView.findViewById(R.id.restaurant_name);
-        TextView food = (TextView) rowView.findViewById(R.id.food_name);
-        TextView location = (TextView) rowView.findViewById(R.id.location_name);
-        TextView deadline = (TextView) rowView.findViewById(R.id.deadline);
-        RatingBar star = (RatingBar) rowView.findViewById(R.id.ratingBar);
-        TextView distance = (TextView) rowView.findViewById(R.id.distance_display);
-        TextView time = (TextView) rowView.findViewById(R.id.time_display);
+        ImageView imageView = rowView.findViewById(R.id.profile_image);
+        TextView name = rowView.findViewById(R.id.profile_name);
+        TextView restaurant = rowView.findViewById(R.id.restaurant_name);
+        //TextView food = rowView.findViewById(R.id.food_name);
+        TextView location = rowView.findViewById(R.id.location_name);
+        TextView deadline = rowView.findViewById(R.id.deadline);
+        RatingBar star = rowView.findViewById(R.id.ratingBar);
+        TextView distance = rowView.findViewById(R.id.distance_display);
+        TextView time = rowView.findViewById(R.id.time_display);
+        TextView price = rowView.findViewById(R.id.price);
 
         Order order = (Order)getItem(position);
         Picasso.with(mContext).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(imageView);
         name.setText(order.name);
-        restaurant.setText("Restaurant: " + order.restaurant);
-        food.setText("Food: " + order.food);
-        location.setText("Location: " + order.location);
-        deadline.setText("Deadline: " + order.deadline);
+        restaurant.setText("RES.: " + order.restaurant);
+        //food.setText("Food: " + order.food);
+        location.setText("DEST.: " + order.location);
+        deadline.setText("DDL.: " + order.deadline);
         star.setRating(order.rating);
         distance.setText(order.distance + " miles away");
         time.setText(order.time + " mins ago");
+        price.setText("Price: $" + order.price);
         return rowView;
     }
 }

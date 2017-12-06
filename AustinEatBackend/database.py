@@ -15,8 +15,10 @@ class User(ndb.Model):
     email = ndb.StringProperty()
     user_id = ndb.StringProperty()
 
+    owned_orders = ndb.StringProperty(repeated=True)
+
     # EaterOrDeliver
-    user_property = ndb.StringProperty
+    user_property = ndb.StringProperty()
 
     # student_number
 
@@ -43,14 +45,16 @@ class Order(ndb.Model):
     orderID = ndb.StringProperty()
     ownerEmail = ndb.StringProperty()
     restaurant = ndb.StringProperty()
+    restaurant_location = ndb.GeoPtProperty()
     food = ndb.StringProperty()
     destination = ndb.StringProperty()
     destination_location = ndb.GeoPtProperty()
     due_time = ndb.DateTimeProperty()
     note = ndb.StringProperty()
     deliverList = ndb.StringProperty(repeated=True)
+    #deliverList_count = ndb.ComputedProperty(lambda e: len(e.deliverList))
     #distance = ndb.FloatProperty()
-
+    price = ndb.FloatProperty()
     #price
 
 

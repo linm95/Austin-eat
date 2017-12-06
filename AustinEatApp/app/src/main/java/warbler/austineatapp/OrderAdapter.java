@@ -55,7 +55,7 @@ public class OrderAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.profile_image);
         TextView name = (TextView) rowView.findViewById(R.id.profile_name);
         TextView restaurant = (TextView) rowView.findViewById(R.id.restaurant_name);
-        TextView food = (TextView) rowView.findViewById(R.id.food_name);
+        //TextView food = (TextView) rowView.findViewById(R.id.food_name);
         TextView location = (TextView) rowView.findViewById(R.id.location_name);
         TextView deadline = (TextView) rowView.findViewById(R.id.deadline);
         RatingBar star = (RatingBar) rowView.findViewById(R.id.ratingBar);
@@ -66,7 +66,7 @@ public class OrderAdapter extends BaseAdapter {
         Picasso.with(mContext).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(imageView);
         name.setText(order.name);
         restaurant.setText("Restaurant: " + order.restaurant);
-        food.setText("Food: " + order.food);
+        //food.setText("Food: " + order.food);
         location.setText("Location: " + order.location);
         deadline.setText("Deadline: " + order.deadline);
         star.setRating(order.rating);

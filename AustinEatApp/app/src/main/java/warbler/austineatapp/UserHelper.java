@@ -8,7 +8,7 @@ public class UserHelper {
     private static String userID;
     private static String userEmail;
     private static String photoUrl;
-    private static String userProperty="";
+    private static String userProperty="idle";
     private static String firstName;
     private static String lastName;
     public static Boolean useEmailAsToken = true;
@@ -49,7 +49,7 @@ public class UserHelper {
         return userProperty;
     }
 
-    public static void setCurrentUserProperty(){
+    public static void setCurrentUserProperty(String userProperty){
         UserHelper.userProperty = userProperty;
     }
 

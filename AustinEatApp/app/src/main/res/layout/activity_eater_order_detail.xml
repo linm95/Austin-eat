@@ -4,46 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="warbler.austineatapp.DiscoverDetailActivity">
+    tools:context="warbler.austineatapp.EaterOrderDetailActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:gravity="top"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="3dp">
+        android:gravity="top"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="Detail Information"></TextView>
+            android:text="Detail Information">
+
+        </TextView>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
 
             <ImageView
                 android:id="@+id/detail_profile_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:scaleX="1"
                 android:scaleY="1"
-                android:src="@mipmap/ic_launcher"></ImageView>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/ic_launcher"
+                >
+
+            </ImageView>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
@@ -56,21 +60,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Name"></TextView>
+                    android:text="Name"
+                    android:paddingLeft="8dp">
+
+                </TextView>
 
                 <TextView
                     android:id="@+id/detail_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Location"></TextView>
+                    android:text="Location"
+                    android:paddingLeft="8dp">
+
+                </TextView>
 
                 <TextView
                     android:id="@+id/detail_deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Deadline"></TextView>
+                    android:text="Deadline"
+                    android:paddingLeft="8dp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/order_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Status: "
+                    android:paddingLeft="8dp">
+
+                </TextView>
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
@@ -81,12 +104,16 @@
                     <RatingBar
                         android:id="@+id/detail_rating_bar"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:stepSize="0.1"
+                        style="?android:attr/ratingBarStyleSmall"
+                        />
 
                     <TextView
                         android:id="@+id/detail_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="10dp"
                         android:text="5.0/5.0" />
                 </LinearLayout>
             </LinearLayout>

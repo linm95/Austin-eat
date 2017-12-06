@@ -13,6 +13,8 @@ public class Order {
     String location;
     String deadline;
     String status;
+    String deliver;
+    float price;
     float rating;
     float distance;
     float time;
