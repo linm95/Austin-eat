@@ -7,6 +7,7 @@ import webapp2
 import global_vars as VAR
 import database
 from datetime import datetime
+from datetime import timedelta
 import braintree
 import requests_toolbelt.adapters.appengine
 from database import *
@@ -64,6 +65,19 @@ class LogIn(webapp2.RequestHandler):
 
 # [END LogIn]
 
+# [START TimeoutDetect]
+class TimeoutDetect(webapp2.RequestHandler):
+    def get(self):
+        orders = Order.query(Order.status != "timeout")
+        if orders:
+            for order in orders:
+                timenow = datetime.utcnow() - timedelta(hours=6)
+                if timenow < order.deadline:
+                    order.status = "timeout"
+                    order.put()
+
+# [END TimeoutDetect]
+
 # [START DiscoverOrder]
 class DiscoverEater(webapp2.RequestHandler):
     def get(self):
@@ -93,7 +107,7 @@ class DiscoverEater(webapp2.RequestHandler):
             order_lat = order.destination_location.lat
             order_lon = order.destination_location.lon
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
-            dic["time"] = (datetime.now() - order.createTime).seconds / 60.0
+            dic["time"] = (datetime.utcnow() - timedelta(hours=6) - order.createTime).seconds / 60.0
             toSend.append(dic)
         self.response.write(json.dumps(toSend))
 
@@ -157,9 +171,11 @@ class DiscoverDetail(webapp2.RequestHandler):
         toSend["rating"] = user.requester_rate
         toSend["note"] = order.note
         toSend["price"] = order.price
-        toSend["lat"] = order.destination_location.lat
-        toSend["lon"] = order.destination_location.lon
-        toSend["creationTime"] = order.createTime.strftime("%H:%M:%S")
+        toSend["resLat"] = order.restaurant_location.lat
+        toSend["resLon"] = order.restaurant_location.lon
+        toSend["destLat"] = order.destination_location.lat
+        toSend["destLon"] = order.destination_location.lon
+        toSend["creationTime"] = order.createTime.strftime("%H:%M")
 
         self.response.write(json.dumps(toSend))
 
@@ -409,7 +425,7 @@ class CreateOrder(webapp2.RequestHandler):
             return
         # Update order info
         order = Order()
-        now = datetime.now()
+        now = datetime.utcnow() - timedelta(hours=6)
         order.createTime = now
         order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         res_lat = float(self.request.get("res_lat"))

@@ -15,7 +15,9 @@ public class OrderDetail {
     String note;
     String status;
     double price;
-    double lat;
-    double lon;
+    double resLat;
+    double resLon;
+    double destLat;
+    double destLon;
     float rating;
 }

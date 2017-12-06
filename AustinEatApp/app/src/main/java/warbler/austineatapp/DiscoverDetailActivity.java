@@ -67,6 +67,19 @@ public class DiscoverDetailActivity extends AppCompatActivity {
 
             }
         });
+        button = findViewById(R.id.detail_on_map);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DiscoverDetailOnMap.class);
+                intent.putExtra("resLat", order.resLat);
+                intent.putExtra("resLon", order.resLon);
+                intent.putExtra("destLat", order.destLat);
+                intent.putExtra("destLon", order.destLon);
+                startActivity(intent);
+            }
+        });
     }
 
     private class UserPullOrder extends AsyncTask{
@@ -149,6 +162,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             TextView food = findViewById(R.id.detail_food_name);
             TextView note = findViewById(R.id.detail_note);
             TextView price = findViewById(R.id.detail_price);
+            TextView createTime = findViewById(R.id.detail_creation_time);
 
             Picasso.with(context).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(image);
             name.setText("Name: " + order.name);
@@ -160,7 +174,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
             price.setText("Money you get: " + order.price);
-
+            createTime.setText("Creation Time: " + order.creationTime);
         }
     }
 }
