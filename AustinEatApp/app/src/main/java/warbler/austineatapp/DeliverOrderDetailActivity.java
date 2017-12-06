@@ -34,6 +34,7 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
     public static class ResultDialogFragment extends DialogFragment {
         public String message;
 
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

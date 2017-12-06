@@ -489,15 +489,18 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
             #deliverEmail = self.request.get("deliverEmail")
             orderKey = Order.query(Order.orderID == orderID)
             order = orderKey.get()
+            price = order.price
             logging.info("DEBUG: In DeliverCompleteOrder, order is " + str(order))
             eater = User.query(User.email == order.ownerEmail).get()
             eater.own_orders = []
             eater.user_property = "idle"
+            eater.balance = eater.balance - price
             eater.put()
 
             deliverEmail = order.deliverList[0]
             logging.info("DEBUG: deliverEmail " + deliverEmail)
             deliver = User.query(User.email == deliverEmail).get()
+            deliver.balance = deliver.balance + price
             updated_owned_orders = deliver.owned_orders
             updated_owned_orders.remove(orderID)
             '''
