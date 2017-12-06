@@ -65,11 +65,11 @@ public class DiscoverFragment extends Fragment {
         mListView = getActivity().findViewById(R.id.discover_list_view);
         setListView();
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                if(!UserHelper.getCurrentUserProperty().equals("eater")){
+                if(UserHelper.getCurrentUserProperty().equals("idle")){
                     Intent intent = new Intent(context, SelectRestaurantLocationActivity.class);
                     startActivity(intent);
                 }
@@ -168,12 +168,9 @@ public class DiscoverFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Order selectedOrder = finalOrders.get(position);
-
                     Intent detailIntent = new Intent(context, DiscoverDetailActivity.class);
-
                     detailIntent.putExtra("orderID", selectedOrder.id);
                     detailIntent.putExtra("deliverEmail", UserHelper.getCurrentUserEmail());
-
                     startActivity(detailIntent);
                     //activity.finish();
                 }
