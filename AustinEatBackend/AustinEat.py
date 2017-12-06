@@ -490,6 +490,34 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
         scanID = self.request.get("scanID")
         logging.info("DEBUG: orderID is " + orderID )
         logging.info("DEBUG: scanID is " + scanID)
+        
+        logging.info("DEBUG: orderID is equal to scanID")
+        # deliverEmail = self.request.get("deliverEmail")
+        orderKey = Order.query(Order.orderID == orderID)
+        order = orderKey.get()
+        logging.info("DEBUG: In DeliverCompleteOrder, order is " + str(order))
+        eater = User.query(User.email == order.ownerEmail).get()
+        eater.own_orders = []
+        eater.user_property = "idle"
+        eater.put()
+
+        deliverEmail = order.deliverList[0]
+        deliver = User.query(User.email == deliverEmail).get()
+        updated_owned_orders = []
+        for owned_order in deliver.owned_orders:
+            if owned_order != orderID:
+                updated_owned_orders.append(owned_order)
+        deliver.owned_orders = updated_owned_orders
+        logging.info("DEBUG: Updated owned orders is " + str(updated_owned_orders))
+        # logging.info("DEBUG: Updated owned orders len is " + str(len(updated_owned_orders)))
+        if len(updated_owned_orders) == 0:
+            # logging.info("DEBUG: Updated owned orders len is 0")
+            deliver.user_property = "idle"
+        deliver.put()
+
+        order.key.delete()
+
+        '''
         if orderID == scanID:
             logging.info("DEBUG: orderID is equal to scanID")
             #deliverEmail = self.request.get("deliverEmail")
@@ -519,6 +547,7 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
         else:
             self.error(401)
             return
+        '''
 
 # [END DeliverCompleteOrder]
 
