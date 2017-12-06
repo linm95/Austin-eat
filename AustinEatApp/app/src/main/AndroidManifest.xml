@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-feature android:name="android.hardware.location.gps" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +17,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB_kVAdbKfv9H9M9kxIu4WlgwSf9g5wzBA" />
+            android:value="AIzaSyCXVFFnIasx-Z4nsIDVmkmyL31FvdvKq8k" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -68,6 +69,7 @@
         <activity android:name=".DiscoverDetailOnMap"></activity>
         <activity android:name=".SendBirdMessagingActivity"/>
         <activity android:name=".SendBirdMemberListActivity"/>
+        <service android:name=".LocationHelper"></service>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -88,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent i = new Intent(this, LocationHelper.class);
+        startService(i);
+        Log.i("!!!!", " " + LocationHelper.getLatitude() + " " + LocationHelper.getLongitude());
 
         Intent mainIntent = getIntent();
         int temp = mainIntent.getIntExtra("tab", 0);

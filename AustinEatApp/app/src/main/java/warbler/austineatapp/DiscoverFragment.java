@@ -36,6 +36,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+//import static com.google.android.gms.cast.CastRemoteDisplayLocalService.startService;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -61,6 +63,8 @@ public class DiscoverFragment extends Fragment {
 
         context = getActivity();
         activity = getActivity();
+
+
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
         mListView = getActivity().findViewById(R.id.discover_list_view);
