@@ -35,9 +35,11 @@ public class DiscoverDetailActivity extends AppCompatActivity {
     private String tail = "/discover-detail";
     private String pullTail = "/pull-order";
     private Context context;
+
     private Activity activity;
     private OrderDetail order;
     private boolean pullSuccessful = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

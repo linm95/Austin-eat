@@ -711,3 +711,27 @@ class GetUserProperty(webapp2.RequestHandler):
 
 
 # [END SetUserProperty]
+
+# [START MySecretCreateOrder]
+class MySecretCreateOrder(webapp2.RequestHandler):
+    def get(self):
+        status = self.request.get("status")
+        email = self.request.get("ownerEmail")
+
+        order = Order()
+        order.status = status
+        now = datetime.utcnow() - timedelta(hours=6)
+        order.createTime = now
+        order.orderID = now.strftime("%Y-%m-%d %H:%M:%S.%f")
+        order.ownerEmail = email
+        order.due_time = datetime(now.year, now.month, now.day, 23, 42)
+        order.restaurant_location = ndb.GeoPt(12.3, 35.6)
+        order.destination_location = ndb.GeoPt(35.4, 22.5)
+
+        order.put()
+        if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+            pass
+        else:
+            time.sleep(3)
+
+# [END MySecretCreateOrder]
