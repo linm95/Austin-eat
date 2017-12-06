@@ -54,6 +54,7 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
     private String tail = "/eater-order-detail";
     private String confirmTail = "/eater-confirm-order";
     private String completeTail = "/eater-complete-order";
+    private String cancelTail = "/eater-cancel-order";
 
     // Send bird
     final String appId = "D4B1661C-35A0-49B1-9D04-BD721ED6DD74";
@@ -212,6 +213,46 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
         }
 
     }
+
+
+    public void cancelBtnClick(View view){
+        System.out.println("DEBUG: In EaterOrderDetail: cancelBtn is clicked");
+        EaterOrderDetailActivity.CancelOrder cancelOrder = new EaterOrderDetailActivity.CancelOrder();
+        cancelOrder.execute();
+        //finish();
+        //Intent upIntent = NavUtils.getParentActivityIntent(this);
+        //NavUtils.navigateUpTo(this, upIntent);
+    }
+
+    // Cancel Order Function
+    private class CancelOrder extends AsyncTask<Object, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Object... args){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("id",id)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + cancelTail)
+                    .post(body)
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Boolean successful) {
+            String message = "Eater cancels this order sucessfully.";
+            EaterOrderDetailActivity.ResultDialogFragment dialogFragment = new EaterOrderDetailActivity.ResultDialogFragment();
+            dialogFragment.message = message;
+            dialogFragment.show(getSupportFragmentManager(), "result");
+        }
+    }
+
     public void codeBtnClick(View view){
         System.out.println("DEBUG: codeBtn is clicked");
         Intent intent = new Intent(this, GenerateQrcodeActivity.class);

@@ -72,9 +72,9 @@ public class DeliverOrderAdapter extends BaseAdapter {
         location.setText("Location: " + order.location);
         deadline.setText("Deadline: " + order.deadline);
         star.setRating(order.rating);
-        distance.setText(order.distance + " miles away");
-        time.setText(order.time + " mins ago");
-        price.setText("Price: " + order.price);
+        distance.setText(String.format("%.2f", order.distance) + " miles away");
+        time.setText(String.format("%.1f", order.time) + " mins ago");
+        price.setText("Price: $" + order.price);
 
         return rowView;
     }

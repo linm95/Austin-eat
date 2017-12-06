@@ -19,6 +19,7 @@ app = webapp2.WSGIApplication([
     (VAR.EATER_ORDER_DETAIL_PAGE, AustinEat.EaterOrderDetail),
     (VAR.CONFIRM_EATER_ORDER_PAGE, AustinEat.ConfirmEaterOrder),
     (VAR.EATER_COMPLETE_ORDER_PAGE, AustinEat.EaterCompleteOrder),
+    (VAR.EATER_CANCEL_ORDER_PAGE, AustinEat.EaterCancelOrder),
     # For Deliver Order Page
     (VAR.DELIVER_ORDER_PAGE, AustinEat.DeliverOrder),
     (VAR.DELIVER_ORDER_DETAIL_PAGE, AustinEat.DeliverOrderDetail),

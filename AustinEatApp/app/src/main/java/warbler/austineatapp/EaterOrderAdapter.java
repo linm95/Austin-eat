@@ -76,10 +76,10 @@ public class EaterOrderAdapter extends BaseAdapter{
         location.setText("Location: " + order.location);
         deadline.setText("Deadline: " + order.deadline);
         star.setRating(order.rating);
-        distance.setText(order.distance + " miles away");
-        time.setText(order.time + " mins ago");
+        distance.setText(String.format("%.2f", order.distance) + " miles away");
+        time.setText(String.format("%.1f", order.time) + " mins ago");
         status.setText("Status: " + order.status);
-        price.setText("Price: " + order.price);
+        price.setText("Price: $" + order.price);
         //statusBtn.setText(order.status);
         return rowView;
     }

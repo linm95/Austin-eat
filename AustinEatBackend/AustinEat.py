@@ -241,6 +241,7 @@ class EaterOrder(webapp2.RequestHandler):
                     dic["time"] = (datetime.utcnow() - timedelta(hours=6) - order.createTime).seconds / 60.0
                     dic["deliver"] = deliver
                     dic["status"] = order.status
+                    dic["price"] = order.price
                     toSend.append(dic)
             else:
                 logging.info("DEBUG: deliver list is empty.")
@@ -299,41 +300,31 @@ class EaterCancelOrder(webapp2.RequestHandler):
     def post(selfs):
         def post(self):
             orderID = self.request.get("id")
-            deliverEmail = self.request.get("deliverEmail")
-            deliver = User.query(User.email == deliverEmail).get()
+            #deliverEmail = self.request.get("deliverEmail")
+            #deliver = User.query(User.email == deliverEmail).get()
             order = Order.query(Order.orderID == orderID).get()
-            # status = order.status
-            deliverList = order.deliverList
-            logging.info("DEBUG: deliver list before updated is " + str(deliverList))
-            if deliverEmail in deliverList:
-                logging.info("DEBUG: remove deliver: " + deliverEmail + " from the deliverList")
-                deliverList.remove(deliverEmail)
-            logging.info("DEBUG: deliver list after updated is " + str(deliverList))
+            eater = User.query(User.email == order.ownerEmail)
 
-            order.deliverList = deliverList
+            deliverList = order.deliverList
+            for deliverEmail in deliverList:
+                deliver = User.query(User.email == deliverEmail).get()
+
+                logging.info("DEBUG: deliver owned order before updated is " + str(deliver.owned_orders))
+                deliver.owned_orders.remove(orderID)
+                logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
+
+                if len(deliver.owned_orders) == 0:
+                    deliver.user_property = "idle"
+                deliver.put()
+
+            eater.user_property = "idle"
+            eater.owned_orders = []
+            eater.put()
+
+            order.deliverList = []
             order.put()
 
-            # Check deliver's pulled order list. If it's empty, update the status of deliver to idle
-            # testList = []
-            # testList.append(deliverEmail)
-            # deliverOwnedOrders = deliver.owned_orders
-            logging.info("DEBUG: deliver owned order before updated is " + str(deliver.owned_orders))
-            deliver.owned_orders.remove(orderID)
-            logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
 
-            if len(deliver.owned_orders) == 0:
-                deliver.user_property = "idle"
-            deliver.put()
-
-            # deliverOrders = Order.query().fetch()
-            '''
-            logging.info("DEBUG: deliver's pulled order list after cancelling is " + str(deliverOrders))
-            if not deliverOrders:
-                logging.info("DEBUG: deliver's pulled order list is empty, update the deliver's status.")
-                deliver = User.query(User.email == deliverEmail).get()
-                deliver.status = "idle"
-                deliver.put()
-            '''
 
 # [END EaterCancelOrder]
 
@@ -394,6 +385,7 @@ class DeliverOrder(webapp2.RequestHandler):
             dic["distance"] = distance((lat, lon), (order_lat, order_lon))
             dic["time"] = (datetime.utcnow() - timedelta(hours=6) - order.createTime).seconds / 60.0
             dic["status"] = order.status
+            dic["price"] = order.price
             toSend.append(dic)
         self.response.write(json.dumps(toSend))
 
