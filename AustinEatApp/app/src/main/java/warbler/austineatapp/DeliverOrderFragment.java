@@ -145,7 +145,6 @@ public class DeliverOrderFragment extends Fragment {
                     Intent detailIntent = new Intent(context, DeliverOrderDetailActivity.class);
 
                     detailIntent.putExtra("orderID", selectedOrder.id);
-
                     startActivity(detailIntent);
                 }
             });

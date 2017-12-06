@@ -30,6 +30,10 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
     private Context context;
     private String tail = "/eater-order-detail";
     private String confirmTail = "/eater-confirm-order";
+
+    // Send bird
+    final String appId = "D4B1661C-35A0-49B1-9D04-BD721ED6DD74";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +71,17 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void startMessaging(View view) {
+        String[] targetIDs = {deliverEmail};
+        Intent intent = new Intent(this, SendBirdMessagingActivity.class);
+        Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId,
+                UserHelper.getCurrentUserEmail(), UserHelper.getFirstName(), targetIDs);
+        intent.putExtras(args);
+
+        //startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
+        startActivity(intent);
     }
 
     private class PullOrder extends AsyncTask<Object, Void, OrderDetail> {

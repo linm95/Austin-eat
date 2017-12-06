@@ -141,6 +141,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_blue_light"
                 android:drawableLeft="@android:drawable/sym_action_chat"
+                android:onClick="startMessaging"
                 android:text="Chat" />
 
             <Button

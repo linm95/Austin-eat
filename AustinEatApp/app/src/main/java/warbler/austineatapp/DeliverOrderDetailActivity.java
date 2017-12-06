@@ -26,10 +26,10 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
 
     private String id;
     private Context context;
+    private String eaterID;
 
     // Send bird
     final String appId = "D4B1661C-35A0-49B1-9D04-BD721ED6DD74";
-    private static final int REQUEST_SENDBIRD_MESSAGING_ACTIVITY = 200;
 
     // Each tail represents different handler
     private String tail = "/deliver-order-detail";
@@ -107,6 +107,7 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
             status.setText("Status: " + order.status);
+            eaterID = order.email;
         }
     }
     // Cancel Order Function
@@ -132,13 +133,12 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
     }
 
     public void startMessaging(View view) {
-        String[] targetIDs = {"ahpan0713@utexas.edu"};
+        String[] targetIDs = {eaterID};
         Intent intent = new Intent(this, SendBirdMessagingActivity.class);
         Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId,
                 UserHelper.getCurrentUserEmail(), UserHelper.getFirstName(), targetIDs);
         intent.putExtras(args);
 
-        //startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
         startActivity(intent);
     }
 }
