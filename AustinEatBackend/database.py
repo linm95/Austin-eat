@@ -56,6 +56,7 @@ class Order(ndb.Model):
     #distance = ndb.FloatProperty()
     price = ndb.FloatProperty()
     #price
+    chatChannel = ndb.StringProperty()
 
 
     # created, pending, confirmed and fulfilled

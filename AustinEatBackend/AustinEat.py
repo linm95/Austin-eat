@@ -72,7 +72,7 @@ class TimeoutDetect(webapp2.RequestHandler):
         if orders:
             for order in orders:
                 timenow = datetime.utcnow() - timedelta(hours=6)
-                if timenow > order.deadline:
+                if timenow > order.due_time:
                     order.status = "timeout"
                     order.put()
 
