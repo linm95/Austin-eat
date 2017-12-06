@@ -107,7 +107,7 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ScanQrcodeActivity.class);
         //EditText editText = (EditText) findViewById(R.id.editText);
         //String message = editText.getText().toString();
-        //intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra("orderID", id);
         startActivity(intent);
     }
 
