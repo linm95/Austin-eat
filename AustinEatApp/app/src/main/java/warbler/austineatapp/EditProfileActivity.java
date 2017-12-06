@@ -130,6 +130,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Boolean successful) {
+
                 ShowUploadResult(successful);
             }
         };

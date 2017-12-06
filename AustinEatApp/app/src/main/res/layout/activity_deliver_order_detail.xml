@@ -132,6 +132,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_red_light"
                 android:drawableLeft="@android:drawable/btn_dialog"
+                android:onClick="cancelBtnClick"
                 android:text="Cancel"
                 android:textSize="12sp" />
 

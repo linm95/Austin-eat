@@ -1,11 +1,14 @@
 package warbler.austineatapp;
 
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -41,7 +45,12 @@ public class DeliverOrderFragment extends Fragment {
     private String tail = "/deliver-order";
     private ListView mConfirmedListView;
     private ListView mPendingListView;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
     private Context context;
+
+    // For resume
+    private boolean isResumed = false;
+    private int REQUEST_CODE = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,17 +72,58 @@ public class DeliverOrderFragment extends Fragment {
         context = getActivity();
         mConfirmedListView = getActivity().findViewById(R.id.deliver_confirmed_order_list_view);
         mPendingListView = getActivity().findViewById(R.id.deliver_pending_order_list_view);
+        mySwipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
+
         setListView();
+
+                /*
+         * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+         * performs a swipe-to-refresh gesture.
+         */
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("DEBUG", "onRefresh called from SwipeRefreshLayout");
+                        setListView();
+                        mySwipeRefreshLayout.setRefreshing(false);
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        //myUpdateOperation();
+                    }
+                }
+        );
+
+    }
+/*
+    @Override
+    public void onPause(){
+        super.onPause();
+        isResumed = true;
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(isResumed) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(this).attach(this).commit();
+            isResumed = false;
+        }
+    }
+*/
     private void setListView(){
+        //PullOrders pullOrders = ((DeliverOrderFragment) getActivity().getFragmentManager().findFragmentById(R.id.content)).PullOrders();
         DeliverOrderFragment.PullOrders pullOrders = new DeliverOrderFragment.PullOrders();
+        //PullOrders pullOrders = f.PullOrders();
+        //DeliverOrderFragment pullOrders = this.PullOrders();
+
         pullOrders.execute();
     }
 
 
-    private class PullOrders extends AsyncTask<Object, Void, ArrayList<Order>> {
+    public class PullOrders extends AsyncTask<Object, Void, ArrayList<Order>> {
 
         @Override
         protected ArrayList<Order> doInBackground(Object... args){
@@ -129,7 +179,8 @@ public class DeliverOrderFragment extends Fragment {
 
                     detailIntent.putExtra("orderID", selectedOrder.id);
 
-                    startActivity(detailIntent);
+                    getActivity().startActivity(detailIntent);
+                    //startActivityForResult(detailIntent, REQUEST_CODE);
                 }
             });
 
@@ -145,11 +196,12 @@ public class DeliverOrderFragment extends Fragment {
                     Intent detailIntent = new Intent(context, DeliverOrderDetailActivity.class);
 
                     detailIntent.putExtra("orderID", selectedOrder.id);
-
-                    startActivity(detailIntent);
+                    getActivity().startActivity(detailIntent);
+                    //startActivityForResult(detailIntent, REQUEST_CODE);
                 }
             });
         }
     }
+
 
 }

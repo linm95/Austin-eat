@@ -1,8 +1,12 @@
 package warbler.austineatapp;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,11 +29,34 @@ import okhttp3.Response;
 
 public class EaterOrderDetailActivity extends AppCompatActivity {
 
+    public static class ResultDialogFragment extends DialogFragment {
+        public String message;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(message)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Intent upIntent = NavUtils.getParentActivityIntent(getActivity());
+                            //NavUtils.navigateUpTo(getActivity(), upIntent);
+                            getActivity().finish();
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
     private String id;
     private String deliverEmail;
     private Context context;
     private String tail = "/eater-order-detail";
     private String confirmTail = "/eater-confirm-order";
+
+    // Send bird
+    final String appId = "D4B1661C-35A0-49B1-9D04-BD721ED6DD74";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +94,17 @@ public class EaterOrderDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void startMessaging(View view) {
+        String[] targetIDs = {deliverEmail};
+        Intent intent = new Intent(this, SendBirdMessagingActivity.class);
+        Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId,
+                UserHelper.getCurrentUserEmail(), UserHelper.getFirstName(), targetIDs);
+        intent.putExtras(args);
+
+        //startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
+        startActivity(intent);
     }
 
     private class PullOrder extends AsyncTask<Object, Void, OrderDetail> {
