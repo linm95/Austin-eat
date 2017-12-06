@@ -44,6 +44,7 @@ public class DiscoverFragment extends Fragment {
     private ListView mListView;
     private Context context;
     private String tail = "/discover";
+    private String getPropertyTail = "/get-user-property";
     private ArrayList<Order> orders;
 
     public DiscoverFragment() {
@@ -59,6 +60,10 @@ public class DiscoverFragment extends Fragment {
         lat = LocationHelper.getLatitude();
         lon = LocationHelper.getLongitude();
         mListView = getActivity().findViewById(R.id.discover_list_view);
+        // Update user property
+        DiscoverFragment.SetUserProperty setUserProperty = new DiscoverFragment.SetUserProperty();
+        setUserProperty.execute();
+
         setListView();
         //sortList(2);
     }
@@ -214,5 +219,30 @@ public class DiscoverFragment extends Fragment {
                 sortList(-1);
                 return true;
         }
+    }
+    // Update user_property
+    private class SetUserProperty extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + getPropertyTail + "?email=" + UserHelper.getCurrentUserEmail())
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+                String userProperty = response.body().string();
+                System.out.println("DEBUG: userProperty is " + userProperty);
+                UserHelper.setCurrentUserProperty(userProperty);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+
+            return null;
+
+        }
+
     }
 }

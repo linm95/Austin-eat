@@ -3,6 +3,7 @@ package warbler.austineatapp;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,6 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     DeliverOrderFragment deliverOrderFragment;
     DiscoverFragment discoverFragment;
     FragmentManager fragmentManager;
+    private String getPropertyTail = "/get-user-property";
     //FragmentTransaction fragmentTransaction;
 
     // encode three tabs
@@ -30,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     // remember where are we
     private static TAB tab = TAB.DISCOVER;
+
+    // For refresh
+    private int REQUEST_CODE = 1;
+    private int RESULT_OK = 1;
+    private int RESULT_FAIL = -1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -46,26 +59,12 @@ public class MainActivity extends AppCompatActivity {
                     tab = TAB.DISCOVER;
                     return true;
                 case R.id.navigation_dashboard:
-                    FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
 
+                    MainActivity.SetUserProperty setUserProperty = new MainActivity.SetUserProperty();
+                    setUserProperty.execute();
                     System.out.println("DEBUG: currentUserProperty is " + UserHelper.getCurrentUserProperty());
 
-                    if (UserHelper.getCurrentUserProperty().equals("deliver")){
-                        deliverOrderFragment = new DeliverOrderFragment();
-                        fragmentTransaction2.replace(R.id.content, deliverOrderFragment);
-                        fragmentTransaction2.commit();
-                    }
-                    else if(UserHelper.getCurrentUserProperty().equals("eater")){
-                        eaterOrderFragment = new EaterOrderFragment();
-                        fragmentTransaction2.replace(R.id.content, eaterOrderFragment);
-                        fragmentTransaction2.commit();
-                    }
-                    else{
-                        noPropertyFragment = new NoPropertyFragment();
-                        fragmentTransaction2.replace(R.id.content, noPropertyFragment);
-                        fragmentTransaction2.commit();
-                    }
-                    tab = TAB.ORDER;
+
 
                     return true;
                 case R.id.navigation_notifications:
@@ -121,6 +120,51 @@ public class MainActivity extends AppCompatActivity {
             }
             fragmentTransaction.commit();
         }
+    }
+
+    private class SetUserProperty extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + getPropertyTail + "?email=" + UserHelper.getCurrentUserEmail())
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+                String userProperty = response.body().string();
+                System.out.println("DEBUG: userProperty is " + userProperty);
+                UserHelper.setCurrentUserProperty(userProperty);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(Object o){
+            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+            if (UserHelper.getCurrentUserProperty().equals("deliver")){
+                deliverOrderFragment = new DeliverOrderFragment();
+                fragmentTransaction2.replace(R.id.content, deliverOrderFragment);
+                fragmentTransaction2.commit();
+            }
+            else if(UserHelper.getCurrentUserProperty().equals("eater")){
+                eaterOrderFragment = new EaterOrderFragment();
+                fragmentTransaction2.replace(R.id.content, eaterOrderFragment);
+                fragmentTransaction2.commit();
+            }
+            else{
+                noPropertyFragment = new NoPropertyFragment();
+                fragmentTransaction2.replace(R.id.content, noPropertyFragment);
+                fragmentTransaction2.commit();
+            }
+            tab = TAB.ORDER;
+        }
+
     }
 
     public void onClickWallet(View view) {

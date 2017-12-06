@@ -1,8 +1,14 @@
 package warbler.austineatapp;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,11 +30,33 @@ import okhttp3.Response;
 
 public class DeliverOrderDetailActivity extends AppCompatActivity {
 
+
+    public static class ResultDialogFragment extends DialogFragment {
+        public String message;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(message)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Intent upIntent = NavUtils.getParentActivityIntent(getActivity());
+                            //NavUtils.navigateUpTo(getActivity(), upIntent);
+                            getActivity().finish();
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+
     private String id;
     private Context context;
     // Each tail represents different handler
     private String tail = "/deliver-order-detail";
     private String cancelTail = "/deliver-cancel-order";
+    private int RESULT_OK = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,18 +69,31 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
         pullOrder.execute();
 
         // The deliver cancels this order
+        /*
         Button cancelBtn = findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                System.out.println("DEBUG: confirmBtn is clicked");
+                System.out.println("DEBUG: cancelBtn is clicked");
                 DeliverOrderDetailActivity.CancelOrder cancelOrder = new DeliverOrderDetailActivity.CancelOrder();
                 cancelOrder.execute();
-                finish();
+                //Intent upIntent = NavUtils.getParentActivityIntent((Activity) context);
+                //NavUtils.navigateUpTo((Activity)context, upIntent);
+                returnToParent();
             }
 
         });
+        */
 
+    }
+
+    public void cancelBtnClick(View view){
+        System.out.println("DEBUG: cancelBtn is clicked");
+        DeliverOrderDetailActivity.CancelOrder cancelOrder = new DeliverOrderDetailActivity.CancelOrder();
+        cancelOrder.execute();
+        //finish();
+        //Intent upIntent = NavUtils.getParentActivityIntent(this);
+        //NavUtils.navigateUpTo(this, upIntent);
     }
 
     private class PullOrders extends AsyncTask<Object, Void, OrderDetail> {
@@ -104,9 +145,9 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
         }
     }
     // Cancel Order Function
-    private class CancelOrder extends AsyncTask<Object, Void, OrderDetail> {
+    private class CancelOrder extends AsyncTask<Object, Void, Boolean> {
         @Override
-        protected OrderDetail doInBackground(Object... args){
+        protected Boolean doInBackground(Object... args){
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("id",id)
@@ -121,7 +162,15 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
             }catch(IOException e){
                 e.printStackTrace();
             }
+
             return null;
+        }
+        @Override
+        protected void onPostExecute(Boolean successful) {
+            String message = "Cancel this order sucessfully.";
+            DeliverOrderDetailActivity.ResultDialogFragment dialogFragment = new DeliverOrderDetailActivity.ResultDialogFragment();
+            dialogFragment.message = message;
+            dialogFragment.show(getSupportFragmentManager(), "result");
         }
     }
 }

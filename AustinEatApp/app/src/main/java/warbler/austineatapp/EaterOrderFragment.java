@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,8 +47,9 @@ public class EaterOrderFragment extends Fragment {
     private String tail = "/eater-order";
     private boolean confirmed = false;
     private ListView mListView;
-    private HorizontalScrollView scrollView;
     private Context context;
+
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,28 @@ public class EaterOrderFragment extends Fragment {
         mListView = getActivity().findViewById(R.id.eater_order_list_view);
         //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
         setListView();
+        mySwipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
+
+        setListView();
+
+                /*
+         * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+         * performs a swipe-to-refresh gesture.
+         */
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("DEBUG", "onRefresh called from SwipeRefreshLayout");
+                        setListView();
+                        mySwipeRefreshLayout.setRefreshing(false);
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        //myUpdateOperation();
+                    }
+                }
+        );
+
     }
 
 

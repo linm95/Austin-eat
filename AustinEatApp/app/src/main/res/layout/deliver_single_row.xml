@@ -55,16 +55,15 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             >
+
             <TextView
                 android:id="@+id/restaurant_name"
-                android:text="RES.: KFC"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
+                android:text="RES.: KFC"
 
-                android:textSize="15sp"
-                >
-            </TextView>
+                android:textSize="12sp"></TextView>
             <!--TextView
                 android:id="@+id/food_name"
                 android:text="Food: burger"
@@ -76,34 +75,30 @@
             </TextView-->
             <TextView
                 android:id="@+id/location_name"
-                android:text="DEST.: EER"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
                 android:layout_gravity="left"
-                android:textSize="15sp"
-                >
-            </TextView>
+                android:layout_marginTop="0dp"
+                android:text="DEST.: EER"
+                android:textSize="12sp"></TextView>
+
             <TextView
                 android:id="@+id/deadline"
-                android:text="DDL: 12:30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
                 android:layout_gravity="left"
-                android:textSize="15sp"
-                >
-            </TextView>
+                android:layout_marginTop="0dp"
+                android:text="DDL: 12:30"
+                android:textSize="12sp"></TextView>
+
             <TextView
                 android:id="@+id/price"
-                android:text="Price: $8.00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
                 android:layout_gravity="left"
-                android:textSize="15sp"
-                >
-            </TextView>
+                android:layout_marginTop="0dp"
+                android:text="Price: $8.00"
+                android:textSize="12sp"></TextView>
         </LinearLayout>
 
         <LinearLayout
@@ -121,8 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="0 miles away"
-                android:textSize="15sp"
-                >
+                android:textSize="12sp">
 
             </TextView>
 
@@ -132,8 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="0 mins ago"
-                android:textSize="15sp"
-                >
+                android:textSize="12sp">
 
 
             </TextView>

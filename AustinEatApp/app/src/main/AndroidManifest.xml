@@ -39,7 +39,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_profile">
+            android:label="@string/title_activity_profile"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,9 +48,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateOrder" />
-        <activity android:name=".EaterOrderDetailActivity" />
-        <activity android:name=".DeliverOrderDetailActivity" />
-        <activity android:name=".SelectRestaurantLocationActivity"></activity>
+        <activity android:name=".EaterOrderDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".DeliverOrderDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".SelectRestaurantLocationActivity">
+        </activity>
         <activity
             android:name=".EditProfileActivity"
             android:parentActivityName=".MainActivity">
