@@ -495,7 +495,7 @@ class CreateOrder(webapp2.RequestHandler):
         order.put()
         # Update user info
         user.user_property = "eater"
-        user.owned_orders.append(orderID)
+        user.owned_orders.append(order.orderID)
         user.put()
 
 

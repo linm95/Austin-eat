@@ -132,7 +132,18 @@
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_green_light"
                 android:drawableLeft="@android:drawable/checkbox_on_background"
-                android:text="Confirm" />
+                android:text="Confirm"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:drawableLeft="@drawable/ic_dialog_close_light"
+                android:text="Cancel"
+                android:textSize="8sp" />
 
             <Button
                 android:id="@+id/chatBtn"
@@ -141,18 +152,20 @@
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_blue_light"
                 android:drawableLeft="@android:drawable/sym_action_chat"
+                android:text="Chat"
+                android:textSize="8sp" />
                 android:onClick="startMessaging"
                 android:text="Chat" />
 
             <Button
-                android:id="@+id/scanBarcodeBtn"
+                android:id="@+id/codeBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/holo_red_light"
+                android:backgroundTint="@android:color/holo_orange_light"
                 android:drawableLeft="?android:attr/actionModeSelectAllDrawable"
                 android:text="Code"
-                android:textSize="14sp" />
+                android:textSize="8sp" />
         </LinearLayout>
 
         <TextView

@@ -217,7 +217,6 @@ public class LogInActivity extends AppCompatActivity implements
 
         }
 
-
     }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
