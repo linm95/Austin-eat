@@ -104,7 +104,8 @@ public class ScanQrcodeActivity extends AppCompatActivity {
                     SparseArray<Barcode> barcodes = detector.detect(frame);
                     for (int index = 0; index < barcodes.size(); index++) {
                         Barcode code = barcodes.valueAt(index);
-                        scanResults.setText(scanResults.getText() + code.displayValue + "\n");
+                        //scanResults.setText(scanResults.getText() + code.displayValue + "\n");
+                        scanResults.setText(code.displayValue);
 
                         //Required only if you need to extract the type of barcode
                         int type = barcodes.valueAt(index).valueFormat;
