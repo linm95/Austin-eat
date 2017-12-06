@@ -76,7 +76,7 @@ public class EaterOrderFragment extends Fragment {
 
         mListView = getActivity().findViewById(R.id.eater_order_list_view);
         //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
-        confirmed = true;
+        confirmed = false;
         setListView();
         mySwipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
         TextView statusTextView = getActivity().findViewById(R.id.status_text);
