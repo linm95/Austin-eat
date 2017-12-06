@@ -488,6 +488,8 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
     def post(self):
         orderID = self.request.get("orderID")
         scanID = self.request.get("scanID")
+        logging.info("DEBUG: orderID is " + orderID )
+        logging.info("DEBUG: scanID is " + scanID)
         if orderID == scanID:
             logging.info("DEBUG: orderID is equal to scanID")
             #deliverEmail = self.request.get("deliverEmail")
