@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -27,6 +28,13 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ScanQrcodeActivity extends AppCompatActivity {
     private static final String LOG_TAG = "Barcode Scanner API";
@@ -37,6 +45,9 @@ public class ScanQrcodeActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_PERMISSION = 20;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
+    private String orderID;
+
+    private String completeTail = "/deliver-complete-order";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,8 @@ public class ScanQrcodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan_qrcode);
         Button button = (Button) findViewById(R.id.button);
         scanResults = (TextView) findViewById(R.id.scan_results);
+        Intent intent = getIntent();
+        orderID = intent.getStringExtra("orderID");
         if (savedInstanceState != null) {
             imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
             scanResults.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
@@ -188,5 +201,44 @@ public class ScanQrcodeActivity extends AppCompatActivity {
 
         return BitmapFactory.decodeStream(ctx.getContentResolver()
                 .openInputStream(uri), null, bmOptions);
+    }
+
+    public void confirmCodeBtnClick(View view){
+        System.out.println("DEBUG: confirmCodeBtn is clicked");
+        //Intent intent = new Intent(this, ScanQrcodeActivity.class);
+        //EditText editText = (EditText) findViewById(R.id.editText);
+        //String message = editText.getText().toString();
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        //startActivity(intent);
+        ScanQrcodeActivity.DeliverCompleteOrder deliverCompleteOrder = new ScanQrcodeActivity.DeliverCompleteOrder();
+        deliverCompleteOrder.execute();
+    }
+    private class DeliverCompleteOrder extends AsyncTask<Object, Void, OrderDetail> {
+        @Override
+        protected OrderDetail doInBackground(Object... args){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("scanCode", SAVED_INSTANCE_RESULT)
+                    .add("orderID", orderID)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + completeTail)
+                    .post(body)
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(OrderDetail orderDetail) {
+            String message = "Complete this order successfully!";
+            DeliverOrderDetailActivity.ResultDialogFragment dialogFragment = new DeliverOrderDetailActivity.ResultDialogFragment();
+            dialogFragment.message = message;
+            dialogFragment.show(getSupportFragmentManager(), "result");
+        }
+
     }
 }

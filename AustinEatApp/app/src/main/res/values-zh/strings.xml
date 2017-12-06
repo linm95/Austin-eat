@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AustinEatApp</string>
+    <string name="deliver_rate">送餐员评价</string>
+    <string name="eater_rate">用户评价</string>
+    <string name="edit_profile_save">保存</string>
+    <string name="edit_profile_first_name">姓</string>
+    <string name="edit_profile_last_name">名</string>
+    <string name="hello_blank_fragment">欢迎来到空白界面</string>
+    <string name="loading">载入中</string>
+    <string name="no_property_message">没有订单可以显示</string>
+    <string name="profile_edit">编辑</string>
+    <string name="profile_ff"></string>
+</resources>

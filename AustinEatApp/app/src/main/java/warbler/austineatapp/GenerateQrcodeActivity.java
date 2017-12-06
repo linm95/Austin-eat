@@ -1,5 +1,6 @@
 package warbler.austineatapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,16 +23,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class GenerateQrcodeActivity extends AppCompatActivity{
 
     private String LOG_TAG = "GenerateQRCode";
+    private String orderID;
+    private TextView qrInput;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generate_qrcode);
 
+        setContentView(R.layout.activity_generate_qrcode);
+        Intent intent = getIntent();
+        orderID = intent.getStringExtra("orderID");
+        TextView qrInput = (TextView) findViewById(R.id.qrInput);
+        qrInput.setText(orderID);
         //Button button1 = (Button) findViewById(R.id.button1);
         //button1.setOnClickListener(this);
 
@@ -41,7 +49,8 @@ public class GenerateQrcodeActivity extends AppCompatActivity{
 
         switch (v.getId()) {
             case R.id.button1:
-                EditText qrInput = (EditText) findViewById(R.id.qrInput);
+                //EditText qrInput = (EditText) findViewById(R.id.qrInput);
+
                 String qrInputText = qrInput.getText().toString();
                 Log.v(LOG_TAG, qrInputText);
 

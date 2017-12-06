@@ -38,10 +38,19 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Take Picture"
+        android:layout_above="@+id/confirmCodeBtn"
+        android:layout_alignStart="@+id/confirmCodeBtn" />
+
+    <Button
+        android:id="@+id/confirmCodeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="20dp"
-        android:text="Take Picture"/>
+        android:text="Confirm Code"
+        android:onClick="confirmCodeBtnClick"/>
 
 </RelativeLayout>

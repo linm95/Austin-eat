@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
     <application
@@ -65,7 +66,7 @@
         <activity
             android:name=".DeliverOrderDetailActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SelectRestaurantLocationActivity"></activity>
+        <activity android:name=".SelectRestaurantLocationActivity" />
         <activity
             android:name=".EditProfileActivity"
             android:parentActivityName=".MainActivity" />
@@ -91,10 +92,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ScanQrcodeActivity"
-            android:parentActivityName=".DeliverOrderDetailActivity" >
-
-        </activity>
+        <activity
+            android:name=".ScanQrcodeActivity"
+            android:parentActivityName=".DeliverOrderDetailActivity"></activity>
+        <activity android:name=".GenerateQrcodeActivity"></activity>
     </application>
 
 </manifest>

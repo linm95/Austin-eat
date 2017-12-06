@@ -11,6 +11,7 @@ EATER_COMPLETE_ORDER_PAGE = '/eater-complete-order'
 DELIVER_ORDER_PAGE = '/deliver-order'
 DELIVER_ORDER_DETAIL_PAGE = '/deliver-order-detail'
 DELIVER_CANCEL_ORDER_PAGE = '/deliver-cancel-order'
+DELIVER_COMPLETE_ORDER_PAGE = '/deliver-complete-order'
 
 paypal_access_token = "access_token$sandbox$32qr9zb33rrs77yz$00c7cc6a12432f52cd124a22a9778b33"
 CREATE_ORDER = '/create-order'
