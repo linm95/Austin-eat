@@ -16,11 +16,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB_kVAdbKfv9H9M9kxIu4WlgwSf9g5wzBA" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".LogInActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".DiscoverDetailActivity" />
+
+        <activity android:name=".DiscoverDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+
         <activity
             android:name=".WalletActivity"
             android:exported="true" />
@@ -56,9 +62,11 @@
         </activity>
         <activity
             android:name=".EditProfileActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
-        <!--activity android:name=".HistoryActivity"></activity-->
+            android:parentActivityName=".MainActivity"></activity>
+        <!-- activity android:name=".HistoryActivity"></activity -->
+        <activity android:name=".DiscoverDetailOnMap"></activity>
+        <activity android:name=".SendBirdMessagingActivity"/>
+        <activity android:name=".SendBirdMemberListActivity"/>
     </application>
 
 </manifest>

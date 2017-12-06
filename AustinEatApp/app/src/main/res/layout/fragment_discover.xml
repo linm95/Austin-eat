@@ -17,12 +17,18 @@
             android:src="@android:drawable/ic_input_add"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"/>
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/discover_list_view"
-            android:descendantFocusability="blocksDescendants"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent">
-        </ListView>
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swiperefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/discover_list_view"
+                android:descendantFocusability="blocksDescendants"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+            </ListView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 
 </FrameLayout>

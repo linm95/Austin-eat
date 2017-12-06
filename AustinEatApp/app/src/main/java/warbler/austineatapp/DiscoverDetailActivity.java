@@ -1,8 +1,12 @@
 package warbler.austineatapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,8 +35,11 @@ public class DiscoverDetailActivity extends AppCompatActivity {
     private String tail = "/discover-detail";
     private String pullTail = "/pull-order";
     private Context context;
+
+    private Activity activity;
     private OrderDetail order;
     private boolean pullSuccessful = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +48,7 @@ public class DiscoverDetailActivity extends AppCompatActivity {
         id = intent.getStringExtra("orderID");
         email = intent.getStringExtra("deliverEmail");
         context = this;
+        activity = this;
         PullOrder pullOrder = new PullOrder();
         pullOrder.execute();
         Button button = findViewById(R.id.detail_pull);
@@ -49,22 +57,43 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("DEBUG: userProperty is " + UserHelper.getCurrentUserProperty());
-                if(UserHelper.getCurrentUserProperty().equals("eater")){
+                if(!UserHelper.getCurrentUserProperty().equals("eater")){
                     CharSequence text = "Before pulling an order, please finish or cancel your ongoing order first!";
                     int duration = Toast.LENGTH_SHORT;
                     Toast.makeText(context, text, duration).show();
                 }
                 else{
-                    UserPullOrder userPullOrder = new UserPullOrder();
-                    userPullOrder.execute();
-                    /*
-                    CharSequence text = "Pull order successfully";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast.makeText(context, text, duration).show();
-                    */
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Confirm")
+                            .setMessage("Do you want to pull this order?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    UserPullOrder userPullOrder = new UserPullOrder();
+                                    userPullOrder.execute();
+                                    CharSequence text = "Pull Successfully";
+                                    int duration = Toast.LENGTH_SHORT;
+                                    Toast.makeText(context, text, duration).show();
+                                    Intent upIntent = NavUtils.getParentActivityIntent(activity);
+                                    NavUtils.navigateUpTo(activity, upIntent);
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
                 }
 
+            }
+        });
+        button = findViewById(R.id.detail_on_map);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DiscoverDetailOnMap.class);
+                intent.putExtra("resLat", order.resLat);
+                intent.putExtra("resLon", order.resLon);
+                intent.putExtra("destLat", order.destLat);
+                intent.putExtra("destLon", order.destLon);
+                startActivity(intent);
             }
         });
     }
@@ -149,18 +178,19 @@ public class DiscoverDetailActivity extends AppCompatActivity {
             TextView food = findViewById(R.id.detail_food_name);
             TextView note = findViewById(R.id.detail_note);
             TextView price = findViewById(R.id.detail_price);
+            TextView createTime = findViewById(R.id.detail_creation_time);
 
             Picasso.with(context).load(order.photoUrl).placeholder(R.mipmap.ic_launcher).into(image);
             name.setText("Name: " + order.name);
             location.setText("Destination: " + order.location);
             deadline.setText("Deadline: " + order.deadline);
             star.setRating(order.rating);
-            rating.setText(order.rating + "/5.0");
+            rating.setText(String.format("%.1f", order.rating) + "/5.0");
             restaurant.setText("Restaurant: " + order.restaurant);
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
             price.setText("Money you get: " + order.price);
-
+            createTime.setText("Creation Time: " + order.creationTime);
         }
     }
 }

@@ -1,0 +1,4 @@
+cron:
+  - description: update timeout every 5 seconds
+    url: /timeout-detect
+    schedule: every 1 mins

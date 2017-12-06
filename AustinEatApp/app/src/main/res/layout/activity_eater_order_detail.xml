@@ -154,6 +154,8 @@
                 android:drawableLeft="@android:drawable/sym_action_chat"
                 android:text="Chat"
                 android:textSize="8sp" />
+                android:onClick="startMessaging"
+                android:text="Chat" />
 
             <Button
                 android:id="@+id/codeBtn"

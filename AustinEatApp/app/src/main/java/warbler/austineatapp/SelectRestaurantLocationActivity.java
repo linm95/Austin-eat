@@ -26,7 +26,7 @@ public class SelectRestaurantLocationActivity extends AppCompatActivity {
         activity = this;
         final EditText locationInput = (EditText) findViewById(R.id.restaurant_input);
         locationInput.setClickable(true);
-        locationInput.setOnClickListener(new View.OnClickListener(){
+        locationInput.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -34,13 +34,13 @@ public class SelectRestaurantLocationActivity extends AppCompatActivity {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         Button button = findViewById(R.id.create_next);
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -52,23 +52,26 @@ public class SelectRestaurantLocationActivity extends AppCompatActivity {
                 intent.putExtra("res", res);
                 intent.putExtra("res_lat", lat);
                 intent.putExtra("res_lon", lon);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent, 2);
             }
         });
         button = findViewById(R.id.create_cancel);
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 finish();
+                //Intent intent = new Intent(activity, MainActivity.class);
+                //startActivity(intent);
             }
         });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == PLACE_PICKER_REQUEST){
-            if(resultCode == RESULT_OK){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, activity);
                 res = place.getName().toString();
                 EditText locationInput = findViewById(R.id.restaurant_input);
@@ -76,6 +79,10 @@ public class SelectRestaurantLocationActivity extends AppCompatActivity {
                 lat = place.getLatLng().latitude;
                 lon = place.getLatLng().longitude;
             }
+        }
+        else{
+            if (resultCode == RESULT_OK)
+                finish();
         }
     }
 }

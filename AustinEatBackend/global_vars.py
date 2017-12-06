@@ -18,3 +18,8 @@ CLIENT_ID = "968428520381-t2hem4uacmao4vug2ml1k9m9qmujpf4r.apps.googleuserconten
 GSUITE_DOMAIN_NAME = "utexas.edu"
 GET_USER_PROPERTY = "/get-user-property"
 PULL_ORDER = "/pull-order"
+
+TIMEOUT_DETECT = "/timeout-detect"
+
+SET_CHANNEL = "/set-channel"
+GET_CHANNEL = "/get-channel"

@@ -49,7 +49,7 @@ public class LogInActivity extends AppCompatActivity implements
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        mStatusTextView = (TextView) findViewById(R.id.status);
+        mStatusTextView = findViewById(R.id.status);
         SetUserProperty setUserProperty = new SetUserProperty();
         setUserProperty.execute();
 
@@ -116,7 +116,11 @@ public class LogInActivity extends AppCompatActivity implements
                 updateUI(true);
                 UserHelper.setCurrentUserID(acct.getId());
                 UserHelper.setCurrentUserEmail(acct.getEmail());
-                UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
+                if(acct.getPhotoUrl() != null)
+                    UserHelper.setPhotoUrl(acct.getPhotoUrl().toString());
+                else
+                    UserHelper.setPhotoUrl("https://crackberry.com/sites/crackberry.com/files/styles/large/public/topic_images/2013/ANDROID.png?itok=xhm7jaxS&timestamp=1362601455");
+
                 UserHelper.setFirstName(acct.getGivenName());
                 UserHelper.setLastName(acct.getFamilyName());
                 //Log.d("PHOTO URL", UserHelper.getPhotoUrl());

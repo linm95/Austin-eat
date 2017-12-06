@@ -25,8 +25,12 @@ app = webapp2.WSGIApplication([
 
     (VAR.GET_USER_PROPERTY, AustinEat.GetUserProperty),
 
+    (VAR.TIMEOUT_DETECT, AustinEat.TimeoutDetect),
     (VAR.PULL_ORDER, AustinEat.PullOrder),
     (VAR.CREATE_USER, AustinEat.LogIn),
-    (VAR.CREATE_ORDER, AustinEat.CreateOrder)
+    (VAR.CREATE_ORDER, AustinEat.CreateOrder),
+
+    # for debug
+    ("/debug-add-order", AustinEat.MySecretCreateOrder),
 ], debug = True)
 #[END APP]
