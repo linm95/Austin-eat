@@ -307,7 +307,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
             #deliverEmail = self.request.get("deliverEmail")
             #deliver = User.query(User.email == deliverEmail).get()
             order = Order.query(Order.orderID == orderID).get()
-            eater = User.query(User.email == order.ownerEmail)
+            eater = User.query(User.email == order.ownerEmail).get()
 
             deliverList = order.deliverList
             for deliverEmail in deliverList:
@@ -493,10 +493,12 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
             #deliverEmail = self.request.get("deliverEmail")
             orderKey = Order.query(Order.orderID == orderID)
             order = orderKey.get()
+            price = order.price
             logging.info("DEBUG: In DeliverCompleteOrder, order is " + str(order))
             eater = User.query(User.email == order.ownerEmail).get()
             eater.own_orders = []
             eater.user_property = "idle"
+
             eater.put()
 
             deliverEmail = order.deliverList[0]
@@ -517,7 +519,7 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
         else:
             self.error(401)
             return
-        
+
 
 # [END DeliverCompleteOrder]
 
