@@ -143,7 +143,8 @@
                 android:backgroundTint="@android:color/holo_red_light"
                 android:drawableLeft="@drawable/ic_dialog_close_light"
                 android:text="Cancel"
-                android:textSize="8sp" />
+                android:textSize="8sp"
+                android:onClick="cancelBtnClick"/>
 
             <Button
                 android:id="@+id/chatBtn"

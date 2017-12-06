@@ -307,7 +307,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
             #deliverEmail = self.request.get("deliverEmail")
             #deliver = User.query(User.email == deliverEmail).get()
             order = Order.query(Order.orderID == orderID).get()
-            eater = User.query(User.email == order.ownerEmail)
+            eater = User.query(User.email == order.ownerEmail).get()
 
             deliverList = order.deliverList
             for deliverEmail in deliverList:
@@ -488,54 +488,38 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
     def post(self):
         orderID = self.request.get("orderID")
         scanID = self.request.get("scanCode")
-        logging.info("DEBUG: orderID is equal to scanID")
-        # deliverEmail = self.request.get("deliverEmail")
-        orderKey = Order.query(Order.orderID == orderID)
-        order = orderKey.get()
-        logging.info("DEBUG: In DeliverCompleteOrder, order is " + str(order))
-        eater = User.query(User.email == order.ownerEmail).get()
-        eater.own_orders = []
-        eater.user_property = "idle"
-        eater.put()
 
-        deliverEmail = order.deliverList[0]
-        deliver = User.query(User.email == deliverEmail).get()
-        updated_owned_orders = []
-        for owned_order in deliver.owned_orders:
-            if owned_order != orderID:
-                updated_owned_orders.append(owned_order)
-        deliver.owned_orders = updated_owned_orders
-        logging.info("DEBUG: Updated owned orders is " + str(updated_owned_orders))
-        # logging.info("DEBUG: Updated owned orders len is " + str(len(updated_owned_orders)))
-        if len(updated_owned_orders) == 0:
-            # logging.info("DEBUG: Updated owned orders len is 0")
-            deliver.user_property = "idle"
-        deliver.put()
-
-        order.key.delete()
-        '''
+        logging.info("DEBUG: orderID is " + orderID)
+        logging.info("DEBUG: scanID is " + scanID)
         if orderID == scanID:
             logging.info("DEBUG: orderID is equal to scanID")
             #deliverEmail = self.request.get("deliverEmail")
             orderKey = Order.query(Order.orderID == orderID)
             order = orderKey.get()
+            price = order.price
             logging.info("DEBUG: In DeliverCompleteOrder, order is " + str(order))
             eater = User.query(User.email == order.ownerEmail).get()
             eater.own_orders = []
             eater.user_property = "idle"
+            eater.balance = eater.balance - price
             eater.put()
 
             deliverEmail = order.deliverList[0]
+            logging.info("DEBUG: deliverEmail " + deliverEmail)
             deliver = User.query(User.email == deliverEmail).get()
-            updated_owned_orders = []
+            deliver.balance = deliver.balance + price
+            updated_owned_orders = deliver.owned_orders
+            updated_owned_orders.remove(orderID)
+            '''
             for owned_order in deliver.owned_orders:
                 if owned_order != orderID:
                     updated_owned_orders.append(owned_order)
+            '''
             deliver.owned_orders = updated_owned_orders
             logging.info("DEBUG: Updated owned orders is " + str(updated_owned_orders))
             #logging.info("DEBUG: Updated owned orders len is " + str(len(updated_owned_orders)))
             if len(updated_owned_orders) == 0:
-                #logging.info("DEBUG: Updated owned orders len is 0")
+                logging.info("DEBUG: Updated owned orders len is 0")
                 deliver.user_property = "idle"
             deliver.put()
 
@@ -543,8 +527,7 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
         else:
             self.error(401)
             return
-        '''
-        
+
 
 # [END DeliverCompleteOrder]
 
