@@ -307,7 +307,7 @@ class EaterCancelOrder(webapp2.RequestHandler):
             #deliverEmail = self.request.get("deliverEmail")
             #deliver = User.query(User.email == deliverEmail).get()
             order = Order.query(Order.orderID == orderID).get()
-            eater = User.query(User.email == order.ownerEmail)
+            eater = User.query(User.email == order.ownerEmail).get()
 
             deliverList = order.deliverList
             for deliverEmail in deliverList:
