@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,6 +25,11 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
 
     private String id;
     private Context context;
+
+    // Send bird
+    final String appId = "D4B1661C-35A0-49B1-9D04-BD721ED6DD74";
+    private static final int REQUEST_SENDBIRD_MESSAGING_ACTIVITY = 200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,5 +84,15 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
             food.setText("Food: " + order.food);
             note.setText("Note: " + order.note);
         }
+    }
+
+    public void startMessaging(View view) {
+        String[] targetIDs = {"aFakeID"};
+        Intent intent = new Intent(this, SendBirdMessagingActivity.class);
+        Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId,
+                UserHelper.getCurrentUserEmail(), UserHelper.getFirstName(), targetIDs);
+        intent.putExtras(args);
+
+        startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
     }
 }
