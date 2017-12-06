@@ -413,6 +413,9 @@ class DeliverOrderDetail(webapp2.RequestHandler):
         orderID = self.request.get("id")
         #deliverEmail = self.request.get("deliverEmail")
         order = Order.query(Order.orderID == orderID).get()
+        if not order:
+            logging.info("DEBUG: DeliverOrderDetail: Can't find this order!")
+            return
         user = User.query(User.email == order.ownerEmail).get()
         toSend = {}
         toSend["photoUrl"] = user.avatar_url
@@ -443,6 +446,12 @@ class DeliverCancelOrder(webapp2.RequestHandler):
         deliverEmail = self.request.get("deliverEmail")
         deliver = User.query(User.email == deliverEmail).get()
         order = Order.query(Order.orderID == orderID).get()
+        if not order:
+            logging.info("DEBUG: DeliverOrderDetail: Can't find this order!")
+            return
+        if order.status == "confirmed":
+            logging.info("DEBUG: DeliverOrderDetail: Can't cancel this order!")
+            return
         #status = order.status
         deliverList = order.deliverList
         logging.info("DEBUG: deliver list before updated is " + str(deliverList))
@@ -451,6 +460,10 @@ class DeliverCancelOrder(webapp2.RequestHandler):
             deliverList.remove(deliverEmail)
         logging.info("DEBUG: deliver list after updated is " + str(deliverList))
         order.deliverList = deliverList
+        if not deliverList:
+            order.status = "created"
+        else:
+            order.status = "pending"
         order.put()
 
         # Check deliver's pulled order list. If it's empty, update the status of deliver to idle
@@ -462,7 +475,7 @@ class DeliverCancelOrder(webapp2.RequestHandler):
         logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
 
         if len(deliver.owned_orders)==0:
-            deliver.status = "idle"
+            deliver.user_property = "idle"
         deliver.put()
 
         #deliverOrders = Order.query().fetch()
@@ -510,7 +523,8 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
 
             order.key.delete()
         else:
-            pass
+            self.error(401)
+            return
 
 # [END DeliverCompleteOrder]
 

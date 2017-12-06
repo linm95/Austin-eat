@@ -213,9 +213,9 @@ public class ScanQrcodeActivity extends AppCompatActivity {
         ScanQrcodeActivity.DeliverCompleteOrder deliverCompleteOrder = new ScanQrcodeActivity.DeliverCompleteOrder();
         deliverCompleteOrder.execute();
     }
-    private class DeliverCompleteOrder extends AsyncTask<Object, Void, OrderDetail> {
+    private class DeliverCompleteOrder extends AsyncTask<Object, Void, Boolean> {
         @Override
-        protected OrderDetail doInBackground(Object... args){
+        protected Boolean doInBackground(Object... args){
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("scanCode", SAVED_INSTANCE_RESULT)
@@ -227,14 +227,21 @@ public class ScanQrcodeActivity extends AppCompatActivity {
                     .build();
             try{
                 Response response = client.newCall(request).execute();
+                if(response.isSuccessful())
+                    return true;
             }catch(IOException e){
                 e.printStackTrace();
+                return false;
             }
-            return null;
+            return false;
         }
         @Override
-        protected void onPostExecute(OrderDetail orderDetail) {
-            String message = "Complete this order successfully!";
+        protected void onPostExecute(Boolean isSuccessful) {
+            String message;
+            if(isSuccessful)
+                message = "Complete this order successfully!";
+            else
+                message = "unmatched scanned code! Please try again";
             DeliverOrderDetailActivity.ResultDialogFragment dialogFragment = new DeliverOrderDetailActivity.ResultDialogFragment();
             dialogFragment.message = message;
             dialogFragment.show(getSupportFragmentManager(), "result");
