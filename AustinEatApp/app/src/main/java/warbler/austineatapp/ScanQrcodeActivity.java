@@ -46,6 +46,7 @@ public class ScanQrcodeActivity extends AppCompatActivity {
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
     private String orderID;
+    private String scanCode;
 
     private String completeTail = "/deliver-complete-order";
 
@@ -211,6 +212,7 @@ public class ScanQrcodeActivity extends AppCompatActivity {
         //String message = editText.getText().toString();
         //intent.putExtra(EXTRA_MESSAGE, message);
         //startActivity(intent);
+        scanCode = scanResults.getText().toString();
         ScanQrcodeActivity.DeliverCompleteOrder deliverCompleteOrder = new ScanQrcodeActivity.DeliverCompleteOrder();
         deliverCompleteOrder.execute();
     }
@@ -219,7 +221,7 @@ public class ScanQrcodeActivity extends AppCompatActivity {
         protected Boolean doInBackground(Object... args){
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
-                    .add("scanCode", SAVED_INSTANCE_RESULT)
+                    .add("scanCode", scanCode)
                     .add("orderID", orderID)
                     .build();
             Request request = new Request.Builder()
