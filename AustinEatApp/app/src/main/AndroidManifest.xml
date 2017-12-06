@@ -58,6 +58,8 @@
             android:parentActivityName=".MainActivity"></activity>
         <!-- activity android:name=".HistoryActivity"></activity -->
         <activity android:name=".DiscoverDetailOnMap"></activity>
+        <activity android:name=".SendBirdMessagingActivity"/>
+        <activity android:name=".SendBirdMemberListActivity"/>
     </application>
 
 </manifest>

@@ -132,12 +132,13 @@ public class DeliverOrderDetailActivity extends AppCompatActivity {
     }
 
     public void startMessaging(View view) {
-        String[] targetIDs = {"aFakeID"};
+        String[] targetIDs = {"ahpan0713@utexas.edu"};
         Intent intent = new Intent(this, SendBirdMessagingActivity.class);
         Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId,
                 UserHelper.getCurrentUserEmail(), UserHelper.getFirstName(), targetIDs);
         intent.putExtras(args);
 
-        startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
+        //startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
+        startActivity(intent);
     }
 }

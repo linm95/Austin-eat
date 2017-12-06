@@ -491,7 +491,6 @@ public class SendBirdMessagingActivity extends FragmentActivity {
         mBtnClose = (ImageButton) findViewById(R.id.btn_close);
         mBtnSettings = (ImageButton) findViewById(R.id.btn_settings);
 
-        /*
         mBtnMembers = (Button)findViewById(R.id.btn_members);
         mBtnMembers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -504,6 +503,7 @@ public class SendBirdMessagingActivity extends FragmentActivity {
             }
         });
 
+        /*
         mBtnInvite = (Button) findViewById(R.id.btn_invite);
         mBtnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
