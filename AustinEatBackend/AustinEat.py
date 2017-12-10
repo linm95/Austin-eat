@@ -808,3 +808,37 @@ class MySecretCreateOrder(webapp2.RequestHandler):
             time.sleep(3)
 
 # [END MySecretCreateOrder]
+
+
+# [START RateEater]
+class RateEater(webapp2.RequestHandler):
+    def post(self):
+        rate = self.request.get("rate")
+        orderId = self.request.get("id")
+
+        order = Order.query(Order.orderID == orderId).get()
+        order.requester_rate = float(rate)
+        order.put()
+        if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+            pass
+        else:
+            time.sleep(3)
+
+# [END RateEater]
+
+
+# [START RateEater]
+class RateDeliver(webapp2.RequestHandler):
+    def post(self):
+        rate = self.request.get("rate")
+        orderId = self.request.get("id")
+
+        order = Order.query(Order.orderID == orderId).get()
+        order.deliveryperson_rate = float(rate)
+        order.put()
+        if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+            pass
+        else:
+            time.sleep(3)
+
+# [END RateEater]

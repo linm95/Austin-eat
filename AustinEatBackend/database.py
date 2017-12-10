@@ -62,5 +62,9 @@ class Order(ndb.Model):
     # created, pending, confirmed and fulfilled
     status = ndb.StringProperty()
 
+    # rate
+    requester_rate = ndb.FloatProperty()
+    deliveryperson_rate = ndb.FloatProperty()
+
     #version
 # [END Order]
