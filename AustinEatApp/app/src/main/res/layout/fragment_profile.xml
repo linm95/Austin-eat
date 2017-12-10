@@ -135,22 +135,10 @@
             android:text="@string/loading" />
 
         <Button
-            android:id="@+id/profileActivityHistoryBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profileFFContent"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/profile_ah"
-            android:textAllCaps="false" />
-
-        <Button
             android:id="@+id/profileWalletBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profileActivityHistoryBtn"
+            android:layout_below="@+id/profileFFContent"
             android:layout_centerHorizontal="true"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
