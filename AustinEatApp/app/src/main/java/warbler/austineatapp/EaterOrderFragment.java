@@ -76,15 +76,17 @@ public class EaterOrderFragment extends Fragment {
 
         mListView = getActivity().findViewById(R.id.eater_order_list_view);
         //scrollView = getActivity().findViewById(R.id.horizontalscrollView);
-        confirmed = true;
+        confirmed = false;
         setListView();
         mySwipeRefreshLayout = getActivity().findViewById(R.id.swiperefresh);
-        TextView statusTextView = getActivity().findViewById(R.id.status_text);
+        statusText = getActivity().findViewById(R.id.status_text);
+        /*
         if(confirmed) {
             statusTextView.setText("Confirmed");
         }
         else
             statusTextView.setText("Pending");
+            */
                 /*
          * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
          * performs a swipe-to-refresh gesture.
@@ -164,6 +166,12 @@ public class EaterOrderFragment extends Fragment {
 
 
                 });
+                if(confirmed) {
+                    statusText.setText("Confirmed");
+                }
+                else
+                    statusText.setText("Pending");
+
             }
 
 

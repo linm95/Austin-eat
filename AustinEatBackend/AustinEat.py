@@ -301,32 +301,26 @@ class ConfirmEaterOrder(webapp2.RequestHandler):
 
 # [START EaterCancelOrder]
 class EaterCancelOrder(webapp2.RequestHandler):
-    def post(selfs):
-        def post(self):
-            orderID = self.request.get("id")
-            #deliverEmail = self.request.get("deliverEmail")
-            #deliver = User.query(User.email == deliverEmail).get()
-            order = Order.query(Order.orderID == orderID).get()
-            eater = User.query(User.email == order.ownerEmail).get()
-
-            deliverList = order.deliverList
-            for deliverEmail in deliverList:
-                deliver = User.query(User.email == deliverEmail).get()
-
-                logging.info("DEBUG: deliver owned order before updated is " + str(deliver.owned_orders))
-                deliver.owned_orders.remove(orderID)
-                logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
-
-                if len(deliver.owned_orders) == 0:
-                    deliver.user_property = "idle"
-                deliver.put()
-
-            eater.user_property = "idle"
-            eater.owned_orders = []
-            eater.put()
-
-            order.deliverList = []
-            order.put()
+    def post(self):
+        orderID = self.request.get("id")
+        #deliverEmail = self.request.get("deliverEmail")
+        #deliver = User.query(User.email == deliverEmail).get()
+        order = Order.query(Order.orderID == orderID).get()
+        eater = User.query(User.email == order.ownerEmail).get()
+        deliverList = order.deliverList
+        for deliverEmail in deliverList:
+            deliver = User.query(User.email == deliverEmail).get()
+            logging.info("DEBUG: deliver owned order before updated is " + str(deliver.owned_orders))
+            deliver.owned_orders.remove(orderID)
+            logging.info("DEBUG: deliver owned order after updated is " + str(deliver.owned_orders))
+            if len(deliver.owned_orders) == 0:
+                deliver.user_property = "idle"
+            deliver.put()
+        eater.user_property = "idle"
+        eater.owned_orders = []
+        eater.put()
+        order.deliverList = []
+        order.put()
 
 
 
@@ -486,9 +480,8 @@ class DeliverCancelOrder(webapp2.RequestHandler):
 # [START DeliverCompleteOrder]
 class DeliverCompleteOrder(webapp2.RequestHandler):
     def post(self):
-        orderID = self.request.get("orderID")
-        scanID = self.request.get("scanCode")
-
+        orderID = self.request.get("orderID").strip(' \t\n\r')
+        scanID = self.request.get("scanCode").strip(' \t\n\r')
         logging.info("DEBUG: orderID is " + orderID)
         logging.info("DEBUG: scanID is " + scanID)
         if orderID == scanID:
