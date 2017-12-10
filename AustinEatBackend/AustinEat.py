@@ -497,7 +497,6 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
             eater.own_orders = []
             eater.user_property = "idle"
             eater.balance = eater.balance - price
-            eater.put()
 
             deliverEmail = order.deliverList[0]
             logging.info("DEBUG: deliverEmail " + deliverEmail)
@@ -516,9 +515,22 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
             if len(updated_owned_orders) == 0:
                 logging.info("DEBUG: Updated owned orders len is 0")
                 deliver.user_property = "idle"
-            deliver.put()
 
+            # check in rating
+            new_total_eater_rate = eater.requester_rate * eater.requester_rate_num + order.requester_rate
+            new_total_eater_rate_num = eater.requester_rate_num + 1
+            eater.requester_rate = new_total_eater_rate / new_total_eater_rate_num
+            eater.requester_rate_num = new_total_eater_rate_num
+
+            new_total_deliver_rate = deliver.deliveryperson_rate * deliver.deliveryperson_rate_num + order.deliveryperson_rate
+            new_total_deliver_rate_num = deliver.deliveryperson_rate_num + 1
+            deliver.deliveryperson_rate = new_total_deliver_rate / new_total_deliver_rate_num
+            deliver.deliveryperson_rate_num = new_total_deliver_rate_num
+
+            # go persist
             order.key.delete()
+            eater.put()
+            deliver.put()
         else:
             self.error(401)
             return
