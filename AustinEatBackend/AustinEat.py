@@ -517,15 +517,17 @@ class DeliverCompleteOrder(webapp2.RequestHandler):
                 deliver.user_property = "idle"
 
             # check in rating
-            new_total_eater_rate = eater.requester_rate * eater.requester_rate_num + order.requester_rate
-            new_total_eater_rate_num = eater.requester_rate_num + 1
-            eater.requester_rate = new_total_eater_rate / new_total_eater_rate_num
-            eater.requester_rate_num = new_total_eater_rate_num
+            if order.requester_rate is not None:
+                new_total_eater_rate = eater.requester_rate * eater.requester_rate_num + order.requester_rate
+                new_total_eater_rate_num = eater.requester_rate_num + 1
+                eater.requester_rate = new_total_eater_rate / new_total_eater_rate_num
+                eater.requester_rate_num = new_total_eater_rate_num
 
-            new_total_deliver_rate = deliver.deliveryperson_rate * deliver.deliveryperson_rate_num + order.deliveryperson_rate
-            new_total_deliver_rate_num = deliver.deliveryperson_rate_num + 1
-            deliver.deliveryperson_rate = new_total_deliver_rate / new_total_deliver_rate_num
-            deliver.deliveryperson_rate_num = new_total_deliver_rate_num
+            if order.deliveryperson_rate is not None:
+                new_total_deliver_rate = deliver.deliveryperson_rate * deliver.deliveryperson_rate_num + order.deliveryperson_rate
+                new_total_deliver_rate_num = deliver.deliveryperson_rate_num + 1
+                deliver.deliveryperson_rate = new_total_deliver_rate / new_total_deliver_rate_num
+                deliver.deliveryperson_rate_num = new_total_deliver_rate_num
 
             # go persist
             order.key.delete()
