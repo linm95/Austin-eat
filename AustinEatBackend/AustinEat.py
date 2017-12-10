@@ -56,8 +56,10 @@ class LogIn(webapp2.RequestHandler):
             user.intro = ""
             user.favorite_food_styles = ""
             user.favorite_foods = ""
-            user.requester_rate = 3.5
-            user.deliveryperson_rate = 3.5
+            user.requester_rate = 5
+            user.requester_rate_num = 0
+            user.deliveryperson_rate = 5
+            user.deliveryperson_rate_num = 0
             user.user_property = "idle"
             user.owned_orders = []
             user.put()

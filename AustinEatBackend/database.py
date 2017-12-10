@@ -32,7 +32,9 @@ class User(ndb.Model):
 
     # rate
     requester_rate = ndb.FloatProperty()
+    requester_rate_num = ndb.IntegerProperty()
     deliveryperson_rate = ndb.FloatProperty()
+    deliveryperson_rate_num = ndb.IntegerProperty()
 
     # reviews
 
