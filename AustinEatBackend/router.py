@@ -34,8 +34,8 @@ app = webapp2.WSGIApplication([
     (VAR.CREATE_ORDER, AustinEat.CreateOrder),
 
     # rating
-    ("rate-eater", AustinEat.RateEater),
-    ("rate-deliver", AustinEat.RateDeliver),
+    ("/rate-eater", AustinEat.RateEater),
+    ("/rate-deliver", AustinEat.RateDeliver),
 
     # for debug
     ("/debug-add-order", AustinEat.MySecretCreateOrder),
