@@ -34,6 +34,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"/>
 
+    <Button android:id="@+id/rateBtn" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="Rating Eater"
+        android:onClick="rateBtnClick"
+        android:layout_above="@+id/button"
+        android:layout_alignEnd="@+id/button"
+        android:layout_marginBottom="20dp" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"

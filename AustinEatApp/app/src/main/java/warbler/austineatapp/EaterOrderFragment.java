@@ -166,12 +166,13 @@ public class EaterOrderFragment extends Fragment {
 
 
                 });
+                /*
                 if(confirmed) {
                     statusText.setText("Confirmed");
                 }
                 else
                     statusText.setText("Pending");
-
+                */
             }
 
 

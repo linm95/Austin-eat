@@ -1,6 +1,8 @@
 package warbler.austineatapp;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,13 +25,24 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class GenerateQrcodeActivity extends AppCompatActivity{
 
     private String LOG_TAG = "GenerateQRCode";
     private String orderID;
     private TextView qrInput;
+    private String rating;
+    private String rateDeliverTail = "/rate-deliver";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +98,44 @@ public class GenerateQrcodeActivity extends AppCompatActivity{
             // More buttons go here (if any) ...
 
         }
+    }
+
+    public void rateBtnClick(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        RatingBarFragment ratingBarFragment = new RatingBarFragment();
+        ratingBarFragment.setValue("deliver", orderID);
+        ratingBarFragment.show(fragmentManager, "dialog");
+    }
+
+
+    private class RateDeliver extends AsyncTask<Object, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Object... args){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("rating", rating)
+                    .add("id", orderID)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + rateDeliverTail)
+                    .post(body)
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+                if(response.isSuccessful())
+                    return true;
+            }catch(IOException e){
+                e.printStackTrace();
+                return false;
+            }
+            return false;
+        }
+        @Override
+        protected void onPostExecute(Boolean isSuccessful) {
+
+
+        }
+
     }
 
 }

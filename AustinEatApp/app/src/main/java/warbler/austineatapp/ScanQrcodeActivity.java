@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
@@ -48,7 +50,10 @@ public class ScanQrcodeActivity extends AppCompatActivity {
     private String orderID;
     private String scanCode;
 
+    private ScanQrcodeActivity.DeliverCompleteOrder deliverCompleteOrder;
+    private String rating;
     private String completeTail = "/deliver-complete-order";
+    private String rateEaterTail = "/rate-eater";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,9 +219,25 @@ public class ScanQrcodeActivity extends AppCompatActivity {
         //intent.putExtra(EXTRA_MESSAGE, message);
         //startActivity(intent);
         scanCode = scanResults.getText().toString();
-        ScanQrcodeActivity.DeliverCompleteOrder deliverCompleteOrder = new ScanQrcodeActivity.DeliverCompleteOrder();
+        deliverCompleteOrder = new ScanQrcodeActivity.DeliverCompleteOrder();
+
+        //ScanQrcodeActivity.RateEater rateEater = new ScanQrcodeActivity.RateEater();
+
         deliverCompleteOrder.execute();
     }
+
+    public void rateBtnClick(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        RatingBarFragment ratingBarFragment = new RatingBarFragment();
+        ratingBarFragment.setValue("eater", orderID);
+        ratingBarFragment.show(fragmentManager, "dialog");
+        /*
+        RatingBar mBar = (RatingBar) findViewById(R.id.rating_bar);
+        rating = String.valueOf(mBar.getRating());
+        rateEater.execute();
+        */
+    }
+
     private class DeliverCompleteOrder extends AsyncTask<Object, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Object... args){
@@ -249,6 +270,38 @@ public class ScanQrcodeActivity extends AppCompatActivity {
             DeliverOrderDetailActivity.ResultDialogFragment dialogFragment = new DeliverOrderDetailActivity.ResultDialogFragment();
             dialogFragment.message = message;
             dialogFragment.show(getSupportFragmentManager(), "result");
+        }
+
+    }
+    private class RateEater extends AsyncTask<Object, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Object... args){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("rating", rating)
+                    .add("id", orderID)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(getString(R.string.root_url) + rateEaterTail)
+                    .post(body)
+                    .build();
+            try{
+                Response response = client.newCall(request).execute();
+                if(response.isSuccessful())
+                    return true;
+            }catch(IOException e){
+                e.printStackTrace();
+                return false;
+            }
+            return false;
+        }
+        @Override
+        protected void onPostExecute(Boolean isSuccessful) {
+            //String message;
+            if(isSuccessful) {
+                deliverCompleteOrder.execute();
+            }
+
         }
 
     }

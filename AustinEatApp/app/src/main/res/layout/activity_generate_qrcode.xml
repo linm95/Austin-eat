@@ -18,6 +18,11 @@
     <Button android:id="@+id/button1" android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:text="Generate QR Code"
         android:onClick="generateBtnClick"/>
+    <Button android:id="@+id/rateBtn" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="Rating Deliver"
+        android:onClick="rateBtnClick"/>
+
+
     <ImageView android:id="@+id/imageView1" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
